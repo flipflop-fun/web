@@ -1,0 +1,101 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@apollo/client": "^3.11.10",
+    "@copilotkit/react-core": "^1.5.20",
+    "@copilotkit/react-ui": "^1.5.20",
+    "@copilotkit/runtime": "^1.5.20",
+    "@coral-xyz/anchor": "^0.30.1",
+    "@irys/sdk": "^0.2.11",
+    "@raydium-io/raydium-sdk-v2": "^0.1.111-alpha",
+    "@solana-mobile/wallet-adapter-mobile": "^2.1.5",
+    "@solana/spl-token": "^0.4.9",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
+    "@solana/wallet-adapter-wallets": "^0.19.32",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^16.18.119",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-mathjax": "^1.0.4",
+    "@types/react-router-dom": "^5.3.3",
+    "arweave": "^1.15.5",
+    "axios": "^1.7.7",
+    "bs58": "^6.0.0",
+    "daisyui": "^4.12.14",
+    "date-fns": "^4.1.0",
+    "form-data": "^4.0.1",
+    "graphql": "^16.9.0",
+    "html2canvas": "^1.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "katex": "^0.16.21",
+    "lightweight-charts": "^4.2.1",
+    "pixelarticons": "^1.8.1",
+    "qrcode.react": "^4.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "4.12.0",
+    "react-markdown": "^10.0.0",
+    "react-mathjax": "^1.0.1",
+    "react-router-dom": "^7.0.1",
+    "react-scripts": "5.0.1",
+    "react-share": "^5.1.1",
+    "rehype-katex": "^7.0.1",
+    "rehype-stringify": "^10.0.1",
+    "remark-math": "^6.0.0",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.1",
+    "typescript": "^4.9.5",
+    "unified": "^11.0.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@craco/craco": "^7.1.0",
+    "assert": "^2.1.0",
+    "autoprefixer": "^10.4.20",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "postcss": "^8.4.49",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.4.15",
+    "url": "^0.11.4"
+  }
+}

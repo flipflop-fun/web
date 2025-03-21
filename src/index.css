@@ -1,0 +1,105 @@
+@font-face {
+  font-family: 'Retro Pixel Cute Mono';
+  src: url('../public/fonts/retro-pixel-cute-mono.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Retro Pixel Arcade';
+  src: url('../public/fonts/retro-pixel-arcade.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Retro Pixel Thick';
+  src: url('../public/fonts/retro-pixel-thick.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Retro Pixel Thick", cursive;
+    letter-spacing: 0.05em;
+  }
+  
+  body {
+    font-family: "Retro Pixel Cute Mono", monospace;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+};
+
+@layer components {
+  .text-label {
+    font-size: 0.875rem;
+    font-family: "Retro Pixel Cute Mono", monospace;
+  }
+  
+  .text-value {
+    font-family: "Retro Pixel Cute Mono", monospace;
+  }
+  
+  .text-heading {
+    font-family: "Retro Pixel Thick", cursive;
+    letter-spacing: 0.05em;
+  }
+  
+  .text-bold {
+    font-family: "Retro Pixel Cute Mono", monospace;
+    font-weight: 700;
+  }
+  
+  .text-medium {
+    font-family: "Retro Pixel Cute Mono", monospace;
+    font-weight: 500;
+  }
+}
+
+.scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.scroll-content {
+  display: flex;
+  animation: scroll 60s linear infinite;
+  width: max-content;
+}
+
+.scroll-content.paused {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-wrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
