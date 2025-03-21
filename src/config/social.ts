@@ -15,7 +15,7 @@ export const socialLinks: Record<string, SocialLink> = {
   },
   github: {
     name: 'GitHub',
-    url: 'https://github.com/fairlaunchlabs'
+    url: 'https://github.com/flipflop-fun'
   },
   medium: {
     name: 'Medium',
