@@ -47,16 +47,17 @@ export const Metrics: React.FC<MetricsProps> = ({
 
     // Calculate Initial liquidity to target milestone
     const liquidityTokensRatioNum = parseFloat(liquidityTokensRatio) || 0;
-    const initialLiquidityToTargetEra = epochesPerEraNum * initialTargetMintSizePerEpochNum * liquidityTokensRatioNum / 100 * (1 - Math.pow(reduceRatioNum / 100, targetErasNum)) /
-      (1 - reduceRatioNum / 100) / (1 - liquidityTokensRatioNum / 100);
+    const initialLiquidityToTargetEra = epochesPerEraNum * initialTargetMintSizePerEpochNum * liquidityTokensRatioNum / 100 
+      * (1 - Math.pow(reduceRatioNum / 100, targetErasNum)) 
+      / ((1 - reduceRatioNum / 100) * (1 - liquidityTokensRatioNum / 100));
 
     const initialLiquidityToTargetEraPercent = (initialLiquidityToTargetEra / maxSupply) * 100;
 
     // Calculate min launch price
-    const minLaunchPrice = minTotalFee / initialLiquidityToTargetEra;
+    const minLaunchPrice = 0.9 * minTotalFee / initialLiquidityToTargetEra;
 
     // Calculate max launch price
-    const maxLaunchPrice = maxTotalFee / initialLiquidityToTargetEra;
+    const maxLaunchPrice = 0.9 * maxTotalFee / initialLiquidityToTargetEra;
 
     // Check if launch price is too high (e.g., greater than 0.1 SOL/token)
     const isLaunchPriceTooHigh = maxLaunchPrice > 0.1;
