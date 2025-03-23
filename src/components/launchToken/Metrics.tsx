@@ -40,8 +40,7 @@ export const Metrics: React.FC<MetricsProps> = ({
     const minTotalFee = initialTargetMintSizePerEpochNum * feeRateNum * (targetErasNum * epochesPerEraNum) / initialMintSizeNum;
 
     // Calculate max total fee
-    const maxTotalFee = initialTargetMintSizePerEpochNum * feeRateNum / initialMintSizeNum * 100 *
-      (Math.pow(1.01, targetErasNum * epochesPerEraNum) - 1);
+    const maxTotalFee = initialTargetMintSizePerEpochNum * feeRateNum / initialMintSizeNum * 101 * (Math.pow(1.01, targetErasNum * epochesPerEraNum) - 1);
 
     // Check if fee is too high (e.g., greater than 1000 SOL)
     const isFeeTooHigh = maxTotalFee > 1000;
