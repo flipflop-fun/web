@@ -22,26 +22,26 @@ export const DEFAULT_PARAMS = {
         feeRate: '200000000',
         liquidityTokensRatio: '20',
     },
-    "meme": { // config for mainnet 
-        targetEras: '1',
-        epochesPerEra: '250',
-        targetSecondsPerEpoch: '2000',
-        reduceRatio: '75',
-        initialMintSize: '10000000000000',
-        initialTargetMintSizePerEpoch: '1000000000000000',
-        feeRate: '10000000',
-        liquidityTokensRatio: '20',
-    },
-    // "meme": { // config for dev
+    // "meme": { // config for mainnet 
     //     targetEras: '1',
-    //     epochesPerEra: '2',
-    //     targetSecondsPerEpoch: '60',
+    //     epochesPerEra: '250',
+    //     targetSecondsPerEpoch: '2000',
     //     reduceRatio: '75',
-    //     initialMintSize: '1000000000000',
-    //     initialTargetMintSizePerEpoch: '10000000000000',
+    //     initialMintSize: '10000000000000',
+    //     initialTargetMintSizePerEpoch: '1000000000000000',
     //     feeRate: '10000000',
     //     liquidityTokensRatio: '20',
     // },
+    "meme": { // config for dev
+        targetEras: '1',
+        epochesPerEra: '2',
+        targetSecondsPerEpoch: '60',
+        reduceRatio: '75',
+        initialMintSize: '1000000000000',
+        initialTargetMintSizePerEpoch: '10000000000000',
+        feeRate: '10000000',
+        liquidityTokensRatio: '20',
+    },
 } as Record<string, TokenParams>;
 
 
