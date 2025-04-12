@@ -85,9 +85,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
       const publicKey = (pubKey as PublicKey).toString();
       const result = await login(publicKey, signatureBase58, WALLET_SIGN_MESSAGE);
-      console.log("token: ", result.data.token)
       if (result.success) {
         const token = result.data.token;
+        console.log("token: ", token)
         setToken(token);
         setWalletAddress(publicKey);
         localStorage.setItem('flipflop_token', token);
@@ -98,7 +98,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       alert('Login failed: ' + error.message);
-      await connect(); // ###### Check the local wallet and launch it if it's not connected
+      await connect();
     } finally {
       isLoggingIn.current = false;
     }
