@@ -130,7 +130,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="absolute bottom-0 py-4 px-3 bg-base-300">
         {!isMobile && <div className='mb-3'>{packageJson.version}</div>}
         {socialIcons.map((social, index) => (
-          <a
+          <a 
             key={index}
             href={social.url}
             target="_blank"
