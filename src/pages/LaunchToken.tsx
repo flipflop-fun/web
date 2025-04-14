@@ -207,7 +207,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
           id: toastId,
         }
       );
-      window.location.href = `/token/${result.data?.mint}`;
+      window.location.href = `/token/${result.data?.mintAddress}`;
     } catch (err: any) {
       console.error('Error creating token:', err);
       setError(err.message || 'Failed to create token');
