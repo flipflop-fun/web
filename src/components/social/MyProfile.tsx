@@ -117,6 +117,11 @@ export const MyProfile: React.FC = () => {
         }
       }
 
+      if (formData.bio.length >= 200) {
+        toast.error('Bio must be less than 200 characters');
+        return;
+      }
+
       const result = await updateUserProfile(token, {
         username: formData.username,
         email: formData.email || null,
@@ -265,6 +270,7 @@ export const MyProfile: React.FC = () => {
                 value={formData.bio}
                 onChange={handleInputChange}
                 className="input w-full mt-2 h-24 py-2 px-4"
+                placeholder='Enter your bio here, max 200 characters'
                 rows={3}
               />
             </div>

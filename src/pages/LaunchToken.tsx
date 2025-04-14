@@ -195,6 +195,8 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
         setIsCreating(false);
         return;
       }
+      // Wait`for 3 seconds for sync with the graph and then redirect to the token page
+      await new Promise((resolve) => setTimeout(resolve, 4000));
       setIsCreating(false);
       setSuccess(true);
 
@@ -205,6 +207,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
           id: toastId,
         }
       );
+      window.location.href = `/token/${result.data?.mint}`;
     } catch (err: any) {
       console.error('Error creating token:', err);
       setError(err.message || 'Failed to create token');

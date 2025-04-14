@@ -11,7 +11,7 @@ export const socialLinks: Record<string, SocialLink> = {
   },
   telegram: {
     name: 'Telegram',
-    url: 'https://t.me/flipflopGlobal'
+    url: 'https://t.me/flipflopEng'
   },
   github: {
     name: 'GitHub',

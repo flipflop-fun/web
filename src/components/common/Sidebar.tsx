@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEY_EXPANDED } from '../../config/constants';
 import { FaTwitter, FaDiscord, FaTelegram, FaGithub, FaMedium } from 'react-icons/fa';
 import { socialLinks } from '../../config/social';
 import { useDeviceType } from '../../hooks/device';
+import packageJson from '../../../package.json';
 
 export const Sidebar: React.FC<SidebarProps> = ({
   menuItems,
@@ -124,8 +125,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </ul>
       </div>
 
+
       {/* Social icons */}
       <div className="absolute bottom-0 py-4 px-3 bg-base-300">
+        {!isMobile && <div className='mb-3'>{packageJson.version}</div>}
         {socialIcons.map((social, index) => (
           <a
             key={index}
