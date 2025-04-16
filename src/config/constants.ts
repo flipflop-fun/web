@@ -79,8 +79,8 @@ export const createPoolFeeReceive = new PublicKey("G11FKBRaAkHAKuLCgLM6K6NUc9rTj
 export const memoProgram = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr");
 export const addressLookupTableAddress = new PublicKey("EebRqpLtUgjX17pJJNNbd6ngtYa34VGa51oYsibwJRXy");
 export const slotsOfEstimatingInterval = 250; // localnet and devnet must be 250, mainnet suggest to be 3000000
-export const subgraphUrl = 'https://api.studio.thegraph.com/query/61629/proof_of_mint/version/latest'
-
+export const subgraphUrl = 'https://gateway.thegraph.com/api/subgraphs/id/7XcwHxUun9pcX3nrBwrDdAaWQEFd4fwkwvCjHK6LxvEs'; // 'https://api.studio.thegraph.com/query/61629/proof_of_mint/version/latest'
+export const THEGRAPH_API_KEY = '143b826715cb1a3fe26419d02a5d44a3';
 export const LOCAL_STORAGE_KEY_EXPANDED = 'flipflop_sidebar_expanded_menus';
 export const LOCAL_STORAGE_KEY_THEME = 'flipflop_theme';
 export const LOCAL_STORAGE_MY_REFERRAL_CODE = 'flipflop_my_referral_code';
