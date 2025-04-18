@@ -42,7 +42,7 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
       setTokenData(result.data);
     } else {
       setTokenData(null);
-      toast.error("Load token data failed: " + result.message as string);
+      // toast.error("Load token data failed: " + result.message as string);
     }
   }, [userToken, mint]);
 
@@ -64,7 +64,7 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
           setTokenData(result.data);
         } else {
           setTokenData(null);
-          toast.error("Load token data failed: " + result.message as string);
+          // toast.error("Load token data failed: " + result.message as string);
         }
       })
     }
