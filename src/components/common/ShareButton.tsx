@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TwitterShareButton } from 'react-share';
 import toast from 'react-hot-toast';
 import { InitiazlizedTokenData, ShareButtonProps, TokenMetadataIPFS } from '../../types/types';
-import { APP_NAME } from '../../config/constants';
+import { APP_NAME, FRONTEND_URL } from '../../config/constants';
 import { drawShareImage } from '../../utils/shareimage';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { getMintDiscount } from '../../utils/web3';
@@ -11,7 +11,7 @@ import { ModalTopBar } from './ModalTopBar';
 export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, inputCode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const currentUrl = window.location.href;
+  const currentUrl = FRONTEND_URL + "/token/" + token.mint; // window.location.href; // ######
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const [showURCModal, setShowURCModal] = useState(false);

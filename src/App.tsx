@@ -26,7 +26,7 @@ import { Toaster } from 'react-hot-toast';
 import { Sidebar } from './components/common/Sidebar';
 import { menuItems } from './config/menu';
 import { TokenDetail } from './pages/TokenDetail';
-import { APP_NAME, COPILOTKIT_RUNTIME_URL } from './config/constants';
+import { APP_NAME, COPILOTKIT_RUNTIME_URL, FRONTEND_URL } from './config/constants';
 import { Discover } from './pages/Discover';
 import { MyMintedTokens } from './pages/MyMintedTokens';
 import { MyDeployments } from './pages/MyDeployments';
@@ -183,7 +183,7 @@ function App() {
         addressSelector: createDefaultAddressSelector(),
         appIdentity: {
           name: "Flipflop",
-          uri: "https://test.flipflip.fun",
+          uri: FRONTEND_URL,
           icon: "logo192.png", // resolves to https://myapp.io/relative/path/to/icon.png
         },
         authorizationResultCache: createDefaultAuthorizationResultCache(),

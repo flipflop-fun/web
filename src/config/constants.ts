@@ -94,6 +94,7 @@ export const NETWORK = 'devnet';
 export const IRYS_NETWORK = 'devnet';
 // export const SCANURL = 'https://solscan.io';
 export const SCANURL = 'https://explorer.solana.com';
+export const FRONTEND_URL = "https://test.flipflop.fun";
 
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 export const API_BASE_URI = process.env.REACT_APP_ENV === "development" ? "http://127.0.0.1:8000" : "https://api-pearl-two-75.vercel.app"; // "https://flipflop-api.vercel.app"; // "api-pearl-two-75.vercel.app";
