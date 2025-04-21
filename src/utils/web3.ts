@@ -308,7 +308,7 @@ export const reactiveReferrerCode = async (
     // If the referrer ata does not exist, create it
     if (!referrerAtaInfo) transaction.add(instructionCreateReferrerAta);
     transaction.add(instructionSetReferrerCode);
-    return await processTransaction(transaction, connection, wallet, "Reactive referrer code successfully", { referralAccount: referralAccountPda.toBase58(), mint: mint.toBase58() });
+    return await processTransaction(transaction, connection, wallet, "Reactiviate referrer code successfully", { referralAccount: referralAccountPda.toBase58(), mint: mint.toBase58() });
   } catch (error: any) {
     if (error.message.includes('Transaction simulation failed: This transaction has already been processed')) {
       return {

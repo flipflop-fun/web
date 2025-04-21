@@ -22,15 +22,16 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
   const [referralData, setReferralData] = useState<ReferrerData>();
   const [referrerResetIntervalSeconds, setReferrerResetIntervalSeconds] = useState(0);
   const [referralUsageMaxCount, setReferralUsageMaxCount] = useState(0);
-  const [myReferrerCode, setMyReferrerCode] = useState<string>(
-    localStorage.getItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58()) !== null ?
-      localStorage.getItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58()) as string
-      :
-      token.tokenData?.tokenSymbol + "_" + wallet?.publicKey.toBase58().slice(0, 8) + wallet?.publicKey.toBase58().slice(-8)
-  );
+  const [myReferrerCode, setMyReferrerCode] = useState<string>("");
 
   useEffect(() => {
     if (wallet) {
+      if(token.mint && wallet.publicKey) setMyReferrerCode(
+        localStorage.getItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58())!== null?
+          localStorage.getItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58()) as string
+          :
+          token.tokenData?.tokenSymbol + "_" + wallet?.publicKey.toBase58().slice(0, 8) + wallet?.publicKey.toBase58().slice(-8)
+      )
       if (myReferrerCode !== "" && myReferrerCode !== null) {
         getMyReferrerData(wallet, connection, new PublicKey(token.mint), myReferrerCode).then((data) => {
           if (data?.success) setReferralData(data.data);
@@ -45,7 +46,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
         else toast.error("ReferralCodeModal.useEffect: " + data.message as string);
       });
     }
-  }, [connection, myReferrerCode, token.mint, wallet]);
+  }, [connection, myReferrerCode, token.mint, token.tokenData?.tokenSymbol, wallet]);
 
   const handleReactiveCode = async () => {
     if (myReferrerCode === "" || myReferrerCode === null) {
@@ -219,7 +220,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                     onClick={handleReactiveCode}
                     disabled={loading}
                   >
-                    Reactive URC
+                    Reactiviate URC
                   </button>
                 </div>}
               </div>
