@@ -11,12 +11,17 @@ import { ModalTopBar } from './ModalTopBar';
 export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, inputCode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-  const currentUrl = FRONTEND_URL + "/token/" + token.mint; // window.location.href; // ######
   const wallet = useAnchorWallet();
   const { connection } = useConnection();
   const [showURCModal, setShowURCModal] = useState(false);
   const [urcCode, setUrcCode] = useState(inputCode || '');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
+
+  React.useEffect(() => {
+    const newUrl = urcCode === "" ? `${FRONTEND_URL}/token/${token.mint}` : `${FRONTEND_URL}/token/${token.mint}/${urcCode}`;
+    setCurrentUrl(newUrl);
+  }, [token, urcCode]);
 
   const handleCopyLink = async () => {
     try {
@@ -103,7 +108,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
           Share
         </button>
 
-        {isOpen && (
+        {isOpen && currentUrl !== "" && (
           <div className='absolute right-0 mt-2 w-48 pixel-box z-50' style={{ padding: 0 }}>
             <div className="py-1" role="menu">
               <button
