@@ -161,7 +161,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                     metadata={metadata}
                     inputCode={myReferrerCode}
                   />
-                </div>
+                </div> 
                 <div className="flex justify-between items-center">
                   <input
                     type="text"
