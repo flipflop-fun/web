@@ -23,8 +23,8 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [decimals, setDecimals] = useState(9);
+  // const [success, setSuccess] = useState(false);
+  // const [decimals, setDecimals] = useState(9);
 
   const [showSocial, setShowSocial] = useState(false);
   const [website, setWebsite] = useState('');
@@ -119,7 +119,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
     e.preventDefault();
     setIsCreating(true);
     setError('');
-    setSuccess(false);
+    // setSuccess(false);
 
     const toastId = toast.loading('Creating token...', {
       style: {
@@ -162,7 +162,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
       const tokenMetadata: TokenMetadata = {
         name,
         symbol,
-        decimals,
+        decimals: 9,
         uri: metadataUrl,
       };
 
@@ -198,7 +198,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
       // Wait`for 3 seconds for sync with the graph and then redirect to the token page
       await new Promise((resolve) => setTimeout(resolve, 4000));
       setIsCreating(false);
-      setSuccess(true);
+      // setSuccess(true);
 
       const explorerUrl = `${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`;
       toast.success(

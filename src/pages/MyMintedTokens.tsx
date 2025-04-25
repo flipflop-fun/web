@@ -1,5 +1,4 @@
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { FC, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { queryMyTokenList, queryTokensByMints } from '../utils/graphql';
@@ -21,7 +20,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
   const navigate = useNavigate();
-  const [balance, setBalance] = useState(0);
+  // const [balance, setBalance] = useState(0);
   const [tokenList, setTokenList] = useState<TokenListItem[]>([]);
   const [searchMints, setSearchMints] = useState<string[]>([]);
   const [selectedTokenForReferral, setSelectedTokenForReferral] = useState<TokenListItem | null>(null);
@@ -60,18 +59,18 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   useEffect(() => {
     if (!wallet?.publicKey) return;
 
-    const getBalance = async () => {
-      try {
-        const balance = await connection.getBalance(wallet?.publicKey);
-        setBalance(balance / LAMPORTS_PER_SOL);
-      } catch (e) {
-        console.error('Error getting balance:', e);
-      }
-    };
+    // const getBalance = async () => {
+    //   try {
+    //     const balance = await connection.getBalance(wallet?.publicKey);
+    //     setBalance(balance / LAMPORTS_PER_SOL);
+    //   } catch (e) {
+    //     console.error('Error getting balance:', e);
+    //   }
+    // };
 
-    getBalance();
+    // getBalance();
     const id = connection.onAccountChange(wallet.publicKey, (account) => {
-      setBalance(account.lamports / LAMPORTS_PER_SOL);
+      // setBalance(account.lamports / LAMPORTS_PER_SOL);
     });
 
     return () => {

@@ -1,9 +1,9 @@
 import { InitiazlizedTokenData, TokenMetadataIPFS } from "../types/types";
 import { QRCodeSVG } from 'qrcode.react';
 import ReactDOM from 'react-dom';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { APP_NAME } from "../config/constants";
-import { BN_LAMPORTS_PER_SOL, calculateMaxSupply, calculateTargetMintTime, calculateTotalSupplyToTargetEras, formatLargeNumber, formatSeconds, getMintSpeed } from "./format";
+import { BN_LAMPORTS_PER_SOL, calculateMaxSupply, calculateTotalSupplyToTargetEras, formatLargeNumber, formatSeconds, getMintSpeed } from "./format";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
 

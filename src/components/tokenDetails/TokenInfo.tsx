@@ -39,12 +39,12 @@ export const TokenInfo: React.FC<TokenInfoProps> = ({
   return (
     <div className="w-full space-y-0">
       <div className='mb-4'>
-        {isMobile ?
+        {isMobile && !isLoading ?
           <TokenHeroMobile token={token} metadata={metadata as TokenMetadataIPFS} referrerCode={referrerCode} tokenData={tokenData} fetchTokenData={fetchTokenData} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />
           : <TokenHero token={token} metadata={metadata as TokenMetadataIPFS} referrerCode={referrerCode} tokenData={tokenData} fetchTokenData={fetchTokenData} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />}
       </div>
       <div className="pixel-box">
-        {isMobile ?
+        {isMobile && !isLoading ?
           <TokenInfoDataMobile token={token} metadata={metadata as TokenMetadataIPFS} hasStarted={hasStarted} />
           : <TokenInfoData token={token} metadata={metadata as TokenMetadataIPFS} hasStarted={hasStarted} />}
 

@@ -161,8 +161,9 @@ export type AddressDisplayProps = {
   showCharacters?: number;
 }
 
-export type MintTokensProps = {
+export type DiscoverProps = {
   expanded: boolean;
+  hasDelegatedTokens: boolean;
 };
 
 export type TokenDetailProps = {

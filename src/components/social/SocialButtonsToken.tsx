@@ -3,7 +3,6 @@ import { OrderedToken } from "../../types/types"
 import toast from "react-hot-toast"
 import { followToken, likeToken, unfollowToken, unlikeToken } from "../../utils/user"
 import { useAuth } from "../../hooks/auth"
-import { set } from "date-fns"
 import LoadingSpinner from "../common/LoadingSpinner"
 
 type SocialButtonsTokenProps = {

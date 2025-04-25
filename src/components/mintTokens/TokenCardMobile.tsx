@@ -60,12 +60,13 @@ export const TokenCardMobile: React.FC<TokenCardMobileProps> = ({ token }) => {
     const initialMintSize = Number(token.initialMintSize) / LAMPORTS_PER_SOL;
     return initialMintSize > 0 ? feeRateInSol / initialMintSize : 0;
   }, [token.initialMintSize, feeRateInSol]);
+
   return (
     <div
       className="pixel-box p-4 cursor-pointer relative overflow-hidden"
       onClick={handleCardClick}
     >
-      {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />}
+      {!isLoading && metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />}
       <div className="relative flex items-start gap-4">
         <div className="flex flex-col items-center">
           <TokenImage

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { USER_API_URL } from '../config/constants';
-import { Activity, OrderedUser, User, Comment, OrderedToken, UserAPIResponse, FAQ } from '../types/types';
+import { Activity, OrderedUser, User, Comment, OrderedToken, UserAPIResponse } from '../types/types';
 import { compressImage, isImageFile } from './format';
 
 export const loadFAQs = async (token: string): Promise<UserAPIResponse> => {

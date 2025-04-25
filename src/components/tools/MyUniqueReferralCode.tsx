@@ -56,7 +56,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
     fetchPolicy: 'network-only',
   });
 
-  const { loading: referralBonusLoading, error: referralBonusError, data: referralBonusData } = useQuery(queryTotalReferrerBonusSum, {
+  const { error: referralBonusError, data: referralBonusData } = useQuery(queryTotalReferrerBonusSum, {
     variables: {
       mints: mints,
       referrerMain: wallet?.publicKey.toBase58(),
@@ -139,6 +139,18 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
         <div className="hero-content text-center">
           <div className="max-w-md">
             <p className="py-6">Please connect your wallet to view your URCs</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (tokenError || referralBonusError) {
+    return (
+      <div className={`hero min-h-[400px] bg-base-200 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
+        <div className="hero-content text-center">
+          <div className="max-w-md">
+            <p className="py-6">Something is wrong!</p>
           </div>
         </div>
       </div>

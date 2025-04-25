@@ -61,6 +61,24 @@ const pixelLight = {
       }
     },
 
+    ".btn-accent": {
+      "background-color": "#8413ae",
+      "color": "#FFFFFF",
+      "&:hover": {
+        "background-color": "#8413ae",
+        "color": "#FFFFFF",
+      }
+    },
+
+    ".btn-extra1": {
+      "background-color": "#49b97b",
+      "color": "#000000",
+      "&:hover": {
+        "background-color": "#009866",
+        "color": "#000000",
+      }
+    },
+
     ".btn-outline": {
       "background-color": "#FFFFFF",
       "color": "#000000",

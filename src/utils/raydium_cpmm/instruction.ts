@@ -3,7 +3,6 @@ import { FairMintToken } from '../../types/fair_mint_token';
 import {
   PublicKey,
   SystemProgram,
-  SYSVAR_RENT_PUBKEY,
   ComputeBudgetProgram,
   LAMPORTS_PER_SOL,
   TransactionInstruction,
@@ -24,8 +23,8 @@ import {
 
 import { ASSOCIATED_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import { CpmmPoolInfoLayout } from "@raydium-io/raydium-sdk-v2";
-import { compareMints, getTokenBalance } from "../web3";
-import { CONFIG_DATA_SEED, cpSwapConfigAddress, cpSwapProgram, createPoolFeeReceive, memoProgram, MINT_SEED } from "../../config/constants";
+import { getTokenBalance } from "../web3";
+import { CONFIG_DATA_SEED, cpSwapConfigAddress, cpSwapProgram, memoProgram, MINT_SEED } from "../../config/constants";
 import { CpSwapPoolStateData } from "../../types/types";
 
 export async function getPoolData (

@@ -35,7 +35,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
   const [medium, setMedium] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [headerImage, setHeaderImage] = useState<File | null>(null);
-  const [headerPreview, setHeaderPreview] = useState<string>('');
+  // const [headerPreview, setHeaderPreview] = useState<string>('');
   const { isMobile } = useDeviceType();
   const [metadataMutable, setMetadataMutable] = useState(false);
 
@@ -51,7 +51,6 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
       setTelegram(token.tokenMetadata.extensions.telegram || '');
       setGithub(token.tokenMetadata.extensions.github || '');
       setMedium(token.tokenMetadata.extensions.medium || '');
-      setHeaderPreview('');
       setHeaderImage(null);
 
       getTokenMetadataMutable(connection, new PublicKey(token.mint)).then((isMutable: boolean) => {

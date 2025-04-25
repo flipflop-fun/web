@@ -1,7 +1,7 @@
 import React, { useState, KeyboardEvent, useEffect, useMemo } from 'react';
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent } from '../utils/graphql';
-import { InitiazlizedTokenData, MintTokensProps } from '../types/types';
+import { InitiazlizedTokenData, DiscoverProps } from '../types/types';
 import { FaSearch } from 'react-icons/fa';
 import { ErrorBox } from '../components/common/ErrorBox';
 import { filterTokens, formatAddress } from '../utils/format';
@@ -12,8 +12,9 @@ import { useDeviceType } from '../hooks/device';
 import { ScrollCards } from '../components/common/ScrollCards';
 import { TokenCardSimple } from '../components/mintTokens/TokenCardSimple';
 
-export const Discover: React.FC<MintTokensProps> = ({
-  expanded
+export const Discover: React.FC<DiscoverProps> = ({
+  expanded,
+  hasDelegatedTokens
 }) => {
   const [searchInput, setSearchInput] = useState('');
   // const [isSearchMode, setIsSearchMode] = useState(false);
@@ -134,6 +135,35 @@ export const Discover: React.FC<MintTokensProps> = ({
       {/* Search Bar */}
       <PageHeader title="Discover" bgImage='/bg/group1/1.jpg' />
       <div className="md:max-w-6xl mx-auto mb-3 md:mb-12">
+        <div className="flex flex-wrap gap-2 mb-4">
+          <button 
+            className="btn btn-primary"
+            onClick={() => window.location.href = '/launch-token'}
+          >
+            Launch A Token
+          </button>
+          <button 
+            className="btn btn-secondary"
+            onClick={() => window.location.href = '/my-minted-tokens'}
+          >
+            My Minted Tokens
+          </button>
+          <button 
+            className="btn btn-accent"
+            onClick={() => window.location.href = '/my-urc'}
+          >
+            My Promotion
+          </button>
+          {hasDelegatedTokens &&
+            <button 
+              className="btn btn-extra1"
+              onClick={() => window.location.href = '/my-delegated-tokens'}
+            >
+              My Liquidities
+            </button>
+          }
+        </div>
+
         <div className="join w-full mb-2">
           <div className="relative join-item flex-1">
             <input

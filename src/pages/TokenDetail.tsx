@@ -14,7 +14,6 @@ import { SEARCH_CACHE_ITEMS } from '../config/constants';
 import { useState } from 'react';
 import { CommentBox } from '../components/social/CommentBox';
 import { getTokenDataByMint } from '../utils/user';
-import toast from 'react-hot-toast';
 import { useAuth } from '../hooks/auth';
 
 export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
