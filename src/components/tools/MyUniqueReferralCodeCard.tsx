@@ -5,6 +5,7 @@ import { AddressDisplay } from '../common/AddressDisplay';
 import { useNavigate } from 'react-router-dom';
 import { useDeviceType } from '../../hooks/device';
 import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+import { useTranslation } from 'react-i18next';
 
 type MyUniqueReferralCodeCardProps = {
   token: InitiazlizedTokenData;
@@ -23,7 +24,8 @@ export const MyUniqueReferralCodeCard: FC<MyUniqueReferralCodeCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { isMobile } = useDeviceType();
-
+  const { t } = useTranslation();
+  
   const handleClick = () => {
     navigate(`/token/${token.mint}`);
   };
@@ -92,7 +94,7 @@ export const MyUniqueReferralCodeCard: FC<MyUniqueReferralCodeCardProps> = ({
               className="btn btn-sm btn-success"
               onClick={handleClick}
             >
-              View
+              {t('tokenInfo.view')}
             </button>
           </div>
         </div>

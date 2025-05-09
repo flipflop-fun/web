@@ -13,6 +13,8 @@ import { BN_LAMPORTS_PER_SOL, numberStringToBN } from '../utils/format';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { BN } from '@coral-xyz/anchor';
 import { PageHeader } from '../components/common/PageHeader';
+import { useTranslation } from 'react-i18next';
+// import { VanityAddress } from '../components/launchToken/VanityAddress';
 
 export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
   const wallet = useAnchorWallet();
@@ -23,10 +25,13 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
+  const { t } = useTranslation();
   // const [success, setSuccess] = useState(false);
   // const [decimals, setDecimals] = useState(9);
 
   const [showSocial, setShowSocial] = useState(false);
+  // const [showVanityAddress, setShowVanityAddress] = useState(false);
+  // const [vanityAddress, setVanityAddress] = useState('');
   const [website, setWebsite] = useState('');
   const [twitter, setTwitter] = useState('');
   const [discord, setDiscord] = useState('');
@@ -73,13 +78,13 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
   const validateImageFile = (file: File): boolean => {
     // Check file type
     if (!VALID_IMAGE_TYPES.includes(file.type)) {
-      setError('Only JPEG, JPG, PNG, GIF, WEBP and AVIF files are allowed');
+      setError(t('launch.onlyImageFormat'));
       return false;
     }
 
     // Check file size (4MB = 4 * 1024 * 1024 bytes)
     if (file.size > MAX_AVATAR_FILE_SIZE) {
-      setError(`Image size must be less than ${MAX_AVATAR_FILE_SIZE / 1024}K`);
+      setError(`${t('launch.imageSize', {size: MAX_AVATAR_FILE_SIZE / 1024, unit: "K"})}`);
       return false;
     }
 
@@ -105,7 +110,6 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
 
     try {
       const imageUrl = await uploadToStorage(file, 'avatar');
-      // const arweaveUrl = "https://arweave.net/zYjcUg1xkcKIryig0nuhJbpUSRHwIjXuqyuWY6kglm4"; // pic
       console.log('Image uploaded to Storage:', imageUrl);
       setImageUrl(imageUrl);
     } catch (err) {
@@ -130,7 +134,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
 
     try {
       if (!wallet) {
-        throw new Error('Please connect wallet (LaunchToken)');
+        throw new Error(t('common.connectWallet'));
       }
 
       const metadataForArweave = {
@@ -156,7 +160,6 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
       });
 
       const metadataUrl = await uploadToStorage(metadataFile, 'metadata');
-      // const metadataUrl = "https://arweave.net/UEuuJkHW3rgw4tcmlL_9loURN3Hc3YVYs_m7e5rngww"; // metadata
       console.log('Metadata uploaded to Storage:', metadataUrl);
 
       const tokenMetadata: TokenMetadata = {
@@ -185,7 +188,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
       console.log('initConfigData', Object.fromEntries(
         Object.entries(initConfigData).map(([key, value]) => [key, value.toString()])
       ));
-    
+
       const result = await initializeToken(tokenMetadata, wallet, connection, initConfigData);
 
       if (!result.success) {
@@ -277,18 +280,18 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      <PageHeader title="Launch Token" bgImage='/bg/group1/2.jpg' />
+      <PageHeader title={t('launch.title')} bgImage='/bg/group1/2.jpg' />
       <div className="flex flex-col lg:flex-row lg:justify-center lg:items-start lg:gap-8">
         <form onSubmit={handleSubmit} className="w-full lg:w-[480px] space-y-4 md:p-4">
           <div className="">
             <label htmlFor="name" className="block text-sm font-medium mb-1">
-              Name
+              {t('launch.tokenName')}
             </label>
             <input
               id="name"
               type="text"
               value={name}
-              placeholder='Max 20 chars, alphanumeric and punctuation'
+              placeholder={t('launch.tokenNamePlaceholder')}
               onChange={(e) => {
                 const value = e.target.value;
                 // Validate name: max 20 chars, alphanumeric and punctuation, no consecutive spaces
@@ -305,13 +308,13 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
 
           <div className="">
             <label htmlFor="symbol" className="block text-sm font-medium mb-1">
-              Symbol
+              {t('launch.tokenSymbol')}
             </label>
             <input
               id="symbol"
               type="text"
               value={symbol}
-              placeholder="Max 8 chars, alphanumeric, max 1 emoji"
+              placeholder={t("launch.tokenSymbolPlaceholder")}
               onChange={(e) => {
                 const value = e.target.value;
                 // Validate symbol: max 8 chars, alphanumeric, max 1 emoji, no spaces/special chars
@@ -336,7 +339,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
           <div className="">
             <ToggleSwitch
               id="toggleStartTime"
-              label="Start mint immediately"
+              label={t('launch.startMintTime')}
               checked={startImmediately}
               onChange={() => setStartImmediately(!startImmediately)}
             />
@@ -345,7 +348,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
           {!startImmediately && (
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Start Time</span>
+                <span className="label-text">{t('launch.startTime')}</span>
               </label>
               <input
                 type="datetime-local"
@@ -360,7 +363,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
           <div className="mb-4">
             <ToggleSwitch
               id="toggleSocial"
-              label="Social information(Optional)"
+              label={t('launch.socialInformation')}
               checked={showSocial}
               onChange={() => setShowSocial(!showSocial)}
             />
@@ -385,17 +388,33 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
             )}
           </div>
 
+          {/* <div className="mb-4">
+            <ToggleSwitch
+              id="toggleSocial"
+              label="Customize vanity token address"
+              checked={showVanityAddress}
+              onChange={() => setShowVanityAddress(!showVanityAddress)}
+            />
+
+            {showVanityAddress && (
+              <VanityAddress
+                vanityAddress={vanityAddress}
+                onVanityAddressChange={setVanityAddress}
+              />
+            )}
+          </div> */}
+
           {/* Select Tier */}
           <div className='flex justify-between gap-3 mt-6'>
             <div className={`py-4 w-full text-center cursor-pointer bg-primary ${mode === 'standard' ? 'pixel-box-primary' : 'pixel-box'}`} onClick={() => setMode('standard')}>
-              <div className='text-lg font-bold mb-2'>Standard Launch</div>
-              <div className='text-xs'>Hard cap 100 million</div>
-              <div className='text-xs'>mint fee 0.2 SOL</div>
+              <div className='text-lg font-bold mb-2'>{t('launch.standardLaunch')}</div>
+              <div className='text-xs'>{t('launch.standardLaunchDescription1')}</div>
+              <div className='text-xs'>{t('launch.standardLaunchDescription2')}</div>
             </div>
             <div className={`py-4 w-full text-center cursor-pointer bg-primary ${mode === 'meme' ? 'pixel-box-primary' : 'pixel-box'}`} onClick={() => setMode('meme')}>
-              <div className='text-lg font-bold mb-2'>Meme Launch</div>
-              <div className='text-xs'>Hard cap 1 billion</div>
-              <div className='text-xs'>mint fee 0.01 SOL</div>
+              <div className='text-lg font-bold mb-2'>{t('launch.memeLaunch')}</div>
+              <div className='text-xs'>{t('launch.memeLaunchDescription1')}</div>
+              <div className='text-xs'>{t('launch.memeLaunchDescription2')}</div>
             </div>
           </div>
           {/* <div className="mt-6">
@@ -439,7 +458,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
               }`}
             disabled={isCreating || isUploading || !name || !symbol || !imageUrl}
           >
-            {isCreating ? 'Creating Token...' : 'Create Token'}
+            {isCreating ? t('launch.createToken') + '...' : t('launch.createToken')}
           </button>
           <div className='h-8'></div>
         </form>

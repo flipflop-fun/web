@@ -143,6 +143,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </div>
 
+      {/* Language selector */}
+
     </div>
   );
 };

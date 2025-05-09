@@ -7,6 +7,7 @@ import { drawShareImage } from '../../utils/shareimage';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { getMintDiscount } from '../../utils/web3';
 import { ModalTopBar } from './ModalTopBar';
+import { useTranslation } from 'react-i18next';
 
 export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, inputCode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +18,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
   const [urcCode, setUrcCode] = useState(inputCode || '');
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     const newUrl = urcCode === "" ? `${FRONTEND_URL}/token/${token.mint}` : `${FRONTEND_URL}/token/${token.mint}/${urcCode}`;
@@ -104,7 +106,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
             <polyline points="16 6 12 2 8 6"></polyline>
             <line x1="12" y1="2" x2="12" y2="15"></line>
           </svg>
-          Share
+          {t('common.share')}
         </button>
 
         {isOpen && currentUrl !== "" && (
@@ -115,7 +117,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
                 onClick={handleCopyLink}
               >
                 <svg className='w-5 h-5' fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 6h7v2H4v8h7v2H2V6h2zm16 0h-7v2h7v8h-7v2h9V6h-2zm-3 5H7v2h10v-2z" fill="currentColor" /> </svg>
-                Copy Link
+                {t('common.copyLink')}
               </button>
 
               <div className="w-full px-4 py-2 text-sm text-left hover:bg-base-200">
@@ -137,7 +139,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
                 disabled={isGenerating}
               >
                 <svg className='w-5 h-5' fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M13 17V3h-2v10H9v-2H7v2h2v2h2v2h2zm8 2v-4h-2v4H5v-4H3v6h18v-2zm-8-6v2h2v-2h2v-2h-2v2h-2z" fill="currentColor" /> </svg>
-                Share Image
+                {t('common.downloadImage')}
               </button>
             </div>
           </div>

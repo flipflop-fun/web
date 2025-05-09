@@ -18,6 +18,7 @@ import { MyDeploymentCard } from "../components/tools/MyDeploymentCard";
 import { filterTokens } from "../utils/format";
 import { PageHeader } from "../components/common/PageHeader";
 import { UpdateAuthoritiesModal } from "../components/tools/UpdateAuthoritiesModal";
+import { useTranslation } from "react-i18next";
 
 export type MyDeploymentsProps = {
   expanded: boolean;
@@ -34,7 +35,7 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [dataAfterFilter, setDataAfterFilter] = useState<InitiazlizedTokenData[]>([]);
-
+  const { t } = useTranslation();
   const wallet = useAnchorWallet();
   const navigate = useNavigate();
   const { isMobile } = useDeviceType();
@@ -71,7 +72,7 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      <PageHeader title="My Deployments" bgImage='/bg/group1/4.jpg' />
+      <PageHeader title={t('menu.myDeployments')} bgImage='/bg/group1/4.jpg' />
       <div className="w-full md:max-w-6xl mx-auto mb-3 md:mb-20">
         {loading ? (
           <div className="flex justify-center">
@@ -104,12 +105,12 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
             <table className="pixel-table w-full">
               <thead>
                 <tr>
-                  <th className=" text-center"></th>
-                  <th className=" text-left">Symbol & Name</th>
-                  <th className=" text-left">Mint Address</th>
-                  <th className=" text-right">Milestone</th>
-                  <th className=" text-right">Supply</th>
-                  <th className=" text-center">Actions</th>
+                  <th className="text-center">{t('tokenInfo.logo')}</th>
+                  <th className="text-left">{t('launch.tokenSymbol')}/{t('launch.tokenName')}</th>
+                  <th className="text-left">{t('tokenInfo.tokenAddress')}</th>
+                  <th className="text-right">{t('common.milestone')}</th>
+                  <th className="text-right">{t('tokenInfo.currentMinted')}</th>
+                  <th className="text-right">{t('common.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -149,7 +150,7 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
                               setIsCloseModalOpen(true);
                             }}
                           >
-                            Close Mint
+                            {t('mint.closeMint')}
                           </button>
                         )}
                         <button
@@ -159,7 +160,7 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
                             setIsUpdateModalOpen(true);
                           }}
                         >
-                          Metadata
+                          {t('tokenInfo.metadata')}
                         </button>
                         <button
                           className="btn btn-sm btn-secondary"
@@ -168,7 +169,7 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
                             setUpdateAuthoritiesOpen(true)
                           }}
                         >
-                          Authorities
+                          {t('tokenInfo.authorities')}
                         </button>
                       </div>
                     </td>
@@ -201,7 +202,7 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
           )
         ) : (
           <div className="text-center py-10">
-            <p className="text-gray-500">No deployments found</p>
+            <p className="text-gray-500">{t('tokenInfo.noDeployments')}</p>
           </div>
         )}
         <CloseTokenModal

@@ -13,6 +13,7 @@ import { useDeviceType } from '../../hooks/device';
 import { ModalTopBar } from '../common/ModalTopBar';
 import { PublicKey } from '@solana/web3.js';
 import { UriDisplay } from '../common/UriDisplay';
+import { useTranslation } from 'react-i18next';
 
 type UpdateMetadataModalProps = {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
 
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (token && token.tokenMetadata && token.tokenMetadata.extensions) {
@@ -124,7 +126,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title={`Token Metadata`} onClose={onClose} />
+        <ModalTopBar title={t('tokenInfo.metadata')} onClose={onClose} />
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Token Logo and Basic Info */}
@@ -142,14 +144,14 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                   <div className="text-base truncate ml-3">{token.tokenName}</div>
                 </div>
                 <div className="flex gap-2 text-sm text-base-content/70">
-                  <span className="font-semibold">Mint:</span>
+                  <span className="font-semibold">{t('tokenInfo.tokenAddress')}:</span>
                   <span className="font-pixel">
                     <AddressDisplay address={token.mint} showCharacters={isMobile ? 5 : 10} />
                   </span>
                 </div>
                 <div className="flex gap-2 text-sm text-base-content/70">
                   <span className="font-semibold">
-                    <UriDisplay uri={token.tokenUri} text={"Metadata"} showCharacters={0} />
+                    <UriDisplay uri={token.tokenUri} text={t('tokenInfo.metadataJson')} showCharacters={0} />
                   </span>
                 </div>
               </div>
@@ -166,7 +168,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
             {/* Description */}
             <div>
               <label className="label">
-                <span className="label-text font-semibold">Description</span>
+                <span className="font-semibold">{t('launch.description')}</span>
               </label>
               <textarea
                 value={description}
@@ -178,7 +180,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
 
             {/* Social Information */}
             <div className="space-y-4">
-              <h4 className="font-semibold">Social Information</h4>
+              <h4 className="font-semibold">{t('launch.socialInformation')}</h4>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Website */}
@@ -270,7 +272,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
             {/* Submit Button */}
             {metadataMutable ? (
               <div className="space-y-4">
-                <AlertBox title='Warning!' message='Updating token metadata will cost 0.1 SOL as a transaction fee.' />
+                <AlertBox title={t('common.attention')} message={t('launch.updateMetadataAttention')} />
 
                 <div className="form-control">
                   <label className="label cursor-pointer justify-start gap-3">
@@ -280,7 +282,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                       checked={isConfirmed}
                       onChange={(e) => setIsConfirmed(e.target.checked)}
                     />
-                    <span className="label-text">I understand and agree to pay 0.1 SOL for updating the token metadata</span>
+                    <span className="label-text">{t('launch.updateMetadataConfirmation')}</span>
                   </label>
                 </div>
 
@@ -290,13 +292,13 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                     className={`btn btn-primary`}
                     disabled={loading || !isConfirmed}
                   >
-                    {loading ? 'Updating...' : 'Metadata'}
+                    {loading ? t('launch.updateMetadata') + '...' : t('launch.updateMetadata')}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="space-y-4">
-                <AlertBox title='Warning!' message='Token metadata is immutable.' />
+                <AlertBox title={t('common.attention')} message='Token metadata is immutable.' />
               </div>
             )}
 

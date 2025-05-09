@@ -1,6 +1,7 @@
 import React from 'react';
 import { MetricsProps } from '../../types/types';
 import { formatSeconds } from '../../utils/format';
+import { useTranslation } from 'react-i18next';
 
 export const Metrics: React.FC<MetricsProps> = ({
   mode,
@@ -14,6 +15,7 @@ export const Metrics: React.FC<MetricsProps> = ({
   liquidityTokensRatio,
   symbol,
 }) => {
+  const { t } = useTranslation();
   const epochesPerEraNum = parseFloat(epochesPerEra) || 0;
   const initialTargetMintSizePerEpochNum = parseFloat(initialTargetMintSizePerEpoch) || 0;
   const reduceRatioNum = parseFloat(reduceRatio) || 0;
@@ -82,33 +84,33 @@ export const Metrics: React.FC<MetricsProps> = ({
 
   return (
     <div className="pixel-box space-y-4 w-full lg:w-[480px] p-6 mt-4" style={{}}>
-      <div className='text-xl font-bold'>{`Cool! You choosed ${mode} launch`}</div>
+      <div className='text-xl font-bold'>{t('launch.tokenParams')}</div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Target Milestone</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.targetMilestone')}</p>
         <p className="font-medium text-base-content">{targetEras}</p>
       </div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Checkpoints per Milestone(min)</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.checkpointsPerMilestone')}</p>
         <p className="font-medium text-base-content">{epochesPerEraNum}</p>
       </div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Estimated Mint Time to target</p>
-        <p className="font-medium text-base-content">{calculateMetrics().estimatedDays} days (est.{calculateMetrics().mintTimesToTarget})</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.targetMintTime')}</p>
+        <p className="font-medium text-base-content">{calculateMetrics().estimatedDays} {t('common.days')}</p>
       </div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Max Supply</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.maxSupply')}</p>
         <p className="font-medium text-base-content">{calculateMetrics().maxSupply} {symbol}</p>
       </div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Supply to Target Milestone</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.targetSupply')}</p>
         <p className="font-medium text-base-content">{calculateMetrics().totalsupplyToTargetEras} {symbol} ({calculateMetrics().percentToTargetEras}%)</p>
       </div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Target Mint Time per Checkpoint</p>
-        <p className="font-medium text-base-content">{formatSeconds(targetSecondsPerEpochNum)} (avg. {formatSeconds(calculateMetrics().mintSecondsToTarget)})/mint)</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.targetMintTimePerCheckpoint')}</p>
+        <p className="font-medium text-base-content">{formatSeconds(targetSecondsPerEpochNum)} ({t('mint.average')} {formatSeconds(calculateMetrics().mintSecondsToTarget)})</p>
       </div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Total Mint Fee(min)</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.targetMintFee')}</p>
         <div className="flex items-center gap-2">
           <p className="font-medium text-base-content">{calculateMetrics().minTotalFee} to {calculateMetrics().maxTotalFee} SOL</p>
           {calculateMetrics().isFeeTooHigh && (
@@ -125,7 +127,7 @@ export const Metrics: React.FC<MetricsProps> = ({
         <p className="font-medium text-base-content">{calculateMetrics().initialLiquidityToTargetEra} {symbol} ({calculateMetrics().initialLiquidityToTargetEraPercent}%)</p>
       </div> */}
       <div>
-        <p className="text-sm text-base-content/70 mb-1">Launch Price</p>
+        <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.estimatedIDOPrice')}</p>
         <div className="flex items-center gap-2">
           <p className="font-medium text-base-content">{calculateMetrics().minLaunchPrice} to {calculateMetrics().maxLaunchPrice} SOL/{symbol}</p>
           {calculateMetrics().isLaunchPriceTooHigh && (

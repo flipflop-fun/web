@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDeviceType } from '../../hooks/device';
 import { BN_LAMPORTS_PER_SOL, numberStringToBN } from '../../utils/format';
 import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+import { useTranslation } from 'react-i18next';
 
 type MyMintedTokenCardProps = {
   token: TokenListItem;
@@ -20,6 +21,7 @@ export const MyMintedTokenCard: FC<MyMintedTokenCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const { isMobile } = useDeviceType();
+  const { t } = useTranslation();
 
   const handleButtonClick = (e: React.MouseEvent, callback: () => void) => {
     e.stopPropagation();
@@ -64,13 +66,13 @@ export const MyMintedTokenCard: FC<MyMintedTokenCardProps> = ({
               </div>
               <div className="space-y-1">
                 <div className="flex gap-2">
-                  <div className="text-sm mt-0.5 opacity-70">Mint:</div>
+                  <div className="text-sm mt-0.5 opacity-70">{t('tokenInfo.tokenAddress')}:</div>
                   <AddressDisplay address={token.mint} showCharacters={isMobile ? 5 : 10} />
                 </div>
               </div>
               <div className="space-y-1">
                 <div className="flex gap-2">
-                  <div className="text-sm mt-0.5 opacity-70">Balance:</div>
+                  <div className="text-sm mt-0.5 opacity-70">{t('tokenInfo.balance')}:</div>
                   {(numberStringToBN(token.amount).div(BN_LAMPORTS_PER_SOL)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} {token.tokenData?.tokenSymbol}
                 </div>
               </div>
@@ -93,7 +95,7 @@ export const MyMintedTokenCard: FC<MyMintedTokenCardProps> = ({
               className="btn btn-sm btn-success"
               onClick={handleGetMore}
             >
-              View
+              {t('tokenInfo.view')}
             </button>
           </div>
         </div>

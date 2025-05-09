@@ -11,6 +11,7 @@ import { PageHeader } from '../components/common/PageHeader';
 import { useDeviceType } from '../hooks/device';
 import { ScrollCards } from '../components/common/ScrollCards';
 import { TokenCardSimple } from '../components/mintTokens/TokenCardSimple';
+import { useTranslation } from 'react-i18next';
 
 export const Discover: React.FC<DiscoverProps> = ({
   expanded,
@@ -20,7 +21,8 @@ export const Discover: React.FC<DiscoverProps> = ({
   // const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const { isMobile } = useDeviceType();
-
+  const { t } = useTranslation();
+  
   // Load search history on component mount
   useEffect(() => {
     const history = localStorage.getItem('search_history');
@@ -133,33 +135,33 @@ export const Discover: React.FC<DiscoverProps> = ({
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
       {/* Search Bar */}
-      <PageHeader title="Discover" bgImage='/bg/group1/1.jpg' />
+      <PageHeader title={t('discover.title')} bgImage='/bg/group1/1.jpg' />
       <div className="md:max-w-6xl mx-auto mb-3 md:mb-12">
         <div className="flex flex-wrap gap-2 mb-4">
           <button 
             className="btn btn-primary"
             onClick={() => window.location.href = '/launch-token'}
           >
-            Launch A Token
+            {t('discover.launchAToken')}
           </button>
           <button 
             className="btn btn-secondary"
             onClick={() => window.location.href = '/my-minted-tokens'}
           >
-            My Minted Tokens
+            {t('discover.myMintedTokens')}
           </button>
           <button 
             className="btn btn-accent"
             onClick={() => window.location.href = '/my-urc'}
           >
-            My Promotion
+            {t('discover.myPromotion')}
           </button>
           {hasDelegatedTokens &&
             <button 
               className="btn btn-extra1"
               onClick={() => window.location.href = '/my-delegated-tokens'}
             >
-              My Liquidities
+              {t('discover.myLiquidities')}
             </button>
           }
         </div>
@@ -168,7 +170,7 @@ export const Discover: React.FC<DiscoverProps> = ({
           <div className="relative join-item flex-1">
             <input
               type="text"
-              placeholder="Search by token name, symbol, or address..."
+              placeholder={t('discover.searchPlaceholder')}
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -181,7 +183,7 @@ export const Discover: React.FC<DiscoverProps> = ({
             onClick={handleSearch}
             disabled={loading}
           >
-            {loading ? <span className="loading loading-spinner loading-sm"></span> : 'Search'}
+            {loading ? <span className="loading loading-spinner loading-sm"></span> : t('discover.search')}
           </button>
         </div>
 
@@ -222,7 +224,7 @@ export const Discover: React.FC<DiscoverProps> = ({
 
         {latestDisplayData.initializeTokenEventEntities.length > 0 && (
           <div className={`${isMobile && "bg-base-200 -ml-4 -mr-4 pb-4"}`}>
-            <h2 className="text-xl mt-6 ml-4 pt-1">Latest Tokens</h2>
+            <h2 className="text-xl mt-6 ml-4 pt-1">{t('discover.latestTokens')}</h2>
             {isMobile ? (
               <ScrollCards tokens={latestDisplayData.initializeTokenEventEntities} />
             ) : (
@@ -238,7 +240,7 @@ export const Discover: React.FC<DiscoverProps> = ({
         {/* Hottest Tokens */}
         {filteredHotTokens.length > 0 && (
           <>
-            <h2 className="text-xl mt-6">Hottest Tokens</h2>
+            <h2 className="text-xl mt-6">{t('discover.hottestTokens')}</h2>
             {isMobile ? (
               <div className="grid grid-cols-2 gap-4 p-1">
                 {filteredHotTokens.map((token: InitiazlizedTokenData, index: number) =>

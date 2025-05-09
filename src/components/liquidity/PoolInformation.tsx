@@ -11,6 +11,7 @@ import { DexStatusBar } from "./DexStatusBar";
 import { formatPrice } from "../../utils/format";
 import { BurnSystemVaultTokensModal } from "./BurnSystemVaultTokensModal";
 import { U32_MAX } from "../../config/constants";
+import { useTranslation } from "react-i18next";
 
 type PoolInformationProps = {
   tokenData: InitiazlizedTokenData;
@@ -59,7 +60,7 @@ export const PoolInformation: FC<PoolInformationProps> = ({
   const [openTime, setOpenTime] = useState(0);
   const [mintTokenVaultBalance, setMintTokenVaultBalance] = useState(0);
   const [showBurnSystemVaultTokensModel, setShowBurnSystemVaultTokensModel] = useState(false);
-
+  const { t } = useTranslation();
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
 
@@ -109,50 +110,50 @@ export const PoolInformation: FC<PoolInformationProps> = ({
   return (
     <div>
       <div className="bg-base-200 md:p-6 p-3 rounded-lg mb-8">
-        <h2 className="md:text-xl text-lg font-semibold mb-4">Pool Information</h2>
+        <h2 className="md:text-xl text-lg font-semibold mb-4">{t('vm.poolInformation')}</h2>
         <div className="grid md:gap-3 gap-2 md:text-md text-sm">
           <div className="flex justify-between">
-            <span>Token Name:</span>
+            <span>{t('launch.tokenName')}:</span>
             <span>{tokenData.tokenName}</span>
           </div>
           <div className="flex justify-between">
-            <span>Token Symbol:</span>
+            <span>{t('launch.tokenSymbol')}:</span>
             <span>{tokenData.tokenSymbol}</span>
           </div>
 
           <div className="flex justify-between">
-            <span>Vault Token Balance:</span>
+            <span>{t('vm.vaultBalanceToken')}:</span>
             <span>{formatPrice(tokenVaultBalance, 3)} {tokenData.tokenSymbol}</span>
           </div>
           <div className="flex justify-between">
-            <span>Vault SOL Balance:</span>
+            <span>{t('vm.vaultBalanceSol')}:</span>
             <span>{formatPrice(wsolVaultBalance, 3)} SOL</span>
           </div>
 
           {poolAddress !== "" && <div>
             <div className='grid gap-3'>
               <div className="flex justify-between">
-                <span>Pool Address:</span>
+                <span>{t('vm.poolAddress')}:</span>
                 <span>{<AddressDisplay address={poolAddress} />}</span>
               </div>
               <div className="flex justify-between">
-                <span>Pool Token Balance:</span>
+                <span>{t('vm.tokenBalanceInPool')}:</span>
                 <span>{formatPrice(poolTokenBalance, 3)} {tokenData?.tokenSymbol}</span>
               </div>
               <div className="flex justify-between">
-                <span>Pool SOL Balance:</span>
+                <span>{t('vm.solBalanceInPool')}:</span>
                 <span>{formatPrice(poolSOLBalance, 3)} SOL</span>
               </div>
               <div className="flex justify-between">
-                <span>Current Token Price:</span>
+                <span>{t('vm.currentTokenPrice')}:</span>
                 <span>{formatPrice(currentPrice, 3)} SOL</span>
               </div>
               <div className="flex justify-between">
-                <span>Total LP Token:</span>
+                <span>{t('vm.totalLpTokens')}:</span>
                 <span>{formatPrice(totalLpToken, 3)} LP-{tokenData.tokenSymbol}-SOL</span>
               </div>
               <div className="flex justify-between">
-                <span>Vault LP Token:</span>
+                <span>{t('vm.vaultLpTokens')}:</span>
                 <span>{formatPrice(vaultLpTokenBalance, 3)} LP-{tokenData.tokenSymbol}-SOL</span>
               </div>
             </div>
@@ -163,7 +164,7 @@ export const PoolInformation: FC<PoolInformationProps> = ({
       {parseInt(tokenData.graduateEpoch) < U32_MAX &&
         <div className="bg-base-200 md:p-6 p-3 rounded-lg mb-8 md:text-md text-sm">
           <div className="flex justify-between">
-            <span>Tokens in System vault:</span>
+            <span>{t('vm.systemVaultToken')}:</span>
             <span>{formatPrice(mintTokenVaultBalance, 3)} {tokenData?.tokenSymbol}</span>
           </div>
           <div className="flex justify-between">
@@ -173,19 +174,19 @@ export const PoolInformation: FC<PoolInformationProps> = ({
                 className="btn btn-secondary btn-sm my-2"
                 onClick={() => setShowBurnSystemVaultTokensModel(true)}
               >
-                Burn the system vault tokens
+                {t('vm.burnUnAllocatedTokens')}
               </button>
             </span>
           </div>
         </div>}
       {poolAddress === "" && 
       <div>
-        <AlertBox title="Alert" message="Raydium pool has not created! Probably the target milestone is not reached." />
+        <AlertBox title={t('common.attention')} message={t('vm.raydiumNotReady')} />
         {/* <div className="mt-5"><a href={`/create-liquidity-pool/${tokenData.mint}`} className="text-blue-500 underline">Create pool</a></div> */}
       </div>}
       {poolAddress !== "" && !isDexOpen &&
         <div>
-          <AlertBox title="Alert" message={`Raydium pool has been created but not opened! Please wait until ${new Date(openTime * 1000).toLocaleString()}`} />
+          <AlertBox title={t('common.attention')} message={`${t('vm.raydiumNotStart')} ${new Date(openTime * 1000).toLocaleString()}`} />
         </div>}
       {showBurnSystemVaultTokensModel && mintTokenVaultBalance > 0 &&
       <BurnSystemVaultTokensModal 

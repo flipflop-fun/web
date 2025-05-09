@@ -9,6 +9,7 @@ import { NETWORK, SCANURL } from '../../config/constants';
 import { formatPrice } from '../../utils/format';
 import AlertBox from '../common/AlertBox';
 import { ModalTopBar } from '../common/ModalTopBar';
+import { useTranslation } from 'react-i18next';
 
 export const RefundModal: FC<RefundModalProps> = ({
   isOpen,
@@ -23,7 +24,7 @@ export const RefundModal: FC<RefundModalProps> = ({
   const [refundFeeRate, setRefundFeeRate] = useState(0);
   const [refundAccountData, setRefundAccountData] = useState<RefundTokenData>();
   const [tokenBalance, setTokenBalance] = useState(0);
-
+  const { t } = useTranslation();
   const liquidityRatio = Number(token.tokenData?.liquidityTokensRatio) / 100;
 
   useEffect(() => {
@@ -103,12 +104,12 @@ export const RefundModal: FC<RefundModalProps> = ({
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title={`Refund ${token.tokenData?.tokenSymbol}`} onClose={onClose} />
+        <ModalTopBar title={`${t('mint.refund')} ${token.tokenData?.tokenSymbol}`} onClose={onClose} />
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <div className="space-y-4">
             <div className="pixel-box mt-4 space-y-2 bg-base-200 p-4">
               <div className="flex justify-between items-center text-sm">
-                <span className="text-base-content/70">Total paid</span>
+                <span className="text-base-content/70">{t('mint.totalPaid')}</span>
                 <span className="font-medium">
                   {refundAccountData ?
                     formatPrice(refundAccountData.totalMintFee.toNumber() / LAMPORTS_PER_SOL, 3) :
@@ -117,7 +118,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-base-content/70">- Bonus to referrer</span>
+                <span className="text-base-content/70">- {t('mint.bonusToReferrer')}</span>
                 <span className="font-medium">
                   {refundAccountData ?
                     formatPrice(refundAccountData.totalReferrerFee.toNumber() / LAMPORTS_PER_SOL, 3) :
@@ -126,7 +127,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-base-content/70">- Refund fee ({refundFeeRate * 100}%)</span>
+                <span className="text-base-content/70">- {t('mint.refundFee')} ({refundFeeRate * 100}%)</span>
                 <span className="font-medium">
                   {refundAccountData ?
                     formatPrice((refundAccountData.totalMintFee.toNumber() * refundFeeRate) / LAMPORTS_PER_SOL, 3) :
@@ -135,7 +136,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-base-content/70">Total tokens you minted</span>
+                <span className="text-base-content/70">{t('mint.totalTokensMinted')}</span>
                 <span className="font-medium text-error">
                   {refundAccountData ?
                     formatPrice(refundAccountData.totalTokens.toNumber() / LAMPORTS_PER_SOL, 3) :
@@ -144,13 +145,13 @@ export const RefundModal: FC<RefundModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-base-content/70">Token balance in wallet</span>
+                <span className="text-base-content/70">{t('mint.balanceInWallet')}</span>
                 <span className="font-medium text-error">
                   {formatPrice(tokenBalance, 3)} {token.tokenData?.tokenSymbol}
                 </span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-base-content/70">Token burned from vault</span>
+                <span className="text-base-content/70">{t('mint.tokensBurnedFromVault')}</span>
                 <span className="font-medium text-error">
                   {refundAccountData ?
                     formatPrice(refundAccountData.totalTokens.toNumber() / LAMPORTS_PER_SOL / (1 - liquidityRatio) * liquidityRatio, 3) :
@@ -159,7 +160,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 </span>
               </div>
               <div className="flex justify-between items-center text-sm">
-                <span className="text-base-content/70 font-bold">You get</span>
+                <span className="text-base-content/70 font-bold">{t('mint.refundAmount')}</span>
                 <span className="font-medium text-success">
                   {refundAccountData ?
                     formatPrice(
@@ -176,10 +177,10 @@ export const RefundModal: FC<RefundModalProps> = ({
 
             {refundAccountData && tokenBalance === refundAccountData?.totalTokens.toNumber() / LAMPORTS_PER_SOL ? (
               <div className="flex flex-col gap-2">
-                <AlertBox
-                  title="Warning!"
+                {/* <AlertBox
+                  title={t('common.attention')}
                   message={`You are about to refund your ${token.tokenData?.tokenSymbol} tokens. This action cannot be undone.`}
-                />
+                /> */}
                 <div className="form-control">
                   <label className="label cursor-pointer justify-start gap-2">
                     <input
@@ -188,7 +189,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                       checked={confirmed}
                       onChange={(e) => setConfirmed(e.target.checked)}
                     />
-                    <span className="label-text">I understand that this action is irreversible</span>
+                    <span className="label-text">{t('mint.refundConfirmation')}</span>
                   </label>
                 </div>
 
@@ -198,14 +199,14 @@ export const RefundModal: FC<RefundModalProps> = ({
                     onClick={handleRefund}
                     disabled={!confirmed || !refundAccountData}
                   >
-                    {loading ? 'Processing...' : 'Confirm Refund'}
+                    {loading ? t('mint.startRefund') + '...' : t('mint.startRefund')}
                   </button>
                 </div>
               </div>
             ) : (
               <AlertBox
-                title="Warning!"
-                message={`You balance is not equal to the total tokens you minted. This action cannot be undone.`}
+                title={t('common.attention')}
+                message={t('mint.refundError')}
               />
             )}
           </div>

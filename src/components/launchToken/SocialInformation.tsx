@@ -1,5 +1,6 @@
 import React from 'react';
 import { SocialInformationProps } from '../../types/types';
+import { useTranslation } from 'react-i18next';
 
 export const SocialInformation: React.FC<SocialInformationProps> = ({
   description,
@@ -17,11 +18,13 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
   onGithubChange,
   onMediumChange,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-4 md:space-y-6">
       <div>
         <label htmlFor="description" className="text-label mb-1">
-          Description
+          {t('launch.description')}
         </label>
         <textarea
           id="description"
@@ -35,7 +38,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
       </div>
       <div>
         <label htmlFor="website" className="text-label mb-1">
-          Website
+          {t('launch.website')}
         </label>
         <input
           type="url"

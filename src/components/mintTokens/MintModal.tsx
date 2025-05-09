@@ -9,6 +9,7 @@ import { ToastBox } from '../common/ToastBox';
 import { BN_LAMPORTS_PER_SOL, formatPrice, getFeeValue, numberStringToBN } from '../../utils/format';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { ModalTopBar } from '../common/ModalTopBar';
+import { useTranslation } from 'react-i18next';
 
 type MintModalProps = {
   isOpen: boolean;
@@ -20,6 +21,7 @@ type MintModalProps = {
 const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode }) => {
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
+  const { t } = useTranslation();
   const [code, setCode] = useState(referrerCode || '');
   const [loading, setLoading] = useState(false);
   const [referralData, setReferralData] = useState<ReferralData>();
@@ -114,7 +116,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
 
   const handleMint = async () => {
     if (!wallet) {
-      toast.error('Please connect wallet (MintModal)');
+      toast.error(t('common.connectWallet'));
       return;
     }
 
@@ -171,16 +173,16 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title={`Mint ${token.tokenSymbol}`} onClose={onClose} />
+        <ModalTopBar title={`${t('common.mint')} ${token.tokenSymbol}`} onClose={onClose} />
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <div className="space-y-4">
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Unique Referral Code(URC)</span>
+                <span className="label-text">{t('common.urc')}</span>
               </label>
               <input
                 type="text"
-                placeholder="Enter referral code"
+                placeholder={t('mint.urcPlaceholder')}
                 className="input input-bordered w-full"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
@@ -275,7 +277,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                 onClick={handleMint}
                 disabled={loading || !isValidCode || !code || !usageCountOk}
               >
-                {loading ? 'Processing...' : 'Mint'}
+                {loading ? 'Processing...' : t('common.mint')}
               </button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { TokenImageUploadProps } from '../../types/types';
 import { MAX_AVATAR_FILE_SIZE, VALID_IMAGE_TYPES } from '../../config/constants';
+import { useTranslation } from 'react-i18next';
 
 export const TokenImageUpload: React.FC<TokenImageUploadProps> = ({
   onImageChange,
@@ -9,19 +10,20 @@ export const TokenImageUpload: React.FC<TokenImageUploadProps> = ({
   // const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation();
 
   const validateImage = (file: File): Promise<boolean> => {
     return new Promise((resolve) => {
       // Check file size
       if (file.size > MAX_AVATAR_FILE_SIZE) {
-        setError('File size must be less than 250K');
+        setError(t('launch.imageSize', {size: 250}));
         resolve(false);
         return;
       }
 
       // Check file type
       if (!VALID_IMAGE_TYPES.includes(file.type)) {
-        setError('Only PNG, JPG, WEBP and GIF files are allowed');
+        setError(t('launch.onlyImageFormat'));
         resolve(false);
         return;
       }
@@ -30,7 +32,7 @@ export const TokenImageUpload: React.FC<TokenImageUploadProps> = ({
       const img = new Image();
       img.onload = () => {
         if (img.width !== img.height) {
-          setError('Image must be square (same width and height)');
+          setError(t('launch.mustBeSquare'));
           resolve(false);
         } else {
           setError(null);
@@ -38,7 +40,7 @@ export const TokenImageUpload: React.FC<TokenImageUploadProps> = ({
         }
       };
       img.onerror = () => {
-        setError('Invalid image file');
+        setError(t('launch.invalidImageFile'));
         resolve(false);
       };
       img.src = URL.createObjectURL(file);
@@ -103,7 +105,7 @@ export const TokenImageUpload: React.FC<TokenImageUploadProps> = ({
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium mb-1">
-        Token Image
+        {t('launch.tokenImage')}
       </label>
       <div
         className='pixel-box text-center cursor-pointer'
@@ -147,10 +149,10 @@ export const TokenImageUpload: React.FC<TokenImageUploadProps> = ({
           <div className="space-y-2 py-8">
             <svg className="mx-auto h-12 w-12 text-base-content" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M22 3H2v18h20v-2h-2v-2h2v-2h-2v-2h2v-2h-2V9h2V7h-2V5h2V3zm-2 4v2h-2v2h2v2h-2v2h2v2h-2v2H4V5h14v2h2zm-6 2h-2v2h-2v2H8v2H6v2h2v-2h2v-2h2v-2h2v2h2v-2h-2V9zM6 7h2v2H6V7z" fill="currentColor" /> </svg>
             <div className="text-sm text-base-content">
-              <span className="font-medium text-primary">Click to upload</span> or drag and drop
+              <span className="font-medium text-primary">{t('launch.clickToUpload')}</span> {t('launch.dragOrDrop')}
             </div>
             <p className="text-xs text-base-content">
-              PNG, JPG, GIF, WEBP, AVIF up to {MAX_AVATAR_FILE_SIZE / 1024 / 1024} MB (must be square)
+              {`${t('launch.imageFormat')}, ${t('launch.imageSize', {size: MAX_AVATAR_FILE_SIZE / 1024 / 1024, unit: "M"})}, ${t('launch.mustBeSquare')}`}
             </p>
           </div>
         )}

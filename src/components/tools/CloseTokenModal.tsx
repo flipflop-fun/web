@@ -7,6 +7,7 @@ import { ToastBox } from "../common/ToastBox";
 import { NETWORK, SCANURL } from "../../config/constants";
 import AlertBox from "../common/AlertBox";
 import { ModalTopBar } from "../common/ModalTopBar";
+import { useTranslation } from "react-i18next";
 
 type CloseTokenModalProps = {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export const CloseTokenModal: FC<CloseTokenModalProps> = ({ isOpen, onClose, tok
   const [loading, setLoading] = useState(false);
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
+  const { t } = useTranslation();
 
   if (!isOpen || !token) return null;
 
@@ -68,10 +70,10 @@ export const CloseTokenModal: FC<CloseTokenModalProps> = ({ isOpen, onClose, tok
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title={`Close Token`} onClose={onClose} />
+        <ModalTopBar title={t('mint.closeMint')} onClose={onClose} />
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <div className="space-y-4">
-            <AlertBox title="Warning" message={`You are about to close the mint for ${token.tokenName} (${token.tokenSymbol}). You will get back some SOL from the closed account. This action cannot be undone and will permanently prevent the creation of new tokens.`} />
+            <AlertBox title={t('common.attention')} message={t('mint.closeMintAttention', {name: token.tokenName, symbol: token.tokenSymbol})} />
 
             <div className="form-control">
               <label className="label cursor-pointer justify-start gap-2">
@@ -81,7 +83,7 @@ export const CloseTokenModal: FC<CloseTokenModalProps> = ({ isOpen, onClose, tok
                   checked={confirmed}
                   onChange={(e) => setConfirmed(e.target.checked)}
                 />
-                <span className="label-text">I understand that this action is irreversible</span>
+                <span className="label-text">{t('mint.closeMintConfirmation')}</span>
               </label>
             </div>
 
@@ -91,7 +93,7 @@ export const CloseTokenModal: FC<CloseTokenModalProps> = ({ isOpen, onClose, tok
                 onClick={handleClose}
                 disabled={!confirmed}
               >
-                {loading ? 'Processing...' : 'Close Mint'}
+                {loading ? 'Processing...' : t('mint.closeMint')}
               </button>
             </div>
           </div>

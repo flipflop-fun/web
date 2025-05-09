@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { generateDefaultUsername } from "../utils/format";
 import { DEFAULT_IMAGE } from '../config/constants';
 import { useAuth } from '../hooks/auth';
+import { useTranslation } from 'react-i18next';
 
 export type SocialExploreProps = {
   expanded: boolean;
@@ -16,7 +17,7 @@ export type SocialExploreProps = {
 
 export const mergeUserData = (originalData: any[]): OrderedUser[] => {
   const userMap = new Map<string, OrderedUser>();
-
+  
   originalData.forEach((item) => {
     const admin = item.admin;
 
@@ -53,6 +54,7 @@ export const mergeUserData = (originalData: any[]): OrderedUser[] => {
 export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
   const { token, handleLogin, isLoggingIn } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
@@ -111,7 +113,7 @@ export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
 
   return (
     <div className={`space-y-3 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      <PageHeader title="Social Explore" bgImage="/bg/group1/22.jpg" />
+      <PageHeader title={t('menu.socialExplore')} bgImage="/bg/group1/22.jpg" />
       {/* {(!token || !walletAddress) && (
         <div className="text-center mt-10">
           <p className="text-gray-300 mb-4">Please log in to view your feed.</p>
@@ -119,7 +121,7 @@ export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
             onClick={handleLogin}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
-            Connect Wallet
+            {t('common.connectWallet')}
           </button>
         </div>
       )} */}
@@ -130,7 +132,7 @@ export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
           <div className='relative join-item flex-1'>
             <input
               type="text"
-              placeholder="Enter username or wallet address"
+              placeholder={t('social.socialExplorePlaceholder')}
               className='input search-input w-full pl-10'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -143,7 +145,7 @@ export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
               onClick={handleSearch}
               disabled={loading}
             >
-            {loading ? <span className="loading loading-spinner loading-sm"></span> : 'Search'}
+            {loading ? <span className="loading loading-spinner loading-sm"></span> : t('discover.search')}
           </button>
         </div>
       </div>
@@ -154,19 +156,19 @@ export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
             onClick={() => setDeveloperRoleSelected(!developerRoleSelected)}
             className={`btn ${developerRoleSelected ? 'btn-primary' : 'btn-outline'}`}
           >
-            Developer
+            {t('tokenInfo.developer')}
           </button>
           <button
             onClick={() => setUrcProviderRoleSelected(!urcProviderRoleSelected)}
             className={`btn ${urcProviderRoleSelected ? 'btn-primary' : 'btn-outline'}`}
           >
-            URC Provider
+            {t('social.urcProvider')}
           </button>
           <button
             onClick={() => setValueManagerRoleSelected(!valueManagerRoleSelected)}
             className={`btn ${valueManagerRoleSelected ? 'btn-primary' : 'btn-outline'}`}
           >
-            V.Manager
+            {t('social.vmManager')}
           </button>
       </div>
 
@@ -195,25 +197,25 @@ export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
               <div className='flex justify-between'>
                 <div className='flex'>
                   <div className='mr-2 text-lg'>{user.totalFollowee}</div>
-                  <div className='text-gray-500 mt-[5px]'>Followees</div>
+                  <div className='text-gray-500 mt-[5px]'>{t('social.followee')}</div>
                 </div>
                 <div className='flex'>
                   <div className='mr-2 text-lg'>{user.totalFollower}</div>
-                  <div className='text-gray-500 mt-[5px]'>Followers</div>
+                  <div className='text-gray-500 mt-[5px]'>{t('social.follower')}</div>
                 </div>
               </div>
               <div className='flex justify-between'>
                 <div className='flex'>
                   <div className='mr-2 text-lg'>{user.totalLike}</div>
-                  <div className='text-gray-500 mt-[5px]'>Likes</div>
+                  <div className='text-gray-500 mt-[5px]'>{t('social.likes')}</div>
                 </div>
               </div>
               <div className='mt-2 flex flex-col-3 justify-between'>
               {(user.role as Role[]).map((roleName, index) => (
                 <div key={index}>
-                  {roleName === Role.ISSUER && !user.hides.includes(Role.ISSUER) && <div className='flex'><div className='text-gray-500 mr-2'>Launched: </div><div className='text-lg -mt-1'>{(user.tokenCount as number[])[index]}</div></div>}
-                  {roleName === Role.PROMOTER && !user.hides.includes(Role.PROMOTER) && <div className='flex'><div className='text-gray-500 mr-2'>Referred: </div><div className='text-lg -mt-1'>{(user.tokenCount as number[])[index]}</div></div>}
-                  {roleName === Role.MANAGER && !user.hides.includes(Role.MANAGER) && <div className='flex'><div className='text-gray-500 mr-2'>Managed: </div><div className='text-lg -mt-1'>{(user.tokenCount as number[])[index]}</div></div>}
+                  {roleName === Role.ISSUER && !user.hides.includes(Role.ISSUER) && <div className='flex'><div className='text-gray-500 mr-2'>{t('social.launchCount')}: </div><div className='text-lg -mt-1'>{(user.tokenCount as number[])[index]}</div></div>}
+                  {roleName === Role.PROMOTER && !user.hides.includes(Role.PROMOTER) && <div className='flex'><div className='text-gray-500 mr-2'>{t('social.promoteCount')}: </div><div className='text-lg -mt-1'>{(user.tokenCount as number[])[index]}</div></div>}
+                  {roleName === Role.MANAGER && !user.hides.includes(Role.MANAGER) && <div className='flex'><div className='text-gray-500 mr-2'>{t('social.manageCount')}: </div><div className='text-lg -mt-1'>{(user.tokenCount as number[])[index]}</div></div>}
                 </div>
               ))}
               </div>

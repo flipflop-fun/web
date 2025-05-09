@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { formatTimestamp } from '../../utils/format';
 import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+import { useTranslation } from 'react-i18next';
 
 type MyDeploymentCardProps = {
     token: InitiazlizedTokenData;
@@ -23,7 +24,7 @@ export const MyDeploymentCard: FC<MyDeploymentCardProps> = ({
     setIsUpdateModalOpen,
 }) => {
     const navigate = useNavigate();
-    
+    const { t } = useTranslation();
     const handleClick = () => {
         navigate(`/token/${token.mint}`);
     };
@@ -67,18 +68,18 @@ export const MyDeploymentCard: FC<MyDeploymentCardProps> = ({
                     </div>
 
                     <div className="flex gap-2">
-                        <div className="text-sm mt-0.5 opacity-70">Mint:</div>
+                        <div className="text-sm mt-0.5 opacity-70">{t('common.mint')}:</div>
                         <AddressDisplay address={token.mint} showCharacters={5} />
                     </div>
                     <div className="space-y-1">
                         <div className="flex gap-2">
-                            <div className="text-sm mt-0.5 opacity-70">Supply:</div>
+                            <div className="text-sm mt-0.5 opacity-70">{t('tokenInfo.currentMinted')}:</div>
                             {(Number(token.supply) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2 })} {token.tokenSymbol}                            </div>
                     </div>
 
                     <div className="space-y-1">
                         <div className="flex gap-2">
-                            <div className="text-sm mt-0.5 opacity-70">At:</div>
+                            <div className="text-sm mt-0.5 opacity-70">{t('tokenInfo.deployAt')}:</div>
                             {formatTimestamp(Number(token.metadataTimestamp))}                            </div>
                     </div>
                     <div className="flex gap-2 justify-end mt-2">
@@ -87,20 +88,20 @@ export const MyDeploymentCard: FC<MyDeploymentCardProps> = ({
                                 className="btn btn-sm btn-error"
                                 onClick={handleCloseToken}
                             >
-                                Close Mint
+                                {t('mint.closeMint')}
                             </button>
                         )}
                         <button 
                             className="btn btn-sm btn-primary"
                             onClick={handleUpdateMetadata}
                         >
-                            Metadata
+                            {t('tokenInfo.metadata')}
                         </button>
                         <button 
                             className="btn btn-sm btn-success"
                             onClick={handleClick}
                         >
-                            View
+                            {t('tokenInfo.view')}
                         </button>
                     </div>
                 </div>

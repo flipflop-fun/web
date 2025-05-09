@@ -4,6 +4,7 @@ import { TokenImage } from '../mintTokens/TokenImage';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { useNavigate } from 'react-router-dom';
 import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+import { useTranslation } from 'react-i18next';
 
 type DelegatedTokenCardProps = {
   token: InitiazlizedTokenData;
@@ -15,7 +16,8 @@ export const DelegatedTokenCard: FC<DelegatedTokenCardProps> = ({
   metadata,
 }) => {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
+  
   const handleClick = () => {
     navigate(`/manage-liquidity/${token.mint}`);
   };
@@ -48,7 +50,7 @@ export const DelegatedTokenCard: FC<DelegatedTokenCardProps> = ({
               className="btn btn-sm btn-success"
               onClick={handleClick}
             >
-              Manage Liquidity
+              {t('vm.manageMarketValue')}
             </button>
           </div>
         </div>

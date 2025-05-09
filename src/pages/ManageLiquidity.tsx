@@ -9,6 +9,7 @@ import { LpBurns } from '../components/liquidity/LpBurns';
 import { PoolInformation } from '../components/liquidity/PoolInformation';
 import { useParams } from 'react-router-dom';
 import { sleep } from '@raydium-io/raydium-sdk-v2';
+import { useTranslation } from 'react-i18next';
 
 type ManageLiquidityProps = {
   expanded: boolean;
@@ -37,6 +38,7 @@ export function ManageLiquidity({
   const initialFetchDone = useRef(false);
   const nonce = useRef(0);
   const { mint } = useParams();
+  const { t } = useTranslation();
 
   const [getTokenData, { loading: queryTokenDataLoading }] = useLazyQuery(queryTokensByMints, {
     onCompleted: (data) => {
@@ -148,13 +150,13 @@ export function ManageLiquidity({
 
       <div className="container mx-auto md:px-4 px-1 py-8">
         <div className='max-w-4xl mx-auto'>
-          <h1 className='text-2xl mb-6'>Manage Liquidity</h1>
+          <h1 className='text-2xl mb-6'>{t('vm.manageMarketValue')}</h1>
           {!mint && (
           <div className="mb-6">
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Enter mint address"
+                placeholder={t('vm.enterTokenPlaceholder')}
                 className="input input-bordered flex-1"
                 value={mintAddress}
                 onChange={(e) => setMintAddress(e.target.value)}
@@ -164,7 +166,7 @@ export function ManageLiquidity({
                 disabled={queryTokenDataLoading || queryLiquiditiesLoading || queryTradesLoading || queryLpBurnLoading || !mintAddress}
                 className="btn btn-primary"
               >
-                {queryTokenDataLoading ? 'Loading...' : 'Get Info'}
+                {queryTokenDataLoading ? 'Loading...' : t('vm.getInfo')}
               </button>
             </div>
           </div>)}

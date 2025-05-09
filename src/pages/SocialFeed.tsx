@@ -7,6 +7,7 @@ import { AiFillLike, AiFillStar, AiFillHeart, AiFillBell, AiOutlineLike, AiOutli
 import { MdRocketLaunch } from "react-icons/md";
 import toast from 'react-hot-toast';
 import { useAuth } from '../hooks/auth';
+import { useTranslation } from 'react-i18next';
 
 export type SocialFeedProps = {
   expanded: boolean;
@@ -43,25 +44,25 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({ expanded }) => {
     fetchActivities();
   }, []);
 
-
+  const { t } = useTranslation();
   const renderActivity = (activity: Activity) => {
     const { avatar, activityType, targetId, targetType, createdAt, targetWalletAddress, userWalletAddress, targetUsername, userUsername, content } = activity;
 
     const actionText = {
-      like:     'liked',
-      unlike:   'unliked',
-      comment:  'commented',
-      rate:     'rated',
-      issue_token: 'launched',
-      promote:  'promoted',
-      manage:   'managing',
-      mint:     'minted',
-      follow:   'followed',
-      unfollow: 'unfollowed',
-      join:     'joined',
-      delete_comment: 'deleted comment',
-      like_comment: 'liked comment',
-      unlike_comment: 'unliked comment'
+      like:     t('social.liked'),
+      unlike:   t('social.unliked'),
+      comment:  t('social.commented'),
+      rate:     t('social.rated'),
+      issue_token: t('menu.launchToken'),
+      promote:  t('social.promoted'),
+      manage:   t('social.managing'),
+      mint:     t('common.mint'),
+      follow:   t('social.followed'),
+      unfollow: t('social.unfollowed'),
+      join:     t('social.joined'),
+      delete_comment: t('social.deletedComment'),
+      like_comment: t('social.likedComment'),
+      unlike_comment: t('social.unlikedComment')
     }[activityType];
 
     const emoji = {
@@ -103,7 +104,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({ expanded }) => {
           <div className="">{actionText}</div>
           {activityType !== "join" &&
           <div className="flex">
-            <div>{targetType === 'user' ? 'User' : 'Token'}</div>
+            <div>{targetType === 'user' ? t('tokenInfo.user') : 'Token'}</div>
             {targetId && targetType && (
               <div className="ml-2">
                 <a href={targetLink} className="text-blue-400 hover:underline font-semibold flex items-center space-x-1">
@@ -131,7 +132,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({ expanded }) => {
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      <PageHeader title="Latest activities" bgImage="/bg/group1/23.jpg" />
+      <PageHeader title={t('menu.socialActivities')} bgImage="/bg/group1/23.jpg" />
       {!token && (
         <div className="text-center mt-10">
           <p className="text-gray-300 mb-4">Please log in to view your feed.</p>
@@ -140,7 +141,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({ expanded }) => {
             onClick={handleLogin}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
-            Connect Wallet
+            {t('common.connectWallet')}
           </button>
         </div>
       )}
@@ -149,7 +150,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({ expanded }) => {
       {token && (
         <div className="mt-6">
           {activities.length === 0 && !loading ? (
-            <div className="text-gray-400 text-center">No activities yet. Follow some users or tokens!</div>
+            <div className="text-gray-400 text-center">{t('social.noActivities')}</div>
           ) : (
             <div className="">
               {/* <div className='font-semibold mb-1'>Latest activities</div> */}

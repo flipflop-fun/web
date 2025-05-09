@@ -17,10 +17,12 @@ import { useDeviceType } from '../../hooks/device';
 import { MyUniqueReferralCodeCard } from './MyUniqueReferralCodeCard';
 import { filterRefererCode } from '../../utils/format';
 import { PageHeader } from '../common/PageHeader';
+import { useTranslation } from 'react-i18next';
 
 export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }) => {
   const wallet = useAnchorWallet();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
@@ -138,7 +140,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
       <div className={`hero min-h-[400px] bg-base-200 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
         <div className="hero-content text-center">
           <div className="max-w-md">
-            <p className="py-6">Please connect your wallet to view your URCs</p>
+            <p className="py-6">{t('common.connectWallet')}</p>
           </div>
         </div>
       </div>
@@ -159,7 +161,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      <PageHeader title="My URCs(Unique Referral Codes)" bgImage='/bg/group1/5.jpg' />
+      <PageHeader title={t('menu.myUrc')} bgImage='/bg/group1/5.jpg' />
       <div className="md:max-w-6xl mx-auto mb-3 md:mb-20">
         {urcLoading || tokenLoading || loadingMetadata ? (
           <div className="flex justify-center">
@@ -192,12 +194,12 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
             <table className="pixel-table w-full">
               <thead>
                 <tr>
-                  <th className="text-center "></th>
-                  <th className="text-left ">Symbol & Name</th>
-                  <th className="text-left ">Mint Address</th>
-                  <th className="text-left ">Developer</th>
-                  <th className="text-right ">Bonus</th>
-                  <th className="text-center ">Actions</th>
+                  <th className="text-center ">{t('tokenInfo.logo')}</th>
+                  <th className="text-left ">{t('launch.tokenName')}/{t('launch.tokenSymbol')}</th>
+                  <th className="text-left ">{t('tokenAddress')}</th>
+                  <th className="text-left ">{t('tokenInfo.developer')}</th>
+                  <th className="text-right ">{t('urc.bonus')}</th>
+                  <th className="text-center ">{t('common.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,13 +236,13 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
                             className="btn btn-sm btn-primary mr-2"
                             onClick={() => handleGetURC(item)}
                           >
-                            Code Detail
+                            {t('urc.urcDetails')}
                           </button>
                           <button
                             className="btn btn-sm btn-secondary"
                             onClick={() => handleOpenBonusDetail(item.mint, bonusByMint[item.mint] === undefined ? 0 : Number(bonusByMint[item.mint]) / LAMPORTS_PER_SOL)}
                           >
-                            Bonus Detail
+                            {t('urc.bonusDetails')}
                           </button>
                         </div>
                       </td>

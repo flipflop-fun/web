@@ -8,9 +8,11 @@ import {
   calculateMaxSupply,
 } from '../../utils/format';
 import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+import { useTranslation } from 'react-i18next';
 
 export const TokenCardMobile: React.FC<TokenCardMobileProps> = ({ token }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [metadata, setMetadata] = useState<TokenMetadataIPFS | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -75,7 +77,7 @@ export const TokenCardMobile: React.FC<TokenCardMobileProps> = ({ token }) => {
             metadataTimestamp={Number(token.metadataTimestamp)}
             className="w-12 h-12"
           />
-          <div className='mt-6 text-sm'>Price</div>
+          <div className='mt-6 text-sm'>{t('tokenInfo.priceChange')}</div>
           <span className="badge badge-lg badge-accent mt-1">+{((currentCost / originalCost - 1) * 100).toFixed(2)}%</span>
         </div>
         <div className="flex-1 min-w-0">
@@ -84,25 +86,25 @@ export const TokenCardMobile: React.FC<TokenCardMobileProps> = ({ token }) => {
             <span className="text-sm">{token.tokenName}</span>
           </div>
           <div className="flex justify-between">
-            <span className="opacity-70">Milestone:</span>
+            <span className="opacity-70">{t('common.milestone')}:</span>
             <span className='font-bold'>#{token.currentEra}</span>
           </div>
           <div className="space-y-0 text-sm">
             <div className="flex justify-between">
-              <span className="opacity-70">Mint Fee:</span>
+              <span className="opacity-70">{t('tokenInfo.mintFee')}:</span>
               <span>{feeRateInSol} SOL</span>
             </div>
             <div className="flex justify-between">
-              <span className="opacity-70">Current Mint Size:</span>
+              <span className="opacity-70">{t('tokenInfo.currentMintSize')}:</span>
               <span>{(Number(token.mintSizeEpoch) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
             </div>
             <div className="flex justify-between">
-              <span className="opacity-70">Current Price:</span>
+              <span className="opacity-70">{t('tokenInfo.currentPrice')}:</span>
               <span>{currentCost.toLocaleString(undefined, { maximumFractionDigits: 6 })} SOL</span>
             </div>
             <div>
               <div className="flex justify-between mb-1">
-                <span className="opacity-70">Progress:</span>
+                <span className="opacity-70">{t('common.progress')}:</span>
                 <span>{progressPercentage.toFixed(2)}%</span>
               </div>
               <progress

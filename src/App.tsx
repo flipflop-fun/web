@@ -49,6 +49,8 @@ import { SocialExplore } from './pages/SocialExplore';
 import { SocialUserDetails } from './pages/SocialUserDetails';
 import { useDeviceType } from './hooks/device';
 import { AuthProvider } from './hooks/auth';
+import './i18n/i18n';
+import { useTranslation } from 'react-i18next';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
 
@@ -62,6 +64,7 @@ const AppContent = () => {
   });
   const { isMobile } = useDeviceType();
   const wallet = useAnchorWallet();
+  const { t } = useTranslation();
 
   const [getDelegatedTokens, { data: delegatedTokens }] = useLazyQuery(queryMyDelegatedTokens);
 
@@ -122,7 +125,7 @@ const AppContent = () => {
             md:translate-x-0 transition-transform duration-300 ease-in-out
         `}>
           <Sidebar
-            menuItems={menuItems(expanded, hasDelegatedTokens)}
+            menuItems={menuItems(expanded, hasDelegatedTokens, t)}
             activeMenuItem={selectedMenuItem}
             onMenuItemClick={(id: string) => {
               setSelectedMenuItem(id);

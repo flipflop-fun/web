@@ -15,6 +15,7 @@ import { PAGE_SIZE_OPTIONS } from '../config/constants';
 import { useDeviceType } from '../hooks/device';
 import { MyMintedTokenCard } from '../components/myAccount/MyMintedTokenCard';
 import { PageHeader } from '../components/common/PageHeader';
+import { useTranslation } from 'react-i18next';
 
 export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   const { connection } = useConnection();
@@ -33,7 +34,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   // const [frozenStates, setFrozenStates] = useState<{ [key: string]: boolean | null }>({});
 
   const { isMobile } = useDeviceType();
-
+  const { t } = useTranslation();
   const { data: myTokensData, loading: loadingTokens } = useQuery(queryMyTokenList, {
     variables: {
       owner: wallet?.publicKey?.toBase58() || '',
@@ -131,7 +132,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
       <div className='flex justify-center items-center'>
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title">My Tokens</h2>
+            <h2 className="card-title">{t('menu.myTokens')}</h2>
             <p>Please connect your wallet to view your account</p>
           </div>
         </div>
@@ -141,7 +142,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`} key={wallet?.publicKey?.toBase58()}>
-      <PageHeader title="My Tokens" bgImage='/bg/group1/3.jpg' />
+      <PageHeader title={t('menu.myTokens')} bgImage='/bg/group1/3.jpg' />
       <div className="w-full md:max-w-6xl mx-auto md:mb-20 mb-3">
         {loadingTokens || loadingDetails ? (
           <div className="flex justify-center">
@@ -171,13 +172,13 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
             <table className="pixel-table w-full">
               <thead>
                 <tr>
-                  <th className=" text-left">Image</th>
-                  <th className=" text-left">Name & Symbol</th>
-                  <th className=" text-left">Mint Address</th>
-                  <th className=" text-right">Milestone</th>
+                  <th className=" text-left">{t('tokenInfo.logo')}</th>
+                  <th className=" text-left">{t('launch.tokenName')}/{t('launch.tokenSymbol')}</th>
+                  <th className=" text-left">{t('tokenInfo.tokenAddress')}</th>
+                  <th className=" text-right">{t('common.milestone')}</th>
                   {/* <th className=" text-right">Status</th> */}
-                  <th className=" text-right">Minted</th>
-                  <th className=" text-center">Actions</th>
+                  <th className=" text-right">{t('mint.minted')}</th>
+                  <th className=" text-center">{t('common.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -222,13 +223,13 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
                             className="btn btn-sm btn-primary"
                             onClick={() => navigate(`/token/${token.mint}`)}
                           >
-                            Get more
+                            {t('mint.mintMore')}
                           </button>
                           <button
                             className="btn btn-sm btn-error"
                             onClick={() => handleRefund(token)}
                           >
-                            Refund
+                            {t('mint.refund')}
                           </button>
                           <button
                             className="btn btn-sm btn-accent"
@@ -237,7 +238,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
                               setIsReferralModalOpen(true);
                             }}
                           >
-                            Code
+                            {t('common.urc')}
                           </button>
                           {/* {Number(token.tokenData?.currentEra) > Number(token.tokenData?.targetEras) && frozenStates[token.mint] && (
                                                     <button 

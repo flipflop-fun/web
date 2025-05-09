@@ -13,6 +13,7 @@ import {
 } from "../utils/web3";
 import { InitiazlizedTokenData, PoolData, ResponseData } from "../types/types";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type CreateLiquidityPoolProps = {
   expanded: boolean;
@@ -32,7 +33,7 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
   const [tokenVaultBalance, setTokenVaultBalance] = useState(0);
   const [wsolVaultBalance, setWsolVaultBalance] = useState(0);
   const [poolAddress, setPoolAddress] = useState("");
-
+  const { t } = useTranslation();
   const { mint } = useParams();
 
   const [getTokenData, { loading: queryLoading }] = useLazyQuery(
@@ -153,7 +154,7 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
                   type="text"
                   value={mintAddress}
                   onChange={(e) => setMintAddress(e.target.value)}
-                  placeholder="Enter mint address"
+                  placeholder={t('vm.enterTokenPlaceholder')}
                   className="input input-bordered flex-1"
                 />
                 <button
@@ -161,7 +162,7 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
                   disabled={queryLoading}
                   className="btn btn-primary"
                 >
-                  {queryLoading ? "Loading..." : "Get Info"}
+                  {queryLoading ? "Loading..." : t('vm.getInfo')}
                 </button>
               </div>
             </div>

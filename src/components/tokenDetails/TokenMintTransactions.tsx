@@ -8,6 +8,7 @@ import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, numberStringToBN } from '../../utils/f
 import { PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { useDeviceType } from '../../hooks/device';
+import { useTranslation } from 'react-i18next';
 
 export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,7 +16,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const { isMobile } = useDeviceType();
-
+  const { t } = useTranslation();
   const { data, loading, error, refetch } = useQuery(queryTokenMintTransactions, {
     variables: {
       mint: token.mint,
@@ -54,7 +55,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
   if (loading && currentPage === 1) {
     return (
       <div className="bg-base-200 rounded-lg shadow-lg p-6 mt-6">
-        <h3 className="text-xl font-semibold mb-4 text-base-content">Recent Mint</h3>
+        <h3 className="text-xl font-semibold mb-4 text-base-content">{t('tokenInfo.recentMint')}</h3>
         <div className="animate-pulse">
           <div className="h-8 bg-base-300 rounded mb-4"></div>
           <div className="h-8 bg-base-300 rounded mb-4"></div>
@@ -78,7 +79,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
   return (
     <div className="pixel-box bg-base-200 p-6 mt-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-base-content">Recent Mint</h3>
+        <h3 className="text-xl font-semibold text-base-content">{t('tokenInfo.recentMint')}</h3>
         <div className="flex items-center gap-2">
           <span className="text-sm text-base-content">Rows per page:</span>
           <select
@@ -96,12 +97,12 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
         <table className="pixel-table w-full">
           <thead>
             <tr>
-              <th className="">Minter</th>
-              <th className="">Transaction</th>
-              <th className="">Time</th>
+              <th className="">{t('tokenInfo.minter')}</th>
+              <th className="">{t('tokenInfo.transactionId')}</th>
+              <th className="">{t('common.time')}</th>
               {!isMobile && <>
-                <th className="">Milestone (Checkpoint)</th>
-                <th className="">Mint Size</th>
+                <th className="">{`${t('common.milestone')} (${t('common.checkpoint')})`}</th>
+                <th className="">{t('tokenInfo.mintSize')}</th>
               </>}
             </tr>
           </thead>

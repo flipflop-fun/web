@@ -7,9 +7,11 @@ import { AddressDisplay } from '../common/AddressDisplay';
 import { CheckURCProps, SetRefererCodeEntity } from '../../types/types';
 import { FaSearch } from 'react-icons/fa';
 import { PageHeader } from '../common/PageHeader';
+import { useTranslation } from 'react-i18next';
 
 export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
   const { connection } = useConnection();
+  const { t } = useTranslation();
   const wallet = useAnchorWallet();
   const [searchId, setSearchId] = useState('');
   const [searchResult, setSearchResult] = useState<SetRefererCodeEntity | null>(null);
@@ -62,7 +64,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
           <div className='relative join-item flex-1'>
             <input
               type="text"
-              placeholder="Enter URC ID"
+              placeholder={t('urc.enterUrc')}
               className='input search-input w-full pl-10'
               value={searchId}
               onChange={(e) => setSearchId(e.target.value)}
@@ -75,7 +77,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
             onClick={handleSearch}
             disabled={loading}
           >
-            {loading ? <span className="loading loading-spinner loading-sm"></span> : 'Search'}
+            {loading ? <span className="loading loading-spinner loading-sm"></span> : t('discover.search')}
           </button>
         </div>
 
@@ -109,7 +111,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
                                 toast.success('Copied');
                               }}
                               className="btn btn-sm w-8 h-8 p-0"
-                              title="Copy Link"
+                              title={t('common.copyLink')}
                             >
                               <svg className='w-4 h-4' fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 2h11v2H6v13H4V2zm4 4h12v16H8V6zm2 2v12h8V8h-8z" fill="currentColor" /> </svg>
                             </button>
@@ -130,7 +132,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
                       </>
                     )}
                     <tr>
-                      <td className="font-bold">Token Address</td>
+                      <td className="font-bold">{t('tokenInfo.tokenAddress')}</td>
                       <td>
                         {<AddressDisplay address={searchResult.mint} showCharacters={6} />}
                       </td>

@@ -5,6 +5,7 @@ import { queryAllTokenMintForChart } from '../../utils/graphql';
 import { formatPrice, processRawData } from '../../utils/format';
 import { TokenChartsProps } from '../../types/types';
 import { LOCAL_STORAGE_HISTORY_CACHE_EXPIRY, LOCAL_STORAGE_HISTORY_CACHE_PREFIX } from '../../config/constants';
+import { useTranslation } from 'react-i18next';
 
 type TimeFrame = '1min' | '5min' | '15min' | '30min' | '1hour' | '2hour' | '4hour' | 'day';
 
@@ -75,7 +76,7 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
     'day': []
   });
   const tooltipRef = useRef<HTMLDivElement>(null);
-
+  const { t } = useTranslation();
   const gridColor = 'rgba(70, 130, 180, 0.1)';
   const labelColor = '#000';
 
@@ -542,7 +543,7 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
 
   return (
     <div className="mt-6">
-      <h2 className="text-xl font-semibold text-base-content">Mint Cost</h2>
+      <h2 className="text-xl font-semibold text-base-content">{t('tokenInfo.mintCost')}</h2>
       <div className="pixel-box bg-base-200 p-6">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-2">

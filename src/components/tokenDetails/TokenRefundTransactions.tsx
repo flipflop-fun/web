@@ -8,13 +8,15 @@ import { BN_LAMPORTS_PER_SOL, numberStringToBN } from '../../utils/format';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
+import { useTranslation } from 'react-i18next';
 
 export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-
+  const { t } = useTranslation();
+  
   const { data, loading, error, refetch } = useQuery(queryTokenRefundTransactions, {
     variables: {
       mint: token.mint,
@@ -53,7 +55,7 @@ export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = (
   if (loading && currentPage === 1) {
     return (
       <div className="pixel-box bg-base-200 p-6 mt-6">
-        <h3 className="text-xl font-semibold mb-4 text-base-content">Recent Refund</h3>
+        <h3 className="text-xl font-semibold mb-4 text-base-content">{t('tokenInfo.recentRefund')}</h3>
         <div className="animate-pulse">
           <div className="h-8 bg-base-300 rounded mb-4"></div>
           <div className="h-8 bg-base-300 rounded mb-4"></div>
@@ -74,7 +76,7 @@ export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = (
   return (
     <div className="pixel-box bg-base-200 p-6 mt-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-base-content">Recent Refund</h3>
+        <h3 className="text-xl font-semibold text-base-content">{t('tokenInfo.recentRefund')}</h3>
         <div className="flex items-center gap-2">
           <span className="text-sm text-base-content">Rows per page:</span>
           <select
@@ -92,11 +94,11 @@ export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = (
         <table className="pixel-table w-full">
           <thead>
             <tr>
-              <th className="">Refunder</th>
-              <th className="">Transaction</th>
-              <th className="">Time</th>
-              <th className="">Refund SOL</th>
-              <th className="">Burned (User+Vault)</th>
+              <th className="">{t('tokenInfo.refunder')}</th>
+              <th className="">{t('tokenInfo.transactionId')}</th>
+              <th className="">{t('common.time')}</th>
+              <th className="">{t('tokenInfo.refundSol')}</th>
+              <th className="">{`${t('tokenInfo.burn')} (${t('tokenInfo.user')}+${t('tokenInfo.vault')})`}</th>
             </tr>
           </thead>
           <tbody>

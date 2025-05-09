@@ -1,7 +1,6 @@
 import { PublicKey } from '@solana/web3.js';
 import { BN } from '@coral-xyz/anchor';
 
-export type Language = 'en-US' | 'zh-CN' | 'ja-JP' | 'ru-RU';
 export type Theme = 'light' | 'dark';
 
 export type TokenMetadata = {
@@ -642,3 +641,5 @@ export type FAQ = {
   label: string;
   questions: string[];
 }
+
+export type Language = 'en-US' | 'zh-CN' | 'zh-TW' | 'ja-JP' | 'es-ES' | 'ru-RU' | 'vi-VN';

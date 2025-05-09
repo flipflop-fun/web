@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ModalTopBar } from './ModalTopBar';
+import { useTranslation } from 'react-i18next';
 
 type UsernameModalProps = {
   isOpen: boolean;
@@ -15,7 +16,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
   defaultUsername
 }) => {
   const [username, setUsername] = useState(defaultUsername);
-
+  const { t } = useTranslation();
   // Reset username to default when modal opens
   useEffect(() => {
     if (isOpen) {
@@ -56,7 +57,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
                 type="submit"
                 className="btn btn-primary"
               >
-                Save
+                {t('common.save')}
               </button>
             </div>
           </form>

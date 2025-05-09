@@ -13,6 +13,7 @@ import { filterTokens } from '../utils/format';
 import { fetchTokenMetadataMap } from '../utils/web3';
 import { PAGE_SIZE_OPTIONS } from '../config/constants';
 import { TokenImage } from '../components/mintTokens/TokenImage';
+import { useTranslation } from 'react-i18next';
 
 type DelegatedTokensProps = {
   expanded: boolean;
@@ -30,6 +31,7 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
   const wallet = useAnchorWallet();
   const navigate = useNavigate();
   const { isMobile } = useDeviceType();
+  const { t } = useTranslation();
 
   const { loading: initialLoading, error, data } = useQuery(queryMyDelegatedTokens, {
     variables: {
@@ -62,7 +64,7 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      <PageHeader title="My Delegated Tokens" bgImage='/bg/group1/8.jpg' />
+      <PageHeader title={t('menu.delegatedTokens')} bgImage='/bg/group1/8.jpg' />
 
       <div className="w-full md:max-w-6xl mx-auto mb-3 md:mb-20">
       {loading ? (
@@ -74,7 +76,7 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
             <ErrorBox title={`Error loading tokens. Please try again later.`} message={error.message} />
           </div>
         ) : dataAfterFilter.length > 0 ? (
-        !isMobile ? (        
+        !isMobile ? (
         <div className="overflow-x-auto">
           <div className="flex justify-end mb-4">
             <div className="flex items-center gap-2">
@@ -97,10 +99,10 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
           <table className="pixel-table w-full">
             <thead>
               <tr>
-                <th className=" text-center"></th>
-                <th>Symbol & Name</th>
-                <th>Mint Address</th>
-                <th>Action</th>
+                <th className=" text-center">{t('tokenInfo.logo')}</th>
+                <th>{t('launch.tokenSymbol')}/{t('launch.tokenName')}</th>
+                <th>{t('tokenInfo.tokenAddress')}</th>
+                <th>{t('common.actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -123,7 +125,7 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
                       />
                     </div>
                   </td>
-                  
+
                   <td>
                     <div className="flex items-center space-x-3">
                       <div>
@@ -140,7 +142,7 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
                       className="btn btn-primary btn-sm"
                       onClick={() => navigate(`/manage-liquidity/${token.mint}`)}
                     >
-                      Manage market value
+                      {t('vm.manageMarketValue')}
                     </button>
                   </td>
                 </tr>
@@ -160,7 +162,7 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
         )
         ) : (
           <div className="text-center py-10">
-            <p className="text-gray-500">No deployments found</p>
+            <p className="text-gray-500">{t('tokenInfo.noDelegated')}</p>
           </div>
         )}
       </div>

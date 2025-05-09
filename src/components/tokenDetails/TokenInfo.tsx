@@ -8,6 +8,7 @@ import { TokenHeroMobile } from './TokenHeroMobile';
 import { TokenInfoData } from './TokenInfoData';
 import { TokenInfoDataMobile } from './TokenInfoDataMobile';
 import { useDeviceType } from '../../hooks/device';
+import { useTranslation } from 'react-i18next';
 
 export const TokenInfo: React.FC<TokenInfoProps> = ({
   token,
@@ -22,6 +23,7 @@ export const TokenInfo: React.FC<TokenInfoProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
   const { isMobile } = useDeviceType();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,12 +56,12 @@ export const TokenInfo: React.FC<TokenInfoProps> = ({
               <div className="flex justify-between mt-3 md:mt-8">
                 <div className='w-1/2 px-3'>
                   <button className="btn w-full btn-primary" onClick={() => setIsModalOpen(true)}>
-                    Mint
+                    {t('common.mint')}
                   </button>
                 </div>
                 <div className='w-1/2 px-3'>
                   <button className="btn w-full btn-secondary" onClick={() => setIsReferralModalOpen(true)}>
-                    Unique Referral Code
+                    {t('common.urc')}
                   </button>
                 </div>
               </div>
@@ -67,7 +69,7 @@ export const TokenInfo: React.FC<TokenInfoProps> = ({
           ) : (
             <div className="mt-8">
               <button className="btn w-full btn-secondary" onClick={() => setIsReferralModalOpen(true)}>
-                Unique Referral Code
+                {t('common.urc')}
               </button>
             </div>)}
       </div>

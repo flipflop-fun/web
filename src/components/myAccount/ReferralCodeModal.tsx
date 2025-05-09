@@ -9,6 +9,7 @@ import { ToastBox } from '../common/ToastBox';
 import AlertBox from '../common/AlertBox';
 import { ModalTopBar } from '../common/ModalTopBar';
 import { ShareButton } from '../common/ShareButton';
+import { useTranslation } from 'react-i18next';
 
 export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
   isOpen,
@@ -23,6 +24,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
   const [referrerResetIntervalSeconds, setReferrerResetIntervalSeconds] = useState(0);
   const [referralUsageMaxCount, setReferralUsageMaxCount] = useState(0);
   const [myReferrerCode, setMyReferrerCode] = useState<string>("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (wallet) {
@@ -149,13 +151,13 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title="My Referral Code" onClose={onClose} />
+        <ModalTopBar title={t('urc.myUrc')} onClose={onClose} />
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <div className="space-y-4">
             {referralData ? (
               <div className="space-y-2">
-                <div className="flex justify-between">
-                  <p>Here's your URC for {token.tokenData?.tokenSymbol}</p>
+                <div className="flex justify-end">
+                  {/* <p>Here's your URC for {token.tokenData?.tokenSymbol}</p> */}
                   <ShareButton
                     token={token.tokenData as InitiazlizedTokenData}
                     metadata={metadata}
@@ -174,31 +176,31 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                     className="btn btn-circle btn-sm btn-ghost ml-2"
                     onClick={() => {
                       navigator.clipboard.writeText(myReferrerCode);
-                      toast.success('URC copied to clipboard!');
+                      toast.success(t('urc.urcCopied'));
                     }}
                     disabled={loading}
                   >
                     <svg className='w-4 h-4' fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 2h11v2H6v13H4V2zm4 4h12v16H8V6zm2 2v12h8V8h-8z" fill="currentColor" /> </svg>
                   </button>
                 </div>
-                <AlertBox title="Attention" message="The URC code is stored locally, please remember it when you change device!" />
+                <AlertBox title={t('common.attention')} message={t('urc.attentionMessage2')} />
 
-                <p className="">Current used count (Max: {referralUsageMaxCount})</p>
+                <p className="">{t('urc.currentUsedCount')} ({t('urc.max')}: {referralUsageMaxCount})</p>
                 <div className="pixel-box bg-base-200 p-2 break-all">
                   {referralData.usageCount}
                 </div>
-                <p className="">Active URC time</p>
+                <p className="">{t('urc.activateTime')}</p>
                 <div className="pixel-box bg-base-200 p-2 break-all">
                   {new Date(Number(referralData.activeTimestamp) * 1000).toLocaleString()}
                 </div>
-                <p className="">Re-active URC time</p>
+                <p className="">{t('urc.reActivateTime')}</p>
                 <div className="pixel-box bg-base-200 p-2 break-all">
                   {new Date(Number(referralData.activeTimestamp) * 1000 + referrerResetIntervalSeconds * 1000).toLocaleString()}
                 </div>
 
                 {myReferrerCode &&
                   <div className="">
-                    <p className="mb-2">Your personal link</p>
+                    <p className="mb-2">{t('urc.yourPersonalUrcUrl')}</p>
                     <div className="flex gap-2">
                       <div className="pixel-box bg-base-200 p-2 break-all flex-1">
                         {window.location.origin}/token/{token.tokenData?.mint}/{myReferrerCode}
@@ -210,7 +212,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                   onClick={handleCopyLink}
                   disabled={loading}
                 >
-                  Copy the link and share to your friends
+                  {t('urc.copyUrlLink')}
                 </button>
 
                 {(new Date()).getTime() - Number(referralData.activeTimestamp) * 1000 > referrerResetIntervalSeconds * 1000 && <div className="space-y-2">
@@ -220,13 +222,13 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                     onClick={handleReactiveCode}
                     disabled={loading}
                   >
-                    Reactiviate URC
+                    {t('urc.reactiateUrc')}
                   </button>
                 </div>}
               </div>
             ) : (
               <div className="space-y-2">
-                <p>Enter your favourite name as a Unique Referral Code(URC) for {token.tokenData?.tokenSymbol}</p>
+                <p>{t('urc.description')}</p>
                 <input
                   type="text"
                   value={myReferrerCode}
@@ -234,13 +236,13 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                   className='input w-full'
                   placeholder="Enter your favourite name as URC"
                 />
-                <AlertBox title="Attention" message="1- URC code aboved can be modifyed; 2- The URC code is stored locally, please remember it when you change device!" />
+                <AlertBox title={t('common.attention')} message={t('urc.attentionMessage')} />
                 <button
                   className={`btn btn-primary w-full mt-3`}
                   onClick={handleGetCode}
                   disabled={loading}
                 >
-                  {loading ? 'Getting URC...' : 'Get URC'}
+                  {loading ? t('urc.getUrc') + '...' : t('urc.getUrc')}
                 </button>
               </div>
             )}

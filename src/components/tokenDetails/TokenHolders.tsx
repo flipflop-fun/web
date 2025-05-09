@@ -7,12 +7,13 @@ import { queryHolders } from '../../utils/graphql';
 import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, BN_ZERO, numberStringToBN } from '../../utils/format';
 import { PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
+import { useTranslation } from 'react-i18next';
 
 export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-
+  const { t } = useTranslation();
   const { data, loading, error } = useQuery(queryHolders, {
     variables: {
       mint: token.mint,
@@ -35,7 +36,7 @@ export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
   if (loading && currentPage === 1) {
     return (
       <div className="bg-base-200 rounded-lg shadow-lg p-6 mt-6">
-        <h3 className="text-xl font-semibold mb-4 text-base-content">Token Holders</h3>
+        <h3 className="text-xl font-semibold mb-4 text-base-content">{t('tokenInfo.tokenHolders')}</h3>
         <div className="animate-pulse">
           <div className="h-8 bg-base-300 rounded mb-4"></div>
           <div className="h-8 bg-base-300 rounded mb-4"></div>
@@ -56,7 +57,7 @@ export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
   return (
     <div className="pixel-box bg-base-200 p-6 mt-6">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-base-content">Token Holders</h3>
+        <h3 className="text-xl font-semibold text-base-content">{t('tokenInfo.tokenHolders')}</h3>
         <div className="flex items-center gap-2">
           <span className="text-sm text-base-content">Rows per page:</span>
           <select
@@ -74,10 +75,10 @@ export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
         <table className="pixel-table w-full">
           <thead>
             <tr>
-              <th className="">Rank</th>
-              <th className="">Holder</th>
-              <th className="">Balance</th>
-              <th className="">Percentage</th>
+              <th className="">{t('tokenInfo.rank')}</th>
+              <th className="">{t('tokenInfo.holder')}</th>
+              <th className="">{t('tokenInfo.balance')}</th>
+              <th className="">{t('tokenInfo.holdPercentage')}</th>
             </tr>
           </thead>
           <tbody>

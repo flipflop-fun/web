@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdvancedSettingsProps } from '../../types/types';
 import AlertBox from '../common/AlertBox';
+import { useTranslation } from 'react-i18next';
 
 export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   targetEras,
@@ -20,6 +21,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
   onDisplayFeeRateChange,
   onLiquidityTokensRatioChange,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="space-y-4 md:space-y-6" >
       <div>
@@ -147,7 +149,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
 
       <div>
         <label htmlFor="liquidityTokensRatio" className="block text-sm font-medium mb-1">
-          Liquidity Tokens Ratio(%)
+          {`${t('tokenInfo.LiquidityTokensRatio')}(%)`}
         </label>
         <input
           type="text"

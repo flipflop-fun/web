@@ -18,16 +18,11 @@ import { SocialButtonsUser } from "../components/social/SocialButtonsUser";
 import { FaAngleDoubleDown } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useAuth } from "../hooks/auth";
+import { useTranslation } from "react-i18next";
 
 type SocialUserDetailsProps = {
   expanded: boolean;
 };
-
-const titles = {
-  "issuer": "Launched Tokens List",
-  "promoter": "Promoting Tokens List",
-  "manager": "Managing Tokens List",
-}
 
 export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
   const [user, setUser] = useState<OrderedUser | null>(null);
@@ -38,7 +33,8 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
   const [tokensByAdmin, setTokensByAdmin] = useState<InitiazlizedTokenData[]>([]);
   const [tokensByValueManager, setTokensByValueManager] = useState<InitiazlizedTokenData[]>([]);
   const [tokensByPromoter, setTokensByPromoter] = useState<InitiazlizedTokenData[]>([]);
-
+  const { t } = useTranslation();
+  
   const [searchTokensByAdmin, { loading: searchLoadingByAdmin, error: searchErrorByAdmin, data: searchDataByAdmin }] = useLazyQuery(queryMyDeployments);
 
   const [searchTokensByValueManager, { loading: searchLoadingByValueManager, error: searchErrorByValueManager, data: searchDataByValueManager }] = useLazyQuery(queryMyDelegatedTokens);
@@ -46,6 +42,12 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
   const [searchTokensByPromoter, { loading: searchLoadingByPromoter, error: searchErrorByPromoter, data: searchDataByPromoter }] = useLazyQuery(querySetRefererCodeEntitiesByOwner);
 
   const [searchTokensByMints, { loading: searchLoadingByMints, error: searchErrorByMints, data: searchDataByMints }] = useLazyQuery(queryInitializeTokenEventByMints);
+
+  const titles = {
+    "issuer": t('social.launchedTokensList'),
+    "promoter": t('social.promotedTokensList'),
+    "manager": t('social.managedTokensList'),
+  }
 
   const fetchUserData = useCallback(async () => {
     const result = await getSearchByKey(token as string, address as string);

@@ -8,6 +8,7 @@ import { Pagination } from '../common/Pagination';
 import { PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { ModalTopBar } from '../common/ModalTopBar';
+import { useTranslation } from 'react-i18next';
 
 type ReferralBonusDetailModalProps = {
   isOpen: boolean;
@@ -26,7 +27,7 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-
+  const { t } = useTranslation();
   const { loading, error, data } = useQuery(queryTotalReferrerBonus, {
     variables: {
       mint,
@@ -66,27 +67,27 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box w-11/12 max-w-5xl">
-        <ModalTopBar title={`Referral Bonus Details`} onClose={onClose} />
+        <ModalTopBar title={t('urc.urcDetails')} onClose={onClose} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="pixel-card">
             <div className="pixel-card-body">
-              <h4 className="pixel-card-title">Summary</h4>
+              <h4 className="pixel-card-title">{t('urc.summary')}</h4>
               <div className="space-y-2">
-                <div>Total Referral Bonus:
+                <div>{t('urc.totalReferral')}:
                   <span className="font-bold text-primary">
                   {formatPrice(totalBonus, 3)} SOL
                   </span>
                 </div>
-                <div>Total Referral Transactions: {data.mintTokenEntities.length}</div>
+                <div>{t('urc.referralCount')}: {data.mintTokenEntities.length}</div>
               </div>
             </div>
           </div>
           <div className="pixel-card">
             <div className="pixel-card-body">
-              <h4 className="pixel-card-title">Token Information</h4>
+              <h4 className="pixel-card-title">{t('urc.tokenInformation')}</h4>
               <div className="space-y-2">
-                <div>Mint Address: <AddressDisplay address={mint} /></div>
-                <div>Referrer: <AddressDisplay address={referrerMain} /></div>
+                <div className="flex gap-1">{t('tokenInfo.tokenAddress')}: <AddressDisplay address={mint} /></div>
+                <div className="flex gap-1">{t('urc.referrer')}:  <AddressDisplay address={referrerMain} /></div>
               </div>
             </div>
           </div>
@@ -111,11 +112,11 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
           <table className="pixel-table w-full">
             <thead>
               <tr>
-                <th className=''>Transaction ID</th>
-                <th className=''>Minter</th>
-                <th className=''>Time</th>
-                <th className=''>Checkpoint</th>
-                <th className=''>Referrer Fee</th>
+                <th className=''>{t('tokenInfo.transactionId')}</th>
+                <th className=''>{t('tokenInfo.minter')}</th>
+                <th className=''>{t('common.time')}</th>
+                <th className=''>{t('common.checkpoint')}</th>
+                <th className=''>{t('tokenInfo.referrerFee')}</th>
               </tr>
             </thead>
             <tbody>

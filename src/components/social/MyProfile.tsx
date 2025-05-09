@@ -6,6 +6,7 @@ import { AddressDisplay } from '../common/AddressDisplay';
 import { FaTelegramPlane, FaDiscord, FaTwitter, FaGithub, FaFacebook, FaInternetExplorer } from "react-icons/fa";
 import { API_BASE_URI } from '../../config/constants';
 import { useAuth } from '../../hooks/auth';
+import { useTranslation } from 'react-i18next';
 
 export const socialNames = ['website', 'twitter', 'telegram', 'discord', 'github', 'facebook']
 export const socialIcons = {
@@ -32,6 +33,13 @@ export const MyProfile: React.FC = () => {
     avatarPreview: null as string | null,
   });
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
+
+  const hideMap = {
+    issuer: t('social.issuer'),
+    promoter: t('social.promoter'),
+    manager: t('social.manager')
+  };
 
   const fetchUserData = useCallback(async () => {
     setLoading(true);
@@ -168,7 +176,7 @@ export const MyProfile: React.FC = () => {
             onClick={handleLogin}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
-            Connect Wallet
+            {t('common.connectWallet')}
           </button>
         </div>
       )}
@@ -198,17 +206,17 @@ export const MyProfile: React.FC = () => {
             onClick={() => setIsEditing(!isEditing)}
             className="btn btn-secondary btn-sm"
           >
-            {isEditing ? 'Cancel' : 'Edit'}
+            {isEditing ? t('common.cancel') : t('common.edit')}
           </button>
         </div>
 
         {/* Only read */}
         {!isEditing && (
           <div className="space-y-4">
-            <div><span className="font-semibold">Email:</span> {user.email || 'Not set'}</div>
-            <div><span className="font-semibold">Bio:</span> {user.bio || 'Not set'}</div>
+            <div><span className="font-semibold">{t('social.email')}:</span> {user.email || 'Not set'}</div>
+            <div><span className="font-semibold">{t('social.bio')}:</span> {user.bio || 'Not set'}</div>
             <div>
-              <span className="font-semibold">Social Links:</span>
+              <span className="font-semibold">{t('social.socialLinks')}:</span>
               {user.social_links && Object.keys(user.social_links).length > 0 ? (
                 <ul className="list-disc pl-1 mt-2">
                   {Object.entries(user.social_links).map(([key, value]) => (
@@ -222,8 +230,8 @@ export const MyProfile: React.FC = () => {
                 ' Not set'
               )}
             </div>
-            <div><span className="font-semibold">Hide:</span> {user.hides ? user.hides.split(',').join(', ') : 'Not set'}</div>
-            <div><span className="font-semibold">Joined at:</span> {new Date(user.created_at).toLocaleString()}</div>
+            <div><span className="font-semibold">{t('social.hide')}:</span> {user.hides ? user.hides.split(',').join(', ') : 'Not set'}</div>
+            <div><span className="font-semibold">{t('social.joinedAt')}:</span> {new Date(user.created_at).toLocaleString()}</div>
             {/* <p><span className="font-semibold">Updated:</span> {new Date(user.updated_at).toLocaleString()}</p> */}
           </div>
         )}
@@ -232,7 +240,7 @@ export const MyProfile: React.FC = () => {
         {isEditing && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold">Avatar</label>
+              <label className="block text-sm font-semibold">{t('social.avatar')}</label>
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/gif"
@@ -244,7 +252,7 @@ export const MyProfile: React.FC = () => {
               )}
             </div>
             <div>
-              <label className="block text-sm font-semibold">Username</label>
+              <label className="block text-sm font-semibold">{t('social.username')}</label>
               <input
                 type="text"
                 name="username"
@@ -254,7 +262,7 @@ export const MyProfile: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold">Email</label>
+              <label className="block text-sm font-semibold">{t('social.email')}</label>
               <input
                 type="email"
                 name="email"
@@ -264,7 +272,7 @@ export const MyProfile: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold">Bio</label>
+              <label className="block text-sm font-semibold">{t('social.bio')}</label>
               <textarea
                 name="bio"
                 value={formData.bio}
@@ -276,7 +284,7 @@ export const MyProfile: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold">Hide</label>
+              <label className="block text-sm font-semibold">{t('social.hide')}</label>
               {[Role.ISSUER, Role.PROMOTER, Role.MANAGER].map((hide: string) => (
                 <label key={hide} className="flex items-center space-x-2">
                   <input
@@ -290,14 +298,14 @@ export const MyProfile: React.FC = () => {
                     }}
                     className="text-blue-600"
                   />
-                  <span>{'Hide ' + hide}</span>
+                  <span>{t('social.notShow') + hideMap[hide as keyof typeof hideMap]}</span>
                 </label>
               ))}
             </div>
 
 
             <div>
-              <label className="block text-sm font-semibold">Social Links</label>
+              <label className="block text-sm font-semibold">{t('social.socialLinks')}</label>
               {socialNames.map((key) => (
                 <div key={key} className="flex items-center space-x-2 mt-2">
                   <div className="flex w-6 items-center gap-2">{socialIcons[key as keyof typeof socialIcons]}</div>
@@ -316,7 +324,7 @@ export const MyProfile: React.FC = () => {
               disabled={loading}
               className="btn btn-primary w-full"
             >
-              {loading ? 'Saving...' : 'Save'}
+              {loading ? t('common.save') + '...' : t('common.save')}
             </button>
           </form>
         )}

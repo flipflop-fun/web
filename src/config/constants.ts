@@ -138,8 +138,8 @@ export const tooltip = {
     reduceRatioPerEra: "Percentage by which the mint size reduces each milestone",
     targetMinimumFee: "Minimum total fee required to reach target supply",
     epochesPerEra: "Number of checkpoints in each milestone",
-    currentMintFee: "Current mint fee",
-    currentReferralFee: "Current referral fee",
+    currentMintFee: "Total mint fee collected",
+    currentReferralFee: "Total referral fee",
     difficultyOfCurrentEpoch: "Difficulty of current checkpoint",
     difficultyOfLastEpoch: "Difficulty of last checkpoint"
 }

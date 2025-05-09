@@ -4,6 +4,9 @@ import { FaBars } from 'react-icons/fa';
 import { NavbarProps } from '../../types/types';
 import { Logo } from './Logo';
 import { useDeviceType } from '../../hooks/device';
+import { LanguageSelector } from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
+import { Language } from '../../types/types';
 
 export const Navbar: React.FC<NavbarProps> = ({
   title = "Logo",
@@ -55,6 +58,17 @@ export const Navbar: React.FC<NavbarProps> = ({
     };
   }, [isMenuOpen, onMenuClick]);
 
+  const { i18n } = useTranslation();
+  const [currentLocale, setCurrentLocale] = useState<Language>(() => {
+    return (localStorage.getItem('language') as Language) || 'en-US';
+  });
+
+  const handleLocaleChange = (locale: Language) => {
+    setCurrentLocale(locale);
+    i18n.changeLanguage(locale);
+    localStorage.setItem('language', locale);
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 bg-base-300 shadow-md border-b-2 border-primary-content transition-transform duration-300 ${!isVisible ? '-translate-y-full' : 'translate-y-0'}`}>
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,7 +94,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             }
           </div>
 
-          <div className="flex-1 flex justify-end">
+          <div className="flex-1 flex justify-end items-center gap-2">
+            <LanguageSelector
+              currentLocale={currentLocale}
+              onLocaleChange={handleLocaleChange}
+            />
             <WalletMultiButton className='btn btn-ghost' />
           </div>
         </div>

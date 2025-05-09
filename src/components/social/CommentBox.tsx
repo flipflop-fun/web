@@ -5,6 +5,7 @@ import { formatDistanceToNow } from 'date-fns';
 import toast from "react-hot-toast";
 import { DEFAULT_IMAGE } from "../../config/constants";
 import { useAuth } from "../../hooks/auth";
+import { useTranslation } from "react-i18next";
 
 type CommentBoxProps = {
   setIsOpen: (isOpen: boolean) => void;
@@ -32,7 +33,8 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const initialLoaded = useRef(false);
   const { walletAddress, isLoggingIn, handleLogin } = useAuth();
-
+  const { t } = useTranslation();
+  
   const loadMoreComments = useCallback(async () => {
     console.log("nextPage", page)
     const result = type === "user" ?
@@ -327,17 +329,17 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
                 </div>
                 <div className="text-sm">{comment.content}</div>
                 <div className="flex justify-between mt-1 text-xs text-gray-400">
-                  <div className="flex space-x-3">                    
-                    {comment.replies && comment.replies?.length > 0 ? 
+                  <div className="flex space-x-3">
+                    {comment.replies && comment.replies?.length > 0 ?
                     <button onClick={() => closeReply(comment.id)}>
                       Hide replies |
-                    </button> : 
+                    </button> :
                     comment.totalReplies ? <button onClick={() => openReply(comment.id)}>
                       Show {comment.totalReplies} replies |
                     </button> : ''
                     }
                     <button onClick={() => window.open(`/social-user-details/${comment.walletAddress}`, "_blank")}>
-                      Visit
+                      {t('social.visit')}
                     </button>
                   </div>
 
@@ -415,7 +417,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
                   <div className="text-sm">{reply.content}</div>
                   <div className="flex justify-between mt-1 text-xs text-gray-400 mr-3">
                     <button onClick={() => window.open(`/social-user-details/${reply.walletAddress}`, "_blank")}>
-                      Visit
+                      {t('social.visit')}
                     </button>
 
                     <div className="flex space-x-3">
