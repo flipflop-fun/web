@@ -211,7 +211,14 @@
     "tokenParams": "重要なパラメータ",
     "updateMetadataAttention": "トークンメタデータのアップグレードには0.1 SOLが必要です",
     "updateMetadataConfirmation": "トークンメタデータアップグレードのために0.1 SOLを支払うことに同意します",
-    "updateMetadata": "トークンメタデータをアップグレード"
+    "updateMetadata": "トークンメタデータをアップグレード",
+    "updateAuthorities": "トークン権限をアップグレード",
+    "medateUpdatable": "トークンメタデータ更新可能",
+    "mutable": "更新可能",
+    "immutable": "更新不可",
+    "revokeMetadataUpdate": "メタデータ更新権限の取り消し",
+    "delegateVmMangerDescription": "ボールトの流動性を管理するアカウントを指定できます。デフォルトは発行者のアカウントです！",
+    "delegateVmManager": "時価管理者を委任"
   },
   "social": {
     "title": "ソーシャル",

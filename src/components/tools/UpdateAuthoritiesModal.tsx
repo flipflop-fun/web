@@ -9,6 +9,7 @@ import AlertBox from '../common/AlertBox';
 import { NETWORK, SCANURL } from '../../config/constants';
 import { ToastBox } from '../common/ToastBox';
 import { SYSTEM_PROGRAM_ID } from '@raydium-io/raydium-sdk-v2';
+import { useTranslation } from 'react-i18next';
 
 type UpdateAuthoritiesModalProps = {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export const UpdateAuthoritiesModal: React.FC<UpdateAuthoritiesModalProps> = ({
   const wallet = useAnchorWallet();
   const [metadataMutable, setMetadataMutable] = useState(false);
   const [valueManager, setValueManager] = useState("");
+  const { t } = useTranslation();
 
   const getMetadataMutable = useCallback(async () => {
     const isMutable = await getTokenMetadataMutable(connection, new PublicKey(token.mint));
@@ -102,25 +104,25 @@ export const UpdateAuthoritiesModal: React.FC<UpdateAuthoritiesModalProps> = ({
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title="Update Authorities" onClose={onClose} />
+        <ModalTopBar title={t('launch.updateAuthorities')} onClose={onClose} />
         <div className="flex flex-col gap-4 mt-4">
           <div className="text-sm">
-            <p>Metadata Mutable: {metadataMutable ? 'Mutable' : 'Immutable'}</p>
+            <p>{t('launch.medateUpdatable')}: {metadataMutable ? t('launch.mutable') : t('launch.immutable')}</p>
           </div>
           <button
             onClick={handleRevokeMetadataAuthority}
             disabled={loading || !metadataMutable}
             className="btn w-full btn-primary"
           >
-            Giveup Metadata Update Authority
+            {t('launch.revokeMetadataUpdate')}
           </button>
 
-          <AlertBox message={`You can delegate a value manager to manage your token liquidity after target era is reached!`} title={'Alert'} />
           <div className="text-sm">
             <p className="mb-2">
-              Value manager
+              {t('social.vmManager')}
             </p>
-            <div className="flex justify-between items-center">
+            <AlertBox message={t('launch.delegateVmMangerDescription')} title={t('common.attention')} />
+            <div className="flex justify-between items-center mt-3">
               <input
                 type="text"
                 value={valueManager}
@@ -136,7 +138,7 @@ export const UpdateAuthoritiesModal: React.FC<UpdateAuthoritiesModalProps> = ({
             onClick={handleDelegateValueManager}
             className="btn w-full btn-primary"
           >
-            Delegate Value Manager
+            {t('launch.delegateVmManager')}
           </button>
 
         </div>

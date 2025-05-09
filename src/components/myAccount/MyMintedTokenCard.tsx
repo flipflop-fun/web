@@ -83,13 +83,13 @@ export const MyMintedTokenCard: FC<MyMintedTokenCardProps> = ({
               className="btn btn-sm btn-error"
               onClick={handleRefund}
             >
-              Refund
+              {t('mint.refund')}
             </button>
             <button
               className="btn btn-sm btn-primary"
               onClick={handleCode}
             >
-              Code
+              {t('common.urc')}
             </button>
             <button
               className="btn btn-sm btn-success"

@@ -211,7 +211,14 @@
     "tokenParams": "重要参数",
     "updateMetadataAttention": "升级代币元数据需要花费0.1 SOL",
     "updateMetadataConfirmation": "我同意支付0.1 SOL用于升级代币元数据",
-    "updateMetadata": "升级代币元数据"
+    "updateMetadata": "升级代币元数据",
+    "updateAuthorities": "升级代币权限",
+    "medateUpdatable": "代币元数据更新",
+    "mutable": "可更新",
+    "immutable": "不可更新",
+    "revokeMetadataUpdate": "取消元数据更新权限",
+    "delegateVmMangerDescription": "您可以指定一个帐号用来管理金库的流动性，默认为发行人帐号!",
+    "delegateVmManager": "委托市值管理人"
   },
   "social": {
     "title": "社交",

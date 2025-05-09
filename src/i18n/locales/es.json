@@ -211,7 +211,14 @@
     "tokenParams": "Parámetros importantes",
     "updateMetadataAttention": "Actualizar los metadatos del token requiere 0.1 SOL",
     "updateMetadataConfirmation": "Acepto pagar 0.1 SOL para actualizar los metadatos del token",
-    "updateMetadata": "Actualizar metadatos del token"
+    "updateMetadata": "Actualizar metadatos del token",
+    "updateAuthorities": "Actualizar autoridades del token",
+    "medateUpdatable": "Metadatos del token actualizables",
+    "mutable": "Mutable",
+    "immutable": "Inmutable",
+    "revokeMetadataUpdate": "Revocar autoridad de actualización de metadatos",
+    "delegateVmMangerDescription": "Puedes designar una cuenta para gestionar la liquidez de la bóveda, ¡por defecto es la cuenta del emisor!",
+    "delegateVmManager": "Delegar gestor de valor de mercado"
   },
   "social": {
     "title": "Social",

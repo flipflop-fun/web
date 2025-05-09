@@ -211,7 +211,14 @@
     "tokenParams": "Important Parameters",
     "updateMetadataAttention": "Upgrading token metadata requires 0.1 SOL",
     "updateMetadataConfirmation": "I agree to pay 0.1 SOL to upgrade token metadata",
-    "updateMetadata": "Upgrade Token Metadata"
+    "updateMetadata": "Upgrade Token Metadata",
+    "updateAuthorities": "Upgrade Token Authorities",
+    "medateUpdatable": "Token Metadata Updatable",
+    "mutable": "Mutable",
+    "immutable": "Immutable",
+    "revokeMetadataUpdate": "Revoke Metadata Update Authority",
+    "delegateVmMangerDescription": "You can designate an account to manage the liquidity of the vault, defaulting to the issuer's account!",
+    "delegateVmManager": "Delegate Market Value Manager"
   },
   "social": {
     "title": "Social",

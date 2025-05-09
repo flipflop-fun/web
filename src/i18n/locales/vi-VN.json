@@ -211,7 +211,14 @@
     "tokenParams": "Thông số quan trọng",
     "updateMetadataAttention": "Nâng cấp siêu dữ liệu token cần chi phí 0.1 SOL",
     "updateMetadataConfirmation": "Tôi đồng ý chi trả 0.1 SOL để nâng cấp siêu dữ liệu token",
-    "updateMetadata": "Nâng cấp siêu dữ liệu token"
+    "updateMetadata": "Nâng cấp siêu dữ liệu token",
+    "updateAuthorities": "Nâng cấp quyền token",
+    "medateUpdatable": "Siêu dữ liệu token có thể cập nhật",
+    "mutable": "Có thể cập nhật",
+    "immutable": "Không thể cập nhật",
+    "revokeMetadataUpdate": "Hủy quyền cập nhật siêu dữ liệu",
+    "delegateVmMangerDescription": "Bạn có thể chỉ định một tài khoản để quản lý thanh khoản của kho, mặc định là tài khoản của nhà phát hành!",
+    "delegateVmManager": "Ủy quyền quản lý giá trị thị trường"
   },
   "social": {
     "title": "Mạng xã hội",

@@ -211,7 +211,14 @@
     "tokenParams": "重要參數",
     "updateMetadataAttention": "升級代幣元數據需要花費0.1 SOL",
     "updateMetadataConfirmation": "我同意支付0.1 SOL用於升級代幣元數據",
-    "updateMetadata": "升級代幣元數據"
+    "updateMetadata": "升級代幣元數據",
+    "updateAuthorities": "升級代幣權限",
+    "medateUpdatable": "代幣元數據可更新",
+    "mutable": "可更新",
+    "immutable": "不可更新",
+    "revokeMetadataUpdate": "取消元數據更新權限",
+    "delegateVmMangerDescription": "您可以指定一個帳戶用來管理金庫的流動性，預設為發行人帳戶！",
+    "delegateVmManager": "委托市值管理人"
   },
   "social": {
     "title": "社交",

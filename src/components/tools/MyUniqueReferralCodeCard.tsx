@@ -55,7 +55,7 @@ export const MyUniqueReferralCodeCard: FC<MyUniqueReferralCodeCardProps> = ({
               metadataTimestamp={Number(token.metadataTimestamp)}
               className="w-12 h-12"
             />}
-          <div className="mt-1 text-sm opacity-70">Bonus</div>
+          <div className="mt-1 text-sm opacity-70">{t('urc.bonus')}</div>
           <div className="font-semibold">{bonus.toFixed(4)} SOL</div>
         </div>
         <div className="flex-1 min-w-0">
@@ -67,12 +67,12 @@ export const MyUniqueReferralCodeCard: FC<MyUniqueReferralCodeCardProps> = ({
               </div>
               <div className="space-y-1">
                 <div className="flex gap-2">
-                  <div className="text-sm mt-0.5 opacity-70">Mint:</div>
-                  <AddressDisplay address={token.mint} showCharacters={isMobile ? 5 : 10} />
+                  <div className="text-sm mt-0.5 opacity-70">{t("tokenInfo.tokenAddress")}:</div>
+                  <AddressDisplay address={token.mint} showCharacters={isMobile ? 3 : 10} />
                 </div>
                 <div className="flex gap-2">
-                  <div className="text-sm mt-0.5 opacity-70">Dev:</div>
-                  <AddressDisplay address={token.admin} showCharacters={isMobile ? 5 : 10} />
+                  <div className="text-sm mt-0.5 opacity-70">{t("tokenInfo.developer")}:</div>
+                  <AddressDisplay address={token.admin} showCharacters={isMobile ? 3 : 10} />
                 </div>
               </div>
             </div>
@@ -82,13 +82,13 @@ export const MyUniqueReferralCodeCard: FC<MyUniqueReferralCodeCardProps> = ({
               className="btn btn-sm btn-primary"
               onClick={handleGetURC}
             >
-              Code Detail
+              {t('urc.urcDetails')}
             </button>
             <button
               className="btn btn-sm btn-secondary"
               onClick={handleBonusDetail}
             >
-              Bonus Detail
+              {t('urc.bonusDetails')}
             </button>
             <button
               className="btn btn-sm btn-success"
