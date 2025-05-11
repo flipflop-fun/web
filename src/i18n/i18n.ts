@@ -8,7 +8,7 @@ import zhCNTranslation from './locales/zh-CN.json';
 import zhTWTranslation from './locales/zh-TW.json';
 import jaTranslation from './locales/ja.json';
 import esTranslation from './locales/es.json';
-import ruTranslation from './locales/ru.json';
+// import ruTranslation from './locales/ru.json';
 import viVNTranslation from './locales/vi-VN.json';
 
 i18n
@@ -21,7 +21,7 @@ i18n
       'zh-TW': { translation: zhTWTranslation },
       'ja-JP': { translation: jaTranslation },
       'es-ES': { translation: esTranslation },
-      'ru-RU': { translation: ruTranslation },
+      // 'ru-RU': { translation: ruTranslation },
       'vi-VN': { translation: viVNTranslation },
     },
     fallbackLng: 'en-US',

@@ -16,7 +16,11 @@
     "cancel": "キャンセル",
     "edit": "編集",
     "connectWallet": "Solanaチェーンのウォレットを接続してください",
-    "days": "日"
+    "days": "日",
+    "copied": "コピーされました",
+    "rowsPerPage": "ページあたりの行数",
+    "showing": "表示中",
+    "page": "ページ"
   },
   "menu": {
     "discover": "発見",
@@ -117,7 +121,12 @@
     "noDeployments": "デプロイされたトークン情報が見つかりません",
     "noDelegated": "管理中のトークンが見つかりません",
     "headerImage": "ヘッダー画像",
-    "headerImageWidthAndHeight": "推奨アスペクト比3:1"
+    "headerImageWidthAndHeight": "推奨アスペクト比3:1",
+    "targetSecondsPerCheckpoint": "チェックポイントごとの目標ミント時間（秒）",
+    "initialMintSize": "初期ミント数量",
+    "initialMintSizePerCheckpoint": "チェックポイントごとの初期ミント数量",
+    "showMore": "もっと見る",
+    "hideMore": "隠す"
   },
   "mint": {
     "title": "ミント",
@@ -156,7 +165,32 @@
     "totalLpTokens": "LPトークンの総量",
     "vaultLpTokens": "ボールト内のLP数量",
     "systemVaultToken": "未配布のLP数量",
-    "burnUnAllocatedTokens": "未配布トークンをバーン"
+    "burnUnAllocatedTokens": "未配布トークンをバーン",
+    "burnAmountOfSystemVault": "システムボールトからバーンするトークン数量を入力",
+    "burnAmount": "バーン数量",
+    "burn": "バーン",
+    "burnAttention": "この操作は元に戻せません。システムボールトからトークンをバーンすると、トークンの最大総供給量が減少しますが、既にミントされたトークンには影響しません。",
+    "addLiquidity": "流動性を追加",
+    "removeLiquidity": "流動性を削除",
+    "addSolAmount": "約{{amount}}SOLをプールに追加します",
+    "removeLpDescription": "トークン{{tokenAmount}}{{tokenSymbol}}と{{solAmount}}SOLを引き出します",
+    "lpPercentage": "LPの割合",
+    "lpAmount": "LP数量",
+    "burnLp": "LPトークンをバーン",
+    "burnLpAmount": "LPバーン数量",
+    "burnLpNotEnough": "LP数量が不足しています、最大:",
+    "burnLpDescription": "{{amount}}LPトークンをバーンします",
+    "buyToken": "トークンを購入",
+    "sellToken": "トークンを売却",
+    "slippage": "スリッページ",
+    "buyTokenAmount": "購入トークン数量",
+    "paySolDescription": "約{{amount}}SOLを支払います",
+    "getSolDescription": "約{{amount}}SOLを受け取ります",
+    "payTokenDescription": "約{{amount}}{{tokenSymbol}}を支払います",
+    "sellTokenAmount": "売却トークン数量",
+    "tokenAmount": "トークン数量",
+    "solAmount": "SOL数量",
+    "amountAddLiquidity": "追加数量"
   },
   "urc": {
     "myUrc": "私のURC紹介コード",
@@ -180,7 +214,16 @@
     "totalReferral": "総報酬",
     "referralCount": "報酬回数",
     "tokenInformation": "トークン詳細",
-    "referrer": "紹介者"
+    "referrer": "紹介者",
+    "invalidUrc": "無効なURC",
+    "urcAccount": "URCアカウント",
+    "providerTokenAccount": "プロバイダートークンアカウント",
+    "providerMainAccount": "プロバイダーメインアカウント",
+    "referrerTokenBalance": "紹介者のトークン残高",
+    "urcReferralUrl": "URC紹介リンク",
+    "codeHash": "コードハッシュ",
+    "verified": "検証済み",
+    "enterUrcName": "カスタムURCコードに名前を付けてください"
   },
   "launch": {
     "title": "トークンデプロイ",
@@ -218,7 +261,8 @@
     "immutable": "更新不可",
     "revokeMetadataUpdate": "メタデータ更新権限の取り消し",
     "delegateVmMangerDescription": "ボールトの流動性を管理するアカウントを指定できます。デフォルトは発行者のアカウントです！",
-    "delegateVmManager": "時価管理者を委任"
+    "delegateVmManager": "時価管理者を委任",
+    "vmManagerPlaceholder": "時価総額管理者のアカウントアドレスを入力してください"
   },
   "social": {
     "title": "ソーシャル",
@@ -258,6 +302,9 @@
     "issuer": "発行者",
     "promoter": "プロモーター",
     "manager": "時価管理者",
-    "noActivities": "アクティビティ情報がありません。ユーザーまたはトークンをフォローしてください"
+    "noActivities": "アクティビティ情報がありません。ユーザーまたはトークンをフォローしてください",
+    "writeCommentPlaceholder": "コメントを書く...",
+    "replyToPlaceholder": "{{name}}に返信...",
+    "notSet": "未設定"
   }
 }
