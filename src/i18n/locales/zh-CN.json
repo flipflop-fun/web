@@ -189,7 +189,8 @@
     "payTokenDescription": "将支付约{{amount}}{{tokenSymbol}}",
     "sellTokenAmount": "出售代币数量",
     "tokenAmount": "代币数量",
-    "solAmount": "SOL数量"
+    "solAmount": "SOL数量",
+    "amountAddLiquidity": "添加数量"
   },
   "urc": {
     "myUrc": "我的URC推荐码",
@@ -324,6 +325,7 @@
     "socialInformationDiscord": "输入Discord邀请链接...",
     "socialInformationTelegram": "输入电报群链接...",
     "socialInformationGithub": "输入Github链接...",
-    "socialInformationMedium": "输入Medium链接..."
+    "socialInformationMedium": "输入Medium链接...",
+    "profileBio": "输入简介..."
   }
 }

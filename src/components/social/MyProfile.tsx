@@ -288,7 +288,7 @@ export const MyProfile: React.FC = () => {
                 value={formData.bio}
                 onChange={handleInputChange}
                 className="input w-full mt-2 h-24 py-2 px-4"
-                placeholder='Enter your bio here, max 200 characters'
+                placeholder={t('placeholder.profileBio')}
                 rows={3}
               />
             </div>

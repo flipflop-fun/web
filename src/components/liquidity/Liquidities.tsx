@@ -174,7 +174,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
           <div className="mb-2 ml-1 font-bold">{t('vm.addLiquidity')}</div>
           <input
             type="text"
-            placeholder="quantity to add"
+            placeholder={t('vm.amountAddLiquidity')}
             className="input w-full"
             value={addLiquidityAmount}
             onChange={(e) => {
