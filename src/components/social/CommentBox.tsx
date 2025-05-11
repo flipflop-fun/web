@@ -294,7 +294,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
           <input
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment..."
+            placeholder={t('social.writeCommentPlaceholder')}
             className="w-full input mt-2 join-item"
           />
           <button
@@ -382,7 +382,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
                 <input
                   value={newReply}
                   onChange={(e) => setNewReply(e.target.value)}
-                  placeholder={`Reply to ${comment.username}...`}
+                  placeholder={t('social.replyToPlaceholder', {name: comment.username})}
                   className="w-full input join-item mb-3"
                 />
                 <button

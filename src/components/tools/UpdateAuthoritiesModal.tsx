@@ -128,7 +128,7 @@ export const UpdateAuthoritiesModal: React.FC<UpdateAuthoritiesModalProps> = ({
                 value={valueManager}
                 onChange={(e) => setValueManager(e.target.value)}
                 className='input w-full'
-                placeholder="Enter your value manager account"
+                placeholder={t('launch.vmManagerPlaceholder')}
               />
             </div>
 

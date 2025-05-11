@@ -32,7 +32,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
           onChange={(e) => onDescriptionChange(e.target.value)}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${description ? 'border-base-content' : ''}`}
           className='pixel-textarea w-full'
-          placeholder='Describe your development'
+          placeholder={t('placeholder.socialInformationDescription')}
           rows={4}
         />
       </div>
@@ -47,7 +47,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
           onChange={(e) => onWebsiteChange(e.target.value)}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${website ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="https://example.com"
+          placeholder={t('placeholder.socialInformationWebsite')}
         />
       </div>
       <div>
@@ -61,7 +61,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
           onChange={(e) => onTwitterChange(e.target.value)}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${twitter ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="@username"
+          placeholder={t('placeholder.socialInformationTwitter')}
         />
       </div>
       <div>
@@ -75,7 +75,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
           onChange={(e) => onDiscordChange(e.target.value)}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${discord ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Discord server invite link"
+          placeholder={t('placeholder.socialInformationDiscord')}
         />
       </div>
       <div>
@@ -89,7 +89,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
           onChange={(e) => onTelegramChange(e.target.value)}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${telegram ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Telegram group link"
+          placeholder={t('placeholder.socialInformationTelegram')}
         />
       </div>
       <div>
@@ -103,7 +103,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
           onChange={(e) => onGithubChange(e.target.value)}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${github ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="GitHub profile or repository"
+          placeholder={t('placeholder.socialInformationGithub')}
         />
       </div>
       <div>
@@ -117,7 +117,7 @@ export const SocialInformation: React.FC<SocialInformationProps> = ({
           onChange={(e) => onMediumChange(e.target.value)}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${medium ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Medium profile or publication"
+          placeholder={t('placeholder.socialInformationMedium')}
         />
       </div>
     </div>

@@ -170,7 +170,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                     value={myReferrerCode}
                     onChange={(e) => setMyReferrerCode(e.target.value)}
                     className='input w-full'
-                    placeholder="Enter your favourite name as URC"
+                    placeholder={t('urc.enterUrcName')}
                   />
                   <button
                     className="btn btn-circle btn-sm btn-ghost ml-2"
@@ -234,7 +234,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                   value={myReferrerCode}
                   onChange={(e) => setMyReferrerCode(e.target.value)}
                   className='input w-full'
-                  placeholder="Enter your favourite name as URC"
+                  placeholder={t('urc.enterUrcName')}
                 />
                 <AlertBox title={t('common.attention')} message={t('urc.attentionMessage')} />
                 <button

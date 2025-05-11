@@ -6,14 +6,14 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   currentLocale,
   onLocaleChange,
 }) => {
-  const languages: Language[] = ['en-US', 'ja-JP', 'es-ES', 'ru-RU', 'zh-CN', 'zh-TW', 'vi-VN'];
+  const languages: Language[] = ['en-US', 'ja-JP', 'es-ES', 'zh-CN', 'zh-TW', 'vi-VN'];
 
   const getLanguageName = (locale: Language) => {
     const langMap: Record<Language, string> = {
       'en-US': 'English',
       'zh-CN': '简体中文',
       'ja-JP': '日本語',
-      'ru-RU': 'Русский',
+      // 'ru-RU': 'Русский',
       'zh-TW': '繁體中文',
       'es-ES': 'Español',
       'vi-VN': 'Tiếng Việt',

@@ -41,6 +41,16 @@ export const MyProfile: React.FC = () => {
     manager: t('social.manager')
   };
 
+  const showPaticipants = (roles: string[]) => {
+    let participants = [];
+    for (let i = 0; i < roles.length; i++) {
+      participants.push(
+        hideMap[roles[i] as keyof typeof hideMap]
+      );
+    }
+    return participants.join(', ');
+  };
+
   const fetchUserData = useCallback(async () => {
     setLoading(true);
     try {
@@ -213,8 +223,8 @@ export const MyProfile: React.FC = () => {
         {/* Only read */}
         {!isEditing && (
           <div className="space-y-4">
-            <div><span className="font-semibold">{t('social.email')}:</span> {user.email || 'Not set'}</div>
-            <div><span className="font-semibold">{t('social.bio')}:</span> {user.bio || 'Not set'}</div>
+            <div><span className="font-semibold">{t('social.email')}:</span> {user.email || t('social.notSet')}</div>
+            <div><span className="font-semibold">{t('social.bio')}:</span> {user.bio || t('social.notSet')}</div>
             <div>
               <span className="font-semibold">{t('social.socialLinks')}:</span>
               {user.social_links && Object.keys(user.social_links).length > 0 ? (
@@ -227,10 +237,10 @@ export const MyProfile: React.FC = () => {
                   ))}
                 </ul>
               ) : (
-                ' Not set'
+                t('social.notSet')
               )}
             </div>
-            <div><span className="font-semibold">{t('social.hide')}:</span> {user.hides ? user.hides.split(',').join(', ') : 'Not set'}</div>
+            <div><span className="font-semibold">{t('social.hide')}:</span> {user.hides ? showPaticipants(user.hides.split(',')) : t('social.notSet')}</div>
             <div><span className="font-semibold">{t('social.joinedAt')}:</span> {new Date(user.created_at).toLocaleString()}</div>
             {/* <p><span className="font-semibold">Updated:</span> {new Date(user.updated_at).toLocaleString()}</p> */}
           </div>
@@ -247,9 +257,9 @@ export const MyProfile: React.FC = () => {
                 onChange={handleAvatarChange}
                 className="w-full p-2 pixel-box"
               />
-              {formData.avatarFile && (
+              {/* {formData.avatarFile && (
                 <p className="text-gray-400 text-sm mt-1">Selected: {formData.avatarFile.name}</p>
-              )}
+              )} */}
             </div>
             <div>
               <label className="block text-sm font-semibold">{t('social.username')}</label>

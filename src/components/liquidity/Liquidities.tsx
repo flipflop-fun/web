@@ -8,6 +8,7 @@ import { ToastBox } from "../common/ToastBox"
 import { NETWORK, SCANURL } from "../../config/constants"
 import { InitiazlizedTokenData } from "../../types/types"
 import { useDeviceType } from "../../hooks/device"
+import { useTranslation } from "react-i18next"
 
 export type LiquiditiesProps = {
   onDone: () => void;
@@ -45,12 +46,12 @@ export const Liquidities: FC<LiquiditiesProps> = ({
   const { isMobile } = useDeviceType();
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
-
+  const { t } = useTranslation();
   // Add Liquidity
   const handleAddLiquidity = async () => {
     if (!tokenData) return;
     setLoading(true);
-    const toastId = toast.loading('Add liquidity...', {
+    const toastId = toast.loading(t('vm.addLiquidity') + '...', {
       style: {
         background: 'var(--fallback-b1,oklch(var(--b1)))',
         color: 'var(--fallback-bc,oklch(var(--bc)))',
@@ -100,7 +101,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
   const handleRemoveLiquidity = async () => {
     if (!tokenData) return;
     setLoading(true);
-    const toastId = toast.loading('Remove liquidity...', {
+    const toastId = toast.loading(t('vm.removeLiquidity') + '...', {
       style: {
         background: 'var(--fallback-b1,oklch(var(--b1)))',
         color: 'var(--fallback-bc,oklch(var(--bc)))',
@@ -170,7 +171,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
       <div className="grid md:grid-cols-1 gap-4">
         {/* Add liquidity */}
         <div className="">
-          <div className="mb-2 ml-1 font-bold">Add liquidity</div>
+          <div className="mb-2 ml-1 font-bold">{t('vm.addLiquidity')}</div>
           <input
             type="text"
             placeholder="quantity to add"
@@ -193,7 +194,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
             }}
           />
           <div className="mt-2 ml-2 mb-2">
-            <div>You will add around {addLiquidityAmount1} SOL</div>
+            <div>{t('vm.addSolAmount', {amount: addLiquidityAmount1})}</div>
             <div className='text-error text-sm'>{messageAddLiquidity}</div>
           </div>
           <button
@@ -201,12 +202,12 @@ export const Liquidities: FC<LiquiditiesProps> = ({
             onClick={handleAddLiquidity}
             disabled={loading || !tokenData || messageAddLiquidity !== ''}
           >
-            {loading ? 'Processing...' : 'Add Liquidity'}
+            {loading ? t('vm.addLiquidity') + '...' : t('vm.addLiquidity')}
           </button>
         </div>
         {/* Remove liquidity */}
         <div className="">
-          <div className="mb-2 ml-1 font-bold">Remove liquidity</div>
+          <div className="mb-2 ml-1 font-bold">{t('vm.removeLiquidity')}</div>
           <div className="pixel-box w-full flex flex-col gap-2 bg-white p-2">
             <div className="flex justify-between text-sm">
               <span>0%</span>
@@ -227,7 +228,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
               className="progress w-full bg-gray"
             />
             <div className="flex justify-between items-center">
-              <div>Lp percentage: {removeLiquidityRatio}%</div>
+              <div>{t('vm.lpPercentage')}: {removeLiquidityRatio}%</div>
               <div className="flex gap-2 items-center">
                 <button 
                   className="btn btn-xs" 
@@ -270,7 +271,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
           </div>
 
           <div className="mt-2 ml-2 mb-2">
-            <div>You will remove around {removeLiquidityAmount} {tokenData.tokenSymbol} and {removeLiquidityAmount1} SOL</div>
+            <div>{t('vm.removeLpDescription', {tokenAmount: removeLiquidityAmount, tokenSymbol: tokenData.tokenSymbol, solAmount: removeLiquidityAmount1})}</div>
             <div className='text-error text-sm'>{messageRemoveLiquidity}</div>
           </div>
           <button
@@ -278,7 +279,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
             onClick={handleRemoveLiquidity}
             disabled={loading || !tokenData || messageRemoveLiquidity !== ''}
           >
-            {loading ? 'Processing...' : 'Remove Liquidity'}
+            {loading ? t('vm.removeLiquidity') + '...' : t('vm.removeLiquidity')}
           </button>
         </div>
       </div>
@@ -289,12 +290,12 @@ export const Liquidities: FC<LiquiditiesProps> = ({
             <table className="pixel-table w-full">
               <thead>
                 <tr>
-                  <th>Transaction</th>
+                  <th>{t('tokenInfo.transactionId')}</th>
                   {/* <th>Action</th> */}
                   {!isMobile && <th>Amount0</th>}
                   {!isMobile && <th>Amount1</th>}
-                  <th>LP Amount</th>
-                  {!isMobile && <th>Time</th>}
+                  <th>{t('vm.lpAmount')}</th>
+                  {!isMobile && <th>{t('common.time')}</th>}
                 </tr>
               </thead>
               <tbody>

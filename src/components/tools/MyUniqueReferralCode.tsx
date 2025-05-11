@@ -175,7 +175,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
           <>
             <div className="flex justify-end mb-4">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-base-content">Rows per page:</span>
+                <span className="text-sm text-base-content">{t('common.rowsPerPage')}:</span>
                 <select
                   className="select select-bordered select-sm"
                   value={pageSize}
@@ -196,7 +196,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
                 <tr>
                   <th className="text-center ">{t('tokenInfo.logo')}</th>
                   <th className="text-left ">{t('launch.tokenName')}/{t('launch.tokenSymbol')}</th>
-                  <th className="text-left ">{t('tokenAddress')}</th>
+                  <th className="text-left ">{t('tokenInfo.tokenAddress')}</th>
                   <th className="text-left ">{t('tokenInfo.developer')}</th>
                   <th className="text-right ">{t('urc.bonus')}</th>
                   <th className="text-center ">{t('common.actions')}</th>

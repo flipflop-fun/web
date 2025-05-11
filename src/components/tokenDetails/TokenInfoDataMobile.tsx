@@ -55,13 +55,13 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
           tooltip={tooltip.currentEra}
         />
         <DataBlock
-          label="Current Minted"
+          label={t('tokenInfo.currentMinted')}
           value={`${mintedSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${metadata?.symbol}`}
           tooltip={tooltip.currentMinted}
         />
         <DataBlock
           label={t('tokenInfo.mintFee')}
-          value={`${(Number(token.feeRate) / LAMPORTS_PER_SOL)} SOL/Mint`}
+          value={`${(Number(token.feeRate) / LAMPORTS_PER_SOL)} SOL/${t('common.mint')}`}
           tooltip={tooltip.mintFee}
         />
         <DataBlock
@@ -75,7 +75,7 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
         onClick={() => setShowDetails(!showDetails)}
         className="btn w-full"
       >
-        <span>{showDetails ? 'Hide Details' : 'Show Details'}</span>
+        <span>{showDetails ? t('tokenInfo.hideMore') : t('tokenInfo.showMore')}</span>
         {showDetails ? (
           <svg className="w-4 h-4" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M7 16H5v-2h2v-2h2v-2h2V8h2v2h2v2h2v2h2v2h-2v-2h-2v-2h-2v-2h-2v2H9v2H7v2z" fill="currentColor" /> </svg>
         ) : (

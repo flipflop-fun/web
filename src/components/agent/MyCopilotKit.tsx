@@ -12,6 +12,7 @@ import { loadFAQs } from "../../utils/user";
 import toast from "react-hot-toast";
 import { FAQ } from "../../types/types";
 import { useAuth } from "../../hooks/auth";
+import { useTranslation } from "react-i18next";
 
 export const MyCopilotKit = () => {
   const { messages, setMessages } = useCopilotMessagesContext();
@@ -20,7 +21,7 @@ export const MyCopilotKit = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [faqs, setFaqs] = useState<FAQ[] | null>(null);
   const { token, handleLogin, isLoggingIn } = useAuth();
-
+  const { t } = useTranslation();
   // save to local storage when messages change
   useEffect(() => {
     if (messages.length !== 0) {
@@ -166,7 +167,7 @@ export const MyCopilotKit = () => {
             ref={inputRef}
             disabled={inProgress}
             type="text"
-            placeholder="Ask your question here..."
+            placeholder={t('placeholder.copilotKitAskYourQuestion')}
             className={inputStyle}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {

@@ -8,6 +8,7 @@ import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react"
 import { BN } from "@coral-xyz/anchor"
 import { InitiazlizedTokenData } from "../../types/types"
 import { useDeviceType } from "../../hooks/device"
+import { useTranslation } from "react-i18next"
 
 const SLIPPAGE_KEY = 'trade_slippage';
 const DEFAULT_SLIPPAGE = 0.5;
@@ -47,6 +48,7 @@ export const Trades: FC<TradesProps> = ({
   const { isMobile } = useDeviceType();
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
+  const { t } = useTranslation();
 
   // Get slippage from localStorage
   useEffect(() => {
@@ -71,7 +73,7 @@ export const Trades: FC<TradesProps> = ({
   const handleBuy = async () => {
     if (!tokenData) return;
     setLoading(true);
-    const toastId = toast.loading('Buy tokens...', {
+    const toastId = toast.loading(t('vm.buyToken') + '...', {
       style: {
           background: 'var(--fallback-b1,oklch(var(--b1)))',
           color: 'var(--fallback-bc,oklch(var(--bc)))',
@@ -121,7 +123,7 @@ export const Trades: FC<TradesProps> = ({
     const handleSell = async () => {
       if (!tokenData) return;
       setLoading(true);
-      const toastId = toast.loading('Sell tokens...', {
+      const toastId = toast.loading(t('vm.sellToken') + '...', {
         style: {
             background: 'var(--fallback-b1,oklch(var(--b1)))',
             color: 'var(--fallback-bc,oklch(var(--bc)))',
@@ -172,7 +174,7 @@ export const Trades: FC<TradesProps> = ({
       {/* Slippage Settings */}
       <div className="mb-4 justify-end">
         <div className="flex items-center gap-2">
-          <span>Slippage: {slippageValue}%</span>
+          <span>{t('vm.slippage')}: {slippageValue}%</span>
           <button
             className="btn btn-ghost btn-xs"
             onClick={() => setShowSlippageSettings(!showSlippageSettings)}
@@ -207,7 +209,7 @@ export const Trades: FC<TradesProps> = ({
         <div className="">
           <input
             type="text"
-            placeholder="quantity to buy"
+            placeholder={t('vm.buyTokenAmount')}
             className="input w-full"
             value={buyAmount}
             onChange={(e) => {
@@ -227,7 +229,7 @@ export const Trades: FC<TradesProps> = ({
             }}
           />
           <div className="mt-2 ml-2 mb-2">
-            <div>You will pay around {buy1Amount} SOL</div>
+            <div>{t('vm.paySolDescription', {amount: buy1Amount})}</div>
             <div className='text-error text-sm'>{messageBuy}</div>
           </div>
           <button
@@ -235,14 +237,14 @@ export const Trades: FC<TradesProps> = ({
             onClick={handleBuy}
             disabled={loading || !tokenData || messageBuy !== ''}
           >
-            {loading ? 'Processing...' : `BUY ${tokenData?.tokenSymbol}`}
+            {loading ? t('vm.buyToken') + '...' : `${t('vm.buyToken')} ${tokenData?.tokenSymbol}`}
           </button>
         </div>
         {/* Sell tokens */}
         <div className="">
           <input
             type="text"
-            placeholder="quantity to sell"
+            placeholder={t('vm.sellTokenAmount')}
             className="input w-full"
             value={sellAmount}
             onChange={(e) => {
@@ -262,7 +264,7 @@ export const Trades: FC<TradesProps> = ({
             }}
           />
           <div className="mt-2 ml-2 mb-2">
-            <div>You will get around {sell1Amount} SOL</div>
+            <div>{t('vm.getSolDescription', {amount: sell1Amount})}</div>
             <div className='text-error text-sm'>{messageSell}</div>
           </div>
           <button
@@ -270,7 +272,7 @@ export const Trades: FC<TradesProps> = ({
             onClick={handleSell}
             disabled={loading || !tokenData || messageSell !== ''}
           >
-            {loading ? 'Processing...' : `SELL ${tokenData?.tokenSymbol}`}
+            {loading ? t('vm.sellToken') + '...' : `${t('vm.sellToken')} ${tokenData?.tokenSymbol}`}
           </button>
         </div>
       </div>
@@ -279,11 +281,11 @@ export const Trades: FC<TradesProps> = ({
           <table className="pixel-table w-full">
             <thead>
               <tr>
-                <th>Transaction</th>
+                <th>{t('tokenInfo.transactionId')}</th>
                 {/* <th>Action</th> */}
-                <th>Token Amount</th>
-                {!isMobile && <th>SOL Amount</th>}
-                {!isMobile && <th>Time</th>}
+                <th>{t('vm.tokenAmount')}</th>
+                {!isMobile && <th>{t('vm.solAmount')}</th>}
+                {!isMobile && <th>{t('common.time')}</th>}
               </tr>
             </thead>
             <tbody>

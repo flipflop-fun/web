@@ -16,7 +16,11 @@
     "cancel": "取消",
     "edit": "编辑",
     "connectWallet": "请链接Solana链的钱包",
-    "days": "天"
+    "days": "天",
+    "copied": "已复制",
+    "rowsPerPage": "每页行数",
+    "showing": "显示",
+    "page": "页"
   },
   "menu": {
     "discover": "发现",
@@ -117,7 +121,12 @@
     "noDeployments": "找不到已部署的代币信息",
     "noDelegated": "找不到管理的代币",
     "headerImage": "橱窗图",
-    "headerImageWidthAndHeight": "建议宽高比例3:1"
+    "headerImageWidthAndHeight": "建议宽高比例3:1",
+    "targetSecondsPerCheckpoint": "检查点目标铸造时间(秒)",
+    "initialMintSize": "初始铸造数量",
+    "initialMintSizePerCheckpoint": "检查点初始铸造数量",
+    "showMore": "查看更多",
+    "hideMore": "隐藏"
   },
   "mint": {
     "title": "铸造",
@@ -156,7 +165,31 @@
     "totalLpTokens": "LP总量",
     "vaultLpTokens": "金库中的LP数量",
     "systemVaultToken": "未发放LP数量",
-    "burnUnAllocatedTokens": "销毁未发放代币"
+    "burnUnAllocatedTokens": "销毁未发放代币",
+    "burnAmountOfSystemVault": "输入从系统金库中销毁的代币数量",
+    "burnAmount": "销毁数量",
+    "burn": "销毁",
+    "burnAttention": "该操作不可撤销，如果从系统金库中销毁代币，意味着代币最大总量减少，但不影响已经铸造的代币",
+    "addLiquidity": "添加流动性",
+    "removeLiquidity": "移除流动性",
+    "addSolAmount": "将添加约{{amount}}SOL到池子",
+    "removeLpDescription": "将移出代币{{tokenAmount}}{{tokenSymbol}}和{{solAmount}}SOL",
+    "lpPercentage": "LP占比",
+    "lpAmount": "LP数量",
+    "burnLp": "销毁LP代币",
+    "burnLpAmount": "LP销毁数量",
+    "burnLpNotEnough": "LP数量不足，最多:",
+    "burnLpDescription": "将销毁{{amount}}LP代币",
+    "buyToken": "购买代币",
+    "sellToken": "出售代币",
+    "slippage": "滑点",
+    "buyTokenAmount": "购买代币数量",
+    "paySolDescription": "将支付约{{amount}}SOL",
+    "getSolDescription": "将获得约{{amount}}SOL",
+    "payTokenDescription": "将支付约{{amount}}{{tokenSymbol}}",
+    "sellTokenAmount": "出售代币数量",
+    "tokenAmount": "代币数量",
+    "solAmount": "SOL数量"
   },
   "urc": {
     "myUrc": "我的URC推荐码",
@@ -180,7 +213,16 @@
     "totalReferral": "总奖励",
     "referralCount": "奖励次数",
     "tokenInformation": "代币详情",
-    "referrer": "推荐人"
+    "referrer": "推荐人",
+    "invalidUrc": "无效的URC",
+    "urcAccount": "URC账户",
+    "providerTokenAccount": "提供者代币帐号",
+    "providerMainAccount": "提供者主账号",
+    "referrerTokenBalance": "推荐人代币余额",
+    "urcReferralUrl": "URC推荐链接",
+    "codeHash": "Code Hash",
+    "verified": "已验证",
+    "enterUrcName": "为你的URC专属码起个名字"
   },
   "launch": {
     "title": "部署代币",
@@ -218,7 +260,8 @@
     "immutable": "不可更新",
     "revokeMetadataUpdate": "取消元数据更新权限",
     "delegateVmMangerDescription": "您可以指定一个帐号用来管理金库的流动性，默认为发行人帐号!",
-    "delegateVmManager": "委托市值管理人"
+    "delegateVmManager": "委托市值管理人",
+    "vmManagerPlaceholder": "输入市值管理人的账户地址"
   },
   "social": {
     "title": "社交",
@@ -258,6 +301,29 @@
     "issuer": "开发者",
     "promoter": "推广人",
     "manager": "市值管理人",
-    "noActivities": "没有活动信息，请关注一些用户或代币"
+    "noActivities": "没有活动信息，请关注一些用户或代币",
+    "writeCommentPlaceholder": "写评论...",
+    "replyToPlaceholder": "回复{{name}}...",
+    "notSet": "未设置"
+  },
+  "placeholder": {
+    "copilotKitAskYourQuestion": "输入你的问题...",
+    "shareButtonEnterYourUrcCode": "输入你的URC推荐码...",
+    "enterYourUsername": "输入你的用户名...",
+    "advancedSettingEnterTargetMilestone": "输入目标里程碑...",
+    "advancedSettingEnterCheckpointsPerMilestone": "输入每个里程碑检查点数...",
+    "advancedSettingEnterTargetSeconds": "输入目标时间(秒)...",
+    "advancedSettingEnterReduceRatioPerMilestone": "输入里程碑衰减率...",
+    "advancedSettingInitialMintSize": "输入初始铸造数量...",
+    "advancedSettingEnterTargetMintSizePerCheckpoint": "输入检查点的目标铸造数量...",
+    "advancedSettingEnterFeeRate": "输入铸造费...",
+    "advancedSettingEnterLiquidityTokensRatio": "输入流动性代币占比...",
+    "socialInformationDescription": "输入代币简介...",
+    "socialInformationWebsite": "输入代币网址，如 https://example.com...",
+    "socialInformationTwitter": "输入推特，如 @xxx...",
+    "socialInformationDiscord": "输入Discord邀请链接...",
+    "socialInformationTelegram": "输入电报群链接...",
+    "socialInformationGithub": "输入Github链接...",
+    "socialInformationMedium": "输入Medium链接..."
   }
 }

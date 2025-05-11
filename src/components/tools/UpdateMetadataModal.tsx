@@ -174,7 +174,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="pixel-textarea textarea-bordered w-full h-24"
-                placeholder="Enter token description..."
+                placeholder={t('placeholder.socialInformationDescription')}
               />
             </div>
 
@@ -193,7 +193,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                     value={website}
                     onChange={(e) => setWebsite(e.target.value)}
                     className="input input-bordered w-full"
-                    placeholder="https://"
+                    placeholder={t('placeholder.socialInformationWebsite')}
                   />
                 </div>
 
@@ -207,7 +207,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                     value={twitter}
                     onChange={(e) => setTwitter(e.target.value)}
                     className="input input-bordered w-full"
-                    placeholder="https://x.com/"
+                    placeholder={t('placeholder.socialInformationTwitter')}
                   />
                 </div>
 
@@ -221,7 +221,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                     value={discord}
                     onChange={(e) => setDiscord(e.target.value)}
                     className="input input-bordered w-full"
-                    placeholder="https://discord.gg/"
+                    placeholder={t('placeholder.socialInformationDiscord')}
                   />
                 </div>
 
@@ -235,7 +235,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                     value={telegram}
                     onChange={(e) => setTelegram(e.target.value)}
                     className="input input-bordered w-full"
-                    placeholder="https://t.me/"
+                    placeholder={t('placeholder.socialInformationTelegram')}
                   />
                 </div>
 
@@ -249,7 +249,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                     value={github}
                     onChange={(e) => setGithub(e.target.value)}
                     className="input input-bordered w-full"
-                    placeholder="https://github.com/"
+                    placeholder={t('placeholder.socialInformationGithub')}
                   />
                 </div>
 
@@ -263,7 +263,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                     value={medium}
                     onChange={(e) => setMedium(e.target.value)}
                     className="input input-bordered w-full"
-                    placeholder="https://medium.com/"
+                    placeholder={t('placeholder.socialInformationMedium')}
                   />
                 </div>
               </div>

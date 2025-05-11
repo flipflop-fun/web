@@ -8,6 +8,7 @@ import { BN } from "@coral-xyz/anchor";
 import { ToastBox } from "../common/ToastBox";
 import { NETWORK, SCANURL } from "../../config/constants";
 import { useDeviceType } from "../../hooks/device";
+import { useTranslation } from "react-i18next";
 
 export type LpBurnsProps = {
   tokenData: InitiazlizedTokenData;
@@ -28,6 +29,7 @@ export const LpBurns: FC<LpBurnsProps> = ({
   const { isMobile } = useDeviceType();
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
+  const { t } = useTranslation();
 
   // Burn LP Token
   const handleBurnLpToken = async () => {
@@ -82,20 +84,20 @@ export const LpBurns: FC<LpBurnsProps> = ({
       <div className="w-full mx-auto">
         <input
           type="text"
-          placeholder="quantity of LP tokens to burn"
+          placeholder={t('vm.burnLpAmount')}
           className="input input-bordered w-full"
           value={burnLpAmount}
           onChange={(e) => {
             setBurnLpAmount(e.target.value);
             const amount = parseFloat(e.target.value);
-            if(amount > vaultLpTokenBalance) setMessageBurnLp('Insufficient LP token balance, max: ' + vaultLpTokenBalance.toFixed(4));
+            if(amount > vaultLpTokenBalance) setMessageBurnLp(t('vm.burnLpNotEnough') + vaultLpTokenBalance.toFixed(4));
             else {
               setMessageBurnLp('');
             }
           }}
         />
         <div className="mt-2 ml-2 mb-2">
-          <div>You will burn {burnLpAmount} LP tokens</div>
+          <div>{t('vm.burnLpDescription', {amount: burnLpAmount})}</div>
           <div className="text-error text-sm">{messageBurnLp}</div>
         </div>
 
@@ -104,7 +106,7 @@ export const LpBurns: FC<LpBurnsProps> = ({
           onClick={handleBurnLpToken}
           disabled={loading || !tokenData || messageBurnLp !== ''}
         >
-          {loading ? 'Processing...' : 'Burn LP Token'}
+          {loading ? t('vm.burnLp') + '...' : t('vm.burnLp')}
         </button>
       </div>
       <div>
@@ -114,9 +116,9 @@ export const LpBurns: FC<LpBurnsProps> = ({
             <table className="pixel-table w-full">
               <thead>
                 <tr>
-                  <th>Transaction</th>
-                  <th>LP Amount</th>
-                  {!isMobile && <th>Time</th>}
+                  <th>{t('tokenInfo.transactionId')}</th>
+                  <th>{t('vm.lpAmount')}</th>
+                  {!isMobile && <th>{t('common.time')}</th>}
                 </tr>
               </thead>
               <tbody>
@@ -132,7 +134,6 @@ export const LpBurns: FC<LpBurnsProps> = ({
           </div>
         )}
       </div>
-
     </div>
   )
 }

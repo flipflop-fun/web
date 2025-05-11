@@ -44,7 +44,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="input w-full"
-                placeholder="Enter your username"
+                placeholder={t('placeholder.enterYourUsername')}
                 autoFocus
                 required
               />

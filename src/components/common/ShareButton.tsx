@@ -155,7 +155,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
               type="text"
               value={urcCode}
               onChange={(e) => setUrcCode(e.target.value)}
-              placeholder="Enter your URC code"
+              placeholder={t('placeholder.shareButtonEnterYourUrcCode')}
               className="input w-full mb-4"
             />
             <div className="flex justify-end gap-2">

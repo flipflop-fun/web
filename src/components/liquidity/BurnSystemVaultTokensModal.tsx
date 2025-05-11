@@ -9,6 +9,7 @@ import { ModalTopBar } from '../common/ModalTopBar';
 import { formatPrice } from '../../utils/format';
 import { BN } from '@coral-xyz/anchor';
 import { burnTokensFromMintTokenVault } from '../../utils/web3';
+import { useTranslation } from 'react-i18next';
 
 type BurnSystemVaultTokensModalProps = {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
   const wallet = useAnchorWallet();
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState("0")
+  const { t } = useTranslation();
 
   if (!isOpen) return null;
 
@@ -84,21 +86,21 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <div className="space-y-4">
               <div className="space-y-2">
-                <p>Enter amount of tokens you want to burn from the system vault. (max: {formatPrice(totalBalance, 3)} {token.tokenSymbol})</p>
+                <p>{t('vm.burnAmountOfSystemVault')} (t('urc.max'): {formatPrice(totalBalance, 3)} {token.tokenSymbol})</p>
                 <input
                   type="text"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className='input w-full'
-                  placeholder="Enter amount"
+                  placeholder={t('vm.burnAmount')}
                 />
-                <AlertBox title="Attention" message="If you burn tokens from the system vault, it cannot be recovered, the max supply will deduced by the amount you burn!" />
+                <AlertBox title={t('common.attention')} message={t('vm.burnAttention')} />
                 <button
                   className={`btn btn-primary w-full mt-3`}
                   onClick={handleBurn}
                   disabled={loading}
                 >
-                  {loading ? 'Burning...' : 'Burn'}
+                  {loading ? t('vm.burn') + '...' : t('vm.burn')}
                 </button>
               </div>
           </div>

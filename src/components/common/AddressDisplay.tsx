@@ -3,15 +3,17 @@ import { formatAddress } from '../../utils/format';
 import { AddressDisplayProps } from '../../types/types';
 import { NETWORK, SCANURL } from '../../config/constants';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export const AddressDisplay: React.FC<AddressDisplayProps> = ({
   address,
   type = 'account',
   showCharacters = 4,
 }) => {
+  const { t } = useTranslation();
   const handleCopy = () => {
     navigator.clipboard.writeText(address);
-    toast.success('Copied');
+    toast.success(t('common.copied'));
   };
 
   const explorerUrl = `${SCANURL}/${type}/${address}?cluster=${NETWORK}`;

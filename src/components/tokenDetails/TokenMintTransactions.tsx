@@ -81,7 +81,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold text-base-content">{t('tokenInfo.recentMint')}</h3>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-base-content">Rows per page:</span>
+          <span className="text-sm text-base-content">{t('common.rowsPerPage')}:</span>
           <select
             className="select select-bordered select-sm"
             value={pageSize}

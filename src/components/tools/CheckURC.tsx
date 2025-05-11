@@ -84,21 +84,21 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
         {searchResult && searchResult.codeHash === getReferrerCodeHash(wallet, connection, searchId.trim()).data?.toString() && searchId ? (
           <div className="pixel-box bg-base-200 shadow-xl">
             <div className="card-body">
-              <h2 className="card-title">URC Details</h2>
+              <h2 className="card-title">{t('urc.urcDetails')}</h2>
               <div className="overflow-x-auto">
                 <table className="table w-full">
                   <tbody>
                     {searchResult && (
                       <>
                         <tr>
-                          <td className="font-bold w-1/3">Code Hash</td>
+                          <td className="font-bold w-1/3">{t('urc.codeHash')}</td>
                           <td className="flex items-center gap-2 w-2/3">
                             {searchResult.codeHash}
-                            <span className="badge badge-success">Verified</span>
+                            <span className="badge badge-success">{t('urc.verified')}</span>
                           </td>
                         </tr>
                         <tr>
-                          <td className="font-bold">Referral Link</td>
+                          <td className="font-bold">{t('urc.urcReferralUrl')}</td>
                           <td className="flex items-start gap-2">
                             <div className="relative flex-1 min-w-0">
                               <span className="block line-clamp-3 pr-2 text-sm break-all leading-5">
@@ -108,7 +108,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
                             <button
                               onClick={() => {
                                 navigator.clipboard.writeText(referralLink);
-                                toast.success('Copied');
+                                toast.success(t('common.copied'));
                               }}
                               className="btn btn-sm w-8 h-8 p-0"
                               title={t('common.copyLink')}
@@ -118,15 +118,15 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
                           </td>
                         </tr>
                         <tr>
-                          <td className="font-bold">Usage Count</td>
+                          <td className="font-bold">{t('urc.currentUsedCount')}</td>
                           <td>{searchResult.usageCount}</td>
                         </tr>
                         <tr>
-                          <td className="font-bold">Active Time</td>
+                          <td className="font-bold">{t('urc.activateTime')}</td>
                           <td>{new Date(searchResult.activeTimestamp * 1000).toLocaleString()}</td>
                         </tr>
                         <tr>
-                          <td className="font-bold">Referrer's token balance</td>
+                          <td className="font-bold">{t('urc.referrerTokenBalance')}</td>
                           <td>{searchResult.tokenBalance?.toLocaleString()}</td>
                         </tr>
                       </>
@@ -138,19 +138,19 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
                       </td>
                     </tr>
                     <tr>
-                      <td className="font-bold">Provider main account</td>
+                      <td className="font-bold">{t('urc.providerMainAccount')}</td>
                       <td>
                         {<AddressDisplay address={searchResult.referrerMain} showCharacters={6} />}
                       </td>
                     </tr>
                     <tr>
-                      <td className="font-bold">Provider token accoount</td>
+                      <td className="font-bold">{t('urc.providerTokenAccount')}</td>
                       <td>
                         {<AddressDisplay address={searchResult.referrerAta} showCharacters={6} />}
                       </td>
                     </tr>
                     <tr>
-                      <td className="font-bold">URC Account</td>
+                      <td className="font-bold">{t('urc.urcAccount')}</td>
                       <td>
                         {<AddressDisplay address={searchResult.referralAccount} showCharacters={6} />}
                       </td>
@@ -162,7 +162,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
           </div>
         ) : searchId && (
           <div className='text-red-500'>
-            Invalid URC
+            {t('urc.invalidUrc')}
           </div>
         )}
       </div>

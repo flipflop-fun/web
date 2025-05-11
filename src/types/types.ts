@@ -642,4 +642,4 @@ export type FAQ = {
   questions: string[];
 }
 
-export type Language = 'en-US' | 'zh-CN' | 'zh-TW' | 'ja-JP' | 'es-ES' | 'ru-RU' | 'vi-VN';
+export type Language = 'en-US' | 'zh-CN' | 'zh-TW' | 'ja-JP' | 'es-ES' | 'vi-VN';

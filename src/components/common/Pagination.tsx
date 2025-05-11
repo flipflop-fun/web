@@ -1,5 +1,6 @@
 import React from 'react';
 import { PaginationProps } from '../../types/types';
+import { useTranslation } from 'react-i18next';
 
 export const Pagination: React.FC<PaginationProps> = ({
   currentPage,
@@ -9,10 +10,11 @@ export const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   hasMore = true,
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-between items-center mt-4">
       <div className="text-sm text-base-content mr-4">
-        Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, totalCount)} of {totalCount}
+        {t('common.showing')} {((currentPage - 1) * pageSize) + 1} - {Math.min(currentPage * pageSize, totalCount)} of {totalCount}
       </div>
       <div className="join">
         <button
@@ -30,7 +32,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           ‹
         </button>
         <button className="join-item pagination-btn btn-sm">
-          Page {currentPage}
+          {t('common.page')} {currentPage}
         </button>
         <button
           className="join-item pagination-btn btn-sm"

@@ -26,7 +26,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
     <div className="space-y-4 md:space-y-6" >
       <div>
         <label htmlFor="targetEras" className="block text-sm font-medium mb-1">
-          Target Milestones
+          {t('tokenInfo.targetMilestone')}
         </label>
         <input
           type="text"
@@ -35,13 +35,13 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           onChange={(e) => onTargetErasChange(e.target.value.replace(/[^0-9]/g, ''))}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${targetEras ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter target milestones"
+          placeholder={t('placeholder.advancedSettingEnterTargetMilestone')}
         />
       </div>
 
       <div>
         <label htmlFor="epochesPerEra" className="block text-sm font-medium mb-1">
-          Checkpoints Per Milestone
+          {t('tokenInfo.checkpointsPerMilestone')}
         </label>
         <input
           type="text"
@@ -50,13 +50,13 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           onChange={(e) => onEpochesPerEraChange(e.target.value.replace(/[^0-9]/g, ''))}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${epochesPerEra ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter checkpoints per milestone"
+          placeholder={t('placeholder.advancedSettingEnterCheckpointPerMilestone')}
         />
       </div>
 
       <div>
         <label htmlFor="targetSecondsPerEpoch" className="block text-sm font-medium mb-1">
-          Target Seconds Per Checkpoint
+          {t('tokenInfo.targetSecondsPerCheckpoint')}
         </label>
         <input
           type="text"
@@ -65,13 +65,13 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           onChange={(e) => onTargetSecondsPerEpochChange(e.target.value.replace(/[^0-9]/g, ''))}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${targetSecondsPerEpoch ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter target seconds"
+          placeholder={t('placeholder.advancedSettingEnterTargetSecondsPerCheckpoint')}
         />
       </div>
 
       <div>
         <label htmlFor="reduceRatio" className="block text-sm font-medium mb-1">
-          Reduce Ratio
+          {t('tokenInfo.reduceRatioPerMilestone')}
         </label>
         <input
           type="text"
@@ -86,13 +86,13 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           }}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${reduceRatio ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter reduce ratio (0-100)"
+          placeholder={t('placeholder.advancedSettingEnterReduceRatio')}
         />
       </div>
 
       <div>
         <label htmlFor="initialMintSize" className="block text-sm font-medium mb-1">
-          Initial Mint Size
+          {t('tokenInfo.initialMintSize')}
         </label>
         <input
           type="text"
@@ -105,13 +105,13 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           }}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${displayInitialMintSize ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter initial mint size"
+          placeholder={t('placeholder.advancedSettingEnterInitialMintSize')}
         />
       </div>
 
       <div>
         <label htmlFor="initialTargetMintSizePerEpoch" className="block text-sm font-medium mb-1">
-          Initial Target Mint Size Per Checkpoint
+          {t('tokenInfo.initialMintSizePerCheckpoint')}
         </label>
         <input
           type="text"
@@ -124,13 +124,13 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           }}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${displayInitialTargetMintSizePerEpoch ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter target mint size per checkpoint"
+          placeholder={t('placeholder.advancedSettingEnterInitialTargetMintSizePerCheckpoint')}
         />
       </div>
 
       <div>
         <label htmlFor="feeRate" className="block text-sm font-medium mb-1">
-          Fee Rate(SOL)
+          {t('tokenInfo.mintFee')}(SOL)
         </label>
         <input
           type="text"
@@ -143,7 +143,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           }}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${displayFeeRate ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter fee rate"
+          placeholder={t('placeholder.advancedSettingEnterFeeRate')}
         />
       </div>
 
@@ -158,7 +158,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
           onChange={(e) => onLiquidityTokensRatioChange(e.target.value.replace(/[^0-9]/g, ''))}
           // className={`w-full px-3 py-2 border-2 border-dashed rounded-lg hover:border-primary transition-colors focus:outline-none focus:border-primary focus:border-2 bg-base-100 ${liquidityTokensRatio ? 'border-base-content' : ''}`}
           className='input w-full'
-          placeholder="Enter liquidity tokens ratio"
+          placeholder={t('placeholder.advancedSettingEnterLiquidityTokensRatio')}
         />
       </div>
 
