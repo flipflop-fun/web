@@ -302,7 +302,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
             className="mt-2 btn btn-secondary join-item"
             disabled={sendCommentLoading}
           >
-            Send
+            {t('social.send')}
           </button>
         </form>
       </div>

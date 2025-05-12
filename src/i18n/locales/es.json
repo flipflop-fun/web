@@ -262,7 +262,8 @@
     "revokeMetadataUpdate": "Revocar Autoridad de Actualización de Metadatos",
     "delegateVmMangerDescription": "Puede especificar una cuenta para gestionar la liquidez de la bóveda, ¡por defecto es la cuenta del emisor!",
     "delegateVmManager": "Delegar Gestor de Capitalización de Mercado",
-    "vmManagerPlaceholder": "Ingrese la dirección de la cuenta del gestor de capitalización de mercado"
+    "vmManagerPlaceholder": "Ingrese la dirección de la cuenta del gestor de capitalización de mercado",
+    "tokenMetadataIsImmutable": "Los metadatos del token son inmutables"
   },
   "social": {
     "title": "Social",
@@ -305,7 +306,8 @@
     "noActivities": "No hay información de actividad. Por favor, siga a algunos usuarios o tokens.",
     "writeCommentPlaceholder": "Escriba un comentario...",
     "replyToPlaceholder": "Responder a {{name}}...",
-    "notSet": "No Establecido"
+    "notSet": "No Establecido",
+    "send": "Enviar"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "Ingrese su pregunta...",
@@ -327,5 +329,32 @@
     "socialInformationGithub": "Ingrese enlace de Github...",
     "socialInformationMedium": "Ingrese enlace de Medium...",
     "profileBio": "Ingrese biografía..."
+  },
+  "tooltip": {
+    "currentEra": "El hito actual en el ciclo de vida del token",
+    "currentEpoch": "El punto de control actual dentro del hito actual",
+    "mintFee": "Tarifa requerida para acuñar tokens",
+    "currentMintSize": "Cantidad actual de tokens que se pueden acuñar en este punto de control",
+    "currentMinted": "Cantidad total de tokens que se han acuñado hasta ahora",
+    "targetSupply": "Suministro de tokens objetivo que se alcanzará en el hito especificado",
+    "mintSpeed": "Tasa a la que se acuñan los tokens por punto de control",
+    "deployAt": "Marca de tiempo cuando se implementó el token",
+    "deployingTx": "Hash de la transacción de la implementación",
+    "deployer": "Dirección del desarrollador del token",
+    "tokenAddress": "La dirección del contrato del token en Solana",
+    "liquidityVaultSOL": "Dirección de la bóveda que contiene la liquidez de SOL",
+    "liquidityVaultToken": "Dirección de la bóveda que contiene la liquidez del token",
+    "targetEras": "Número de hitos para alcanzar el suministro objetivo",
+    "startTimeOfCurrentEpoch": "Cuándo comenzó el punto de control actual",
+    "liquidityTokensRatio": "Porcentaje de tokens asignados para liquidez",
+    "maxSupply": "Suministro máximo posible de tokens (límite máximo)",
+    "targetMintTime": "Duración objetivo para la acuñación de tokens",
+    "reduceRatioPerEra": "Porcentaje en que se reduce el tamaño de la acuñación en cada hito",
+    "targetMinimumFee": "Tarifa total mínima requerida para alcanzar el suministro objetivo",
+    "epochesPerEra": "Número de puntos de control en cada hito",
+    "currentMintFee": "Tarifa total de acuñación (SOL) recaudada",
+    "currentReferralFee": "Tarifa total (SOL) pagada a los referentes",
+    "difficultyOfCurrentEpoch": "Dificultad del punto de control actual",
+    "difficultyOfLastEpoch": "Dificultad del último punto de control"
   }
 }

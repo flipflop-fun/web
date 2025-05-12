@@ -298,7 +298,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
               </div>
             ) : (
               <div className="space-y-4">
-                <AlertBox title={t('common.attention')} message='Token metadata is immutable.' />
+                <AlertBox title={t('common.attention')} message={t('launch.tokenMetadataIsImmutable')} />
               </div>
             )}
 

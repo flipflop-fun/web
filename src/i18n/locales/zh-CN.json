@@ -222,7 +222,7 @@
     "referrerTokenBalance": "推荐人代币余额",
     "urcReferralUrl": "URC推荐链接",
     "codeHash": "Code Hash",
-    "verified": "已验证",
+    "verified": "有效",
     "enterUrcName": "为你的URC专属码起个名字"
   },
   "launch": {
@@ -262,7 +262,8 @@
     "revokeMetadataUpdate": "取消元数据更新权限",
     "delegateVmMangerDescription": "您可以指定一个帐号用来管理金库的流动性，默认为发行人帐号!",
     "delegateVmManager": "委托市值管理人",
-    "vmManagerPlaceholder": "输入市值管理人的账户地址"
+    "vmManagerPlaceholder": "输入市值管理人的账户地址",
+    "tokenMetadataIsImmutable": "代币元数据不可更新"
   },
   "social": {
     "title": "社交",
@@ -305,7 +306,8 @@
     "noActivities": "没有活动信息，请关注一些用户或代币",
     "writeCommentPlaceholder": "写评论...",
     "replyToPlaceholder": "回复{{name}}...",
-    "notSet": "未设置"
+    "notSet": "未设置",
+    "send": "发送"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "输入你的问题...",
@@ -327,5 +329,32 @@
     "socialInformationGithub": "输入Github链接...",
     "socialInformationMedium": "输入Medium链接...",
     "profileBio": "输入简介..."
+  },
+  "tooltip": {
+    "currentEra": "代币生命周期中的当前里程碑",
+    "currentEpoch": "当前里程碑中的当前检查点",
+    "mintFee": "铸造代币所需的费用",
+    "currentMintSize": "此检查点中当前可铸造的代币数量",
+    "currentMinted": "迄今为止已铸造的代币总数",
+    "targetSupply": "指定里程碑要达到的目标代币供应量",
+    "mintSpeed": "每个检查点铸造代币的速率",
+    "deployAt": "代币部署时的时间戳",
+    "deployingTx": "部署交易的交易哈希",
+    "deployer": "代币开发者的地址",
+    "tokenAddress": "代币在 Solana 上的合约地址",
+    "liquidityVaultSOL": "持有 SOL 流动性的金库地址",
+    "liquidityVaultToken": "持有代币流动性的金库地址",
+    "targetEras": "达到目标供应量所需的里程碑数量",
+    "startTimeOfCurrentEpoch": "当前检查点开始的时间",
+    "liquidityTokensRatio": "分配给流动性的代币百分比",
+    "maxSupply": "最大可能的代币供应量（硬顶）",
+    "targetMintTime": "铸造代币的目标持续时间",
+    "reduceRatioPerEra": "每个里程碑铸造规模减少的百分比",
+    "targetMinimumFee": "达到目标供应量所需的最低总费用",
+    "epochesPerEra": "每个里程碑中的检查点数量",
+    "currentMintFee": "已收取的总铸造费（SOL）",
+    "currentReferralFee": "已支付给推荐人的总费用（SOL）",
+    "difficultyOfCurrentEpoch": "当前检查点的难度",
+    "difficultyOfLastEpoch": "上一个检查点的难度"
   }
 }

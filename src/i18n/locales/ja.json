@@ -262,7 +262,8 @@
     "revokeMetadataUpdate": "メタデータ更新権限の取り消し",
     "delegateVmMangerDescription": "ボールトの流動性を管理するアカウントを指定できます。デフォルトは発行者のアカウントです！",
     "delegateVmManager": "時価管理者を委任",
-    "vmManagerPlaceholder": "時価総額管理者のアカウントアドレスを入力してください"
+    "vmManagerPlaceholder": "時価総額管理者のアカウントアドレスを入力してください",
+    "tokenMetadataIsImmutable": "トークンメタデータは不変です"
   },
   "social": {
     "title": "ソーシャル",
@@ -305,6 +306,55 @@
     "noActivities": "アクティビティ情報がありません。ユーザーまたはトークンをフォローしてください",
     "writeCommentPlaceholder": "コメントを書く...",
     "replyToPlaceholder": "{{name}}に返信...",
-    "notSet": "未設定"
+    "notSet": "未設定",
+    "send": "送信"
+  },
+  "placeholder": {
+    "copilotKitAskYourQuestion": "質問を入力してください...",
+    "shareButtonEnterYourUrcCode": "URC紹介コードを入力してください...",
+    "enterYourUsername": "ユーザー名を入力してください...",
+    "advancedSettingEnterTargetMilestone": "目標マイルストーンを入力してください...",
+    "advancedSettingEnterCheckpointsPerMilestone": "マイルストーンごとのチェックポイント数を入力してください...",
+    "advancedSettingEnterTargetSeconds": "目標時間（秒）を入力してください...",
+    "advancedSettingEnterReduceRatioPerMilestone": "マイルストーンごとの減少率を入力してください...",
+    "advancedSettingInitialMintSize": "初期ミント数量を入力してください...",
+    "advancedSettingEnterTargetMintSizePerCheckpoint": "チェックポイントごとの目標ミント数量を入力してください...",
+    "advancedSettingEnterFeeRate": "ミント手数料を入力してください...",
+    "advancedSettingEnterLiquidityTokensRatio": "流動性トークンの割合を入力してください...",
+    "socialInformationDescription": "トークンの説明を入力してください...",
+    "socialInformationWebsite": "トークンのウェブサイトを入力してください（例：https://example.com）...",
+    "socialInformationTwitter": "Twitterを入力してください（例：@xxx）...",
+    "socialInformationDiscord": "Discord招待リンクを入力してください...",
+    "socialInformationTelegram": "Telegramグループリンクを入力してください...",
+    "socialInformationGithub": "Githubリンクを入力してください...",
+    "socialInformationMedium": "Mediumリンクを入力してください...",
+    "profileBio": "自己紹介を入力してください..."
+  },
+  "tooltip": {
+    "currentEra": "トークンのライフサイクルにおける現在のマイルストーン",
+    "currentEpoch": "現在のマイルストーン内の現在のチェックポイント",
+    "mintFee": "トークンをミントするために必要な手数料",
+    "currentMintSize": "このチェックポイントで現在ミントできるトークンの量",
+    "currentMinted": "これまでにミントされたトークンの総量",
+    "targetSupply": "指定されたマイルストーンまでに到達する目標トークン供給量",
+    "mintSpeed": "チェックポイントごとにトークンがミントされるレート",
+    "deployAt": "トークンがデプロイされたときのタイムスタンプ",
+    "deployingTx": "デプロイトランザクションのトランザクションハッシュ",
+    "deployer": "トークン開発者のアドレス",
+    "tokenAddress": "Solana上のトークンのコントラクトアドレス",
+    "liquidityVaultSOL": "SOL流動性を保持するボールトアドレス",
+    "liquidityVaultToken": "トークン流動性を保持するボールトアドレス",
+    "targetEras": "目標供給量に到達するためのマイルストーンの数",
+    "startTimeOfCurrentEpoch": "現在のチェックポイントが開始された日時",
+    "liquidityTokensRatio": "流動性のために割り当てられたトークンの割合",
+    "maxSupply": "可能な最大トークン供給量（ハードキャップ）",
+    "targetMintTime": "トークンをミントするための目標期間",
+    "reduceRatioPerEra": "各マイルストーンでミントサイズが減少する割合",
+    "targetMinimumFee": "目標供給量に到達するために必要な最小合計手数料",
+    "epochesPerEra": "各マイルストーンのチェックポイント数",
+    "currentMintFee": "収集された合計ミント手数料（SOL）",
+    "currentReferralFee": "紹介者に支払われた合計手数料（SOL）",
+    "difficultyOfCurrentEpoch": "現在のチェックポイントの難易度",
+    "difficultyOfLastEpoch": "最後のチェックポイントの難易度"
   }
 }

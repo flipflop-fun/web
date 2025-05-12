@@ -28,7 +28,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
 
   useEffect(() => {
     if (wallet) {
-      if(token.mint && wallet.publicKey) setMyReferrerCode(
+      if(token.mint && wallet.publicKey && myReferrerCode === "") setMyReferrerCode(
         localStorage.getItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58())!== null?
           localStorage.getItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58()) as string
           :

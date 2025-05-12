@@ -262,7 +262,8 @@
     "revokeMetadataUpdate": "Thu hồi quyền cập nhật siêu dữ liệu",
     "delegateVmMangerDescription": "Bạn có thể chỉ định một tài khoản để quản lý thanh khoản của kho, mặc định là tài khoản của người phát hành!",
     "delegateVmManager": "Ủy quyền người quản lý vốn hóa thị trường",
-    "vmManagerPlaceholder": "Nhập địa chỉ tài khoản của người quản lý vốn hóa thị trường"
+    "vmManagerPlaceholder": "Nhập địa chỉ tài khoản của người quản lý vốn hóa thị trường",
+    "tokenMetadataIsImmutable": "Siêu dữ liệu token là bất biến"
   },
   "social": {
     "title": "Xã hội",
@@ -305,7 +306,8 @@
     "noActivities": "Không có thông tin hoạt động. Vui lòng theo dõi một số người dùng hoặc token.",
     "writeCommentPlaceholder": "Viết bình luận...",
     "replyToPlaceholder": "Trả lời {{name}}...",
-    "notSet": "Chưa đặt"
+    "notSet": "Chưa đặt",
+    "send": "Send"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "Nhập câu hỏi của bạn...",
@@ -327,5 +329,32 @@
     "socialInformationGithub": "Nhập liên kết Github...",
     "socialInformationMedium": "Nhập liên kết Medium...",
     "profileBio": "Nhập tiểu sử..."
+  },
+  "tooltip": {
+    "currentEra": "Cột mốc hiện tại trong vòng đời của token",
+    "currentEpoch": "Điểm kiểm tra hiện tại trong cột mốc hiện tại",
+    "mintFee": "Phí yêu cầu để đúc token",
+    "currentMintSize": "Số lượng token hiện tại có thể được đúc trong điểm kiểm tra này",
+    "currentMinted": "Tổng số token đã được đúc cho đến nay",
+    "targetSupply": "Nguồn cung token mục tiêu sẽ đạt được vào cột mốc được chỉ định",
+    "mintSpeed": "Tốc độ đúc token mỗi điểm kiểm tra",
+    "deployAt": "Dấu thời gian khi token được triển khai",
+    "deployingTx": "Mãハッシュ giao dịch của giao dịch triển khai",
+    "deployer": "Địa chỉ của nhà phát triển token",
+    "tokenAddress": "Địa chỉ hợp đồng của token trên Solana",
+    "liquidityVaultSOL": "Địa chỉ kho chứa thanh khoản SOL",
+    "liquidityVaultToken": "Địa chỉ kho chứa thanh khoản token",
+    "targetEras": "Số lượng cột mốc để đạt được nguồn cung mục tiêu",
+    "startTimeOfCurrentEpoch": "Thời điểm bắt đầu điểm kiểm tra hiện tại",
+    "liquidityTokensRatio": "Tỷ lệ phần trăm token được phân bổ cho thanh khoản",
+    "maxSupply": "Nguồn cung token tối đa có thể (giới hạn cứng)",
+    "targetMintTime": "Thời gian mục tiêu để đúc token",
+    "reduceRatioPerEra": "Tỷ lệ phần trăm mà kích thước đúc giảm sau mỗi cột mốc",
+    "targetMinimumFee": "Tổng phí tối thiểu cần thiết để đạt được nguồn cung mục tiêu",
+    "epochesPerEra": "Số lượng điểm kiểm tra trong mỗi cột mốc",
+    "currentMintFee": "Tổng phí đúc (SOL) đã thu",
+    "currentReferralFee": "Tổng phí (SOL) đã trả cho người giới thiệu",
+    "difficultyOfCurrentEpoch": "Độ khó của điểm kiểm tra hiện tại",
+    "difficultyOfLastEpoch": "Độ khó của điểm kiểm tra cuối cùng"
   }
 }

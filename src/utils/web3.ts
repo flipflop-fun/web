@@ -983,7 +983,7 @@ export const getReferralDataByCodeHash = async (
     [Buffer.from(CODE_ACCOUNT_SEEDS), codeHash.toBuffer()],
     program.programId,
   );
-
+  console.log("###### code hash", codeHash.toBase58(), "code account pda", codeAccountPda.toBase58(), "code account", codeAccountPda.toBase58())
   const codeAccountInfo = await connection.getAccountInfo(codeAccountPda);
   if (!codeAccountInfo) {
     return {

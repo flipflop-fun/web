@@ -1,7 +1,6 @@
 import { FC, useMemo, useState } from "react";
 import { InitiazlizedTokenData, TokenMetadataIPFS } from "../../types/types";
 import { DataBlock } from "./TokenInfo";
-import { tooltip } from "../../config/constants";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, calculateMaxSupply, calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintedSupply, getMintSpeed, numberStringToBN } from "../../utils/format";
 import { AddressDisplay } from "../common/AddressDisplay";
@@ -52,22 +51,22 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
         <DataBlock
           label={t('tokenInfo.currentMilestone') + "/" + t('tokenInfo.currentCheckpoint')}
           value={`Milestone #${token.currentEra} / Checkpoint #${token.currentEpoch}`}
-          tooltip={tooltip.currentEra}
+          tooltip={t('tooltip.currentEra')}
         />
         <DataBlock
           label={t('tokenInfo.currentMinted')}
           value={`${mintedSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${metadata?.symbol}`}
-          tooltip={tooltip.currentMinted}
+          tooltip={t('tooltip.currentMinted')}
         />
         <DataBlock
           label={t('tokenInfo.mintFee')}
           value={`${(Number(token.feeRate) / LAMPORTS_PER_SOL)} SOL/${t('common.mint')}`}
-          tooltip={tooltip.mintFee}
+          tooltip={t('tooltip.mintFee')}
         />
         <DataBlock
           label={t('tokenInfo.tokenAddress')}
           value={<AddressDisplay address={token.mint} />}
-          tooltip={tooltip.tokenAddress}
+          tooltip={t('tooltip.tokenAddress')}
         />
       </div>
 
@@ -88,72 +87,72 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
           <DataBlock
             label={t('tokenInfo.currentMintSize')}
             value={`${(numberStringToBN(token.mintSizeEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })} ${metadata?.symbol}`}
-            tooltip={tooltip.currentMintSize}
+            tooltip={t('tooltip.currentMintSize')}
           />
           <DataBlock
             label={t('tokenInfo.targetSpeed')}
             value={`${formatSeconds(mintSpeed)}/mint`}
-            tooltip={tooltip.mintSpeed}
+            tooltip={t('tooltip.mintSpeed')}
           />
           <DataBlock
             label={`${t('tokenInfo.targetSupply')} (${t('tokenInfo.targetMilestone')}:${token.targetEras})`}
             value={`${totalSupplyToTargetEras.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${metadata?.symbol}`}
-            tooltip={tooltip.targetSupply}
+            tooltip={t('tooltip.targetSupply')}
           />
           <DataBlock
             label={t('tokenInfo.deployAt')}
             value={new Date(Number(token.timestamp) * 1000).toLocaleString()}
-            tooltip={tooltip.deployAt}
+            tooltip={t('tooltip.deployAt')}
           />
           <DataBlock
             label={t('tokenInfo.deployTx')}
             value={<AddressDisplay address={token.txId} type='tx' />}
-            tooltip={tooltip.deployingTx}
+            tooltip={t('tooltip.deployingTx')}
           />
           <DataBlock
             label={t('tokenInfo.developer')}
             value={<AddressDisplay address={token.admin} />}
-            tooltip={tooltip.deployer}
+            tooltip={t('tooltip.deployer')}
           />
           <DataBlock
             label={t('tokenInfo.liquidityVault') + ' (SOL)'}
             value={<AddressDisplay address={token.configAccount} />}
-            tooltip={tooltip.liquidityVaultSOL}
+            tooltip={t('tooltip.liquidityVaultSOL')}
           />
           <DataBlock
             label={t('tokenInfo.liquidityVault') + '(' + metadata?.symbol + ')'}
             value={<AddressDisplay address={token.tokenVault} />}
-            tooltip={tooltip.liquidityVaultToken}
+            tooltip={t('tooltip.liquidityVaultToken')}
           />
           <DataBlock
             label={t('tokenInfo.targetMilestone')}
             value={token.targetEras}
-            tooltip={tooltip.targetEras}
+            tooltip={t('tooltip.targetEras')}
           />
           <DataBlock
             label={t('tokenInfo.startTimeOfCurrentCheckpoint')}
             value={new Date(Number(token.startTimestampEpoch) * 1000).toLocaleString()}
-            tooltip={tooltip.startTimeOfCurrentEpoch}
+            tooltip={t('tooltip.startTimeOfCurrentEpoch')}
           />
           <DataBlock
             label={t('tokenInfo.LiquidityTokensRatio')}
             value={token.liquidityTokensRatio + "%"}
-            tooltip={tooltip.liquidityTokensRatio}
+            tooltip={t('tooltip.liquidityTokensRatio')}
           />
           <DataBlock
             label={t('tokenInfo.maxSupply')}
             value={calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
-            tooltip={tooltip.maxSupply}
+            tooltip={t('tooltip.maxSupply')}
           />
           <DataBlock
             label={t('tokenInfo.targetMintTime')}
             value={formatSeconds(Number(token.targetSecondsPerEpoch) * Number(token.epochesPerEra))}
-            tooltip={tooltip.targetMintTime}
+            tooltip={t('tooltip.targetMintTime')}
           />
           <DataBlock
             label={t('tokenInfo.reduceRatioPerMilestone')}
             value={token.reduceRatio + "%"}
-            tooltip={tooltip.reduceRatioPerEra}
+            tooltip={t('tooltip.reduceRatioPerEra')}
           />
           <DataBlock
             label={t('tokenInfo.targetMinimumMintFee')}
@@ -164,32 +163,32 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
               token.epochesPerEra,
               token.initialMintSize
             )).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " SOL"}
-            tooltip={tooltip.targetMinimumFee}
+            tooltip={t('tooltip.targetMinimumFee')}
           />
           <DataBlock
             label={t('tokenInfo.checkpointsPerMilestone')}
             value={token.epochesPerEra}
-            tooltip={tooltip.epochesPerEra}
+            tooltip={t('tooltip.epochesPerEra')}
           />
           <DataBlock
             label={t('tokenInfo.totalMintFee')}
             value={(Number(token.totalMintFee) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " SOL"}
-            tooltip={tooltip.currentMintFee}
+            tooltip={t('tooltip.currentMintFee')}
           />
           <DataBlock
             label={t('tokenInfo.totalReferralFee')}
             value={(Number(token.totalReferrerFee) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " SOL"}
-            tooltip={tooltip.currentReferralFee}
+            tooltip={t('tooltip.currentReferralFee')}
           />
           <DataBlock
             label={t('tokenInfo.currentDifficulty')}
             value={parseFloat(token.difficultyCoefficientEpoch).toFixed(4)}
-            tooltip={tooltip.difficultyOfCurrentEpoch}
+            tooltip={t('tooltip.difficultyOfCurrentEpoch')}
           />
           <DataBlock
             label={t('tokenInfo.lastDifficulty')}
             value={parseFloat(token.lastDifficultyCoefficientEpoch).toFixed(4)}
-            tooltip={tooltip.difficultyOfLastEpoch}
+            tooltip={t('tooltip.difficultyOfLastEpoch')}
           />
         </div>
       )}

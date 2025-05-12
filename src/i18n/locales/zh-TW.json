@@ -222,7 +222,7 @@
     "referrerTokenBalance": "推薦人代幣餘額",
     "urcReferralUrl": "URC推薦鏈接",
     "codeHash": "Code Hash",
-    "verified": "已驗證",
+    "verified": "有效",
     "enterUrcName": "為你的URC專屬碼起個名字"
   },
   "launch": {
@@ -262,7 +262,8 @@
     "revokeMetadataUpdate": "取消元數據更新權限",
     "delegateVmMangerDescription": "您可以指定一個帳號用來管理金庫的流動性，默認為發行人帳號!",
     "delegateVmManager": "委託市值管理人",
-    "vmManagerPlaceholder": "輸入市值管理人的賬戶地址"
+    "vmManagerPlaceholder": "輸入市值管理人的賬戶地址",
+    "tokenMetadataIsImmutable": "代幣元數據不可更新"
   },
   "social": {
     "title": "社交",
@@ -305,7 +306,8 @@
     "noActivities": "沒有活動信息，請關注一些用戶或代幣",
     "writeCommentPlaceholder": "寫評論...",
     "replyToPlaceholder": "回覆{{name}}...",
-    "notSet": "未設置"
+    "notSet": "未設置",
+    "send": "發送"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "輸入你的問題...",
@@ -327,5 +329,32 @@
     "socialInformationGithub": "輸入Github鏈接...",
     "socialInformationMedium": "輸入Medium鏈接...",
     "profileBio": "輸入簡介..."
+  },
+  "tooltip": {
+    "currentEra": "代幣生命週期中的目前里程碑",
+    "currentEpoch": "目前里程碑中的目前檢查點",
+    "mintFee": "鑄造代幣所需的費用",
+    "currentMintSize": "此檢查點中目前可鑄造的代幣數量",
+    "currentMinted": "迄今為止已鑄造的代幣總數",
+    "targetSupply": "指定里程碑要達到的目標代幣供應量",
+    "mintSpeed": "每個檢查點鑄造代幣的速率",
+    "deployAt": "代幣部署時的時間戳",
+    "deployingTx": "部署交易的交易雜湊",
+    "deployer": "代幣開發者的地址",
+    "tokenAddress": "代幣在 Solana 上的合約地址",
+    "liquidityVaultSOL": "持有 SOL 流動性的金庫地址",
+    "liquidityVaultToken": "持有代幣流动性的金庫地址",
+    "targetEras": "達到目標供應量所需的里程碑數量",
+    "startTimeOfCurrentEpoch": "目前檢查點開始的時間",
+    "liquidityTokensRatio": "分配給流動性的代幣百分比",
+    "maxSupply": "最大可能的代幣供應量（硬頂）",
+    "targetMintTime": "鑄造代幣的目標持續時間",
+    "reduceRatioPerEra": "每個里程碑鑄造規模減少的百分比",
+    "targetMinimumFee": "達到目標供應量所需的最低總費用",
+    "epochesPerEra": "每個里程碑中的檢查點數量",
+    "currentMintFee": "已收取的總鑄造費（SOL）",
+    "currentReferralFee": "已支付給推薦人的總費用（SOL）",
+    "difficultyOfCurrentEpoch": "目前檢查點的難度",
+    "difficultyOfLastEpoch": "上一個檢查點的難度"
   }
 }

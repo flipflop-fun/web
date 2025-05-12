@@ -14,18 +14,20 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
   const { t } = useTranslation();
   const wallet = useAnchorWallet();
   const [searchId, setSearchId] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [searchResult, setSearchResult] = useState<SetRefererCodeEntity | null>(null);
   const [loading, setLoading] = useState(false);
   const [referralLink, setReferralLink] = useState('');
 
   const handleSearch = () => {
     if (!searchId.trim()) {
-      toast.error('Please enter an ID to search');
+      setErrorMessage('Please enter an ID to search');
       return;
     }
     setLoading(true);
 
     const codeHashData = getReferrerCodeHash(wallet, connection, searchId.trim());
+    console.log("###### codeHashData: " + codeHashData.data?.toString() + " ######")
     if (codeHashData.success) {
       getReferralDataByCodeHash(wallet, connection, codeHashData.data as PublicKey).then(async (result) => {
         if (result?.success && result.data) {
@@ -43,14 +45,15 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
             `${window.location.origin}/token/${result.data.mint.toBase58()}/${searchId.trim()}`
           );
           setLoading(false);
+          setErrorMessage('');
         } else {
-          toast.error("CheckURC.handleSearch.1: " + result.message as string);
+          setErrorMessage(result.message as string);
           setSearchResult(null);
           setLoading(false);
         }
       });
     } else {
-      toast.error("CheckURC.handleSearch.2: " + codeHashData.message as string);
+      setErrorMessage(codeHashData.message as string);
       setSearchResult(null);
       setLoading(false);
     }
@@ -58,7 +61,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? "md:ml-64" : "md:ml-20"}`}>
-      <PageHeader title="Check URC" bgImage='/bg/group1/6.jpg' />
+      <PageHeader title={t('menu.validateUrc')} bgImage='/bg/group1/6.jpg' />
       <div className="md:max-w-5xl mx-auto w-full flex flex-col gap-4">
         <div className="join w-full">
           <div className='relative join-item flex-1'>
@@ -81,7 +84,7 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
           </button>
         </div>
 
-        {searchResult && searchResult.codeHash === getReferrerCodeHash(wallet, connection, searchId.trim()).data?.toString() && searchId ? (
+        {searchResult && searchResult.codeHash === getReferrerCodeHash(wallet, connection, searchId.trim()).data?.toString() && searchId && (
           <div className="pixel-box bg-base-200 shadow-xl">
             <div className="card-body">
               <h2 className="card-title">{t('urc.urcDetails')}</h2>
@@ -92,9 +95,9 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
                       <>
                         <tr>
                           <td className="font-bold w-1/3">{t('urc.codeHash')}</td>
-                          <td className="flex items-center gap-2 w-2/3">
-                            {searchResult.codeHash}
-                            <span className="badge badge-success">{t('urc.verified')}</span>
+                          <td className="flex items-center gap-2">
+                            <div>{searchResult.codeHash}</div>
+                            <div className="badge badge-success">{t('urc.verified')}</div>
                           </td>
                         </tr>
                         <tr>
@@ -160,11 +163,13 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
               </div>
             </div>
           </div>
-        ) : searchId && (
+        )
+        }
+        {errorMessage &&
           <div className='text-red-500'>
-            {t('urc.invalidUrc')}
+            {errorMessage}
           </div>
-        )}
+        }
       </div>
     </div>
   );
