@@ -34,7 +34,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title="Set Username" onClose={onClose} />
+        <ModalTopBar title={t('social.setUsername')} onClose={onClose} />
         <div className="space-y-4 p-2">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
@@ -50,7 +50,7 @@ export const UsernameModal: React.FC<UsernameModalProps> = ({
               />
             </div>
             <div className="text-sm mb-3">
-              Default username is from your wallet address, you can amend it.
+              {t('social.setUsernameDescription')}
             </div>
             <div className="flex justify-center">
               <button

@@ -223,7 +223,8 @@
     "urcReferralUrl": "URC Referral Link",
     "codeHash": "Code Hash",
     "verified": "Verified",
-    "enterUrcName": "Name your custom URC code"
+    "enterUrcName": "Name your custom URC code",
+    "noUrcFound": "No URC found"
   },
   "launch": {
     "title": "Deploy Token",
@@ -307,7 +308,9 @@
     "writeCommentPlaceholder": "Write a comment...",
     "replyToPlaceholder": "Reply to {{name}}...",
     "notSet": "Not Set",
-    "send": "Send"
+    "send": "Send",
+    "setUsername": "Set your username",
+    "setUsernameDescription": "Default username is from your wallet address, you can set your favourit username."
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "Enter your question...",

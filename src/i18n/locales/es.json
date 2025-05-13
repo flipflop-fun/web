@@ -223,7 +223,8 @@
     "urcReferralUrl": "Enlace de Referencia URC",
     "codeHash": "Hash de Código",
     "verified": "Verificado",
-    "enterUrcName": "Nombre su código URC personalizado"
+    "enterUrcName": "Nombre su código URC personalizado",
+    "noUrcFound": "No se encontraron códigos URC"
   },
   "launch": {
     "title": "Desplegar Token",
@@ -307,7 +308,9 @@
     "writeCommentPlaceholder": "Escriba un comentario...",
     "replyToPlaceholder": "Responder a {{name}}...",
     "notSet": "No Establecido",
-    "send": "Enviar"
+    "send": "Enviar",
+    "setUsername": "Establecer nombre de usuario",
+    "setUsernameDescription": "El nombre de usuario predeterminado se genera automáticamente a partir de la dirección de la billetera, puede configurar un nombre de usuario personalizado"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "Ingrese su pregunta...",

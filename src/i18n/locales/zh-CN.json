@@ -223,7 +223,8 @@
     "urcReferralUrl": "URC推荐链接",
     "codeHash": "Code Hash",
     "verified": "有效",
-    "enterUrcName": "为你的URC专属码起个名字"
+    "enterUrcName": "为你的URC专属码起个名字",
+    "noUrcFound": "没有找到URC"
   },
   "launch": {
     "title": "部署代币",
@@ -307,7 +308,9 @@
     "writeCommentPlaceholder": "写评论...",
     "replyToPlaceholder": "回复{{name}}...",
     "notSet": "未设置",
-    "send": "发送"
+    "send": "发送",
+    "setUsername": "设置用户名",
+    "setUsernameDescription": "默认用户名由钱包地址自动生成，你可以设置专属用户名"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "输入你的问题...",

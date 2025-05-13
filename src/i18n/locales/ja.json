@@ -223,7 +223,8 @@
     "urcReferralUrl": "URC紹介リンク",
     "codeHash": "コードハッシュ",
     "verified": "検証済み",
-    "enterUrcName": "カスタムURCコードに名前を付けてください"
+    "enterUrcName": "カスタムURCコードに名前を付けてください",
+    "noUrcFound": "URCが見つかりません"
   },
   "launch": {
     "title": "トークンデプロイ",
@@ -307,7 +308,9 @@
     "writeCommentPlaceholder": "コメントを書く...",
     "replyToPlaceholder": "{{name}}に返信...",
     "notSet": "未設定",
-    "send": "送信"
+    "send": "送信",
+    "setUsername": "ユーザー名を設定",
+    "setUsernameDescription": "デフォルトのユーザー名はウォレットアドレスから自動生成されます。カスタムユーザー名を設定できます"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "質問を入力してください...",

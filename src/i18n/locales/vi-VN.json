@@ -223,7 +223,8 @@
     "urcReferralUrl": "Liên kết giới thiệu URC",
     "codeHash": "Mã Hash",
     "verified": "Đã xác minh",
-    "enterUrcName": "Đặt tên cho mã URC tùy chỉnh của bạn"
+    "enterUrcName": "Đặt tên cho mã URC tùy chỉnh của bạn",
+    "noUrcFound": "Không tìm thấy URC"
   },
   "launch": {
     "title": "Triển khai Token",
@@ -307,7 +308,9 @@
     "writeCommentPlaceholder": "Viết bình luận...",
     "replyToPlaceholder": "Trả lời {{name}}...",
     "notSet": "Chưa đặt",
-    "send": "Send"
+    "send": "Send",
+    "setUsername": "Đặt tên người dùng",
+    "setUsernameDescription": "Tên người dùng mặc định được tạo tự động từ địa chỉ ví, bạn có thể thiết lập tên người dùng riêng"
   },
   "placeholder": {
     "copilotKitAskYourQuestion": "Nhập câu hỏi của bạn...",

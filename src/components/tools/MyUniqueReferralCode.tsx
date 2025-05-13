@@ -170,7 +170,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
         ) : urcError ? (
           <ErrorBox title="Error loading URCs" message={urcError.message} />
         ) : urcData?.setRefererCodeEventEntities?.length === 0 ? (
-          <p>No URCs found</p>
+          <p>{t('urc.noUrcFound')}</p>
         ) : !isMobile ? (
           <>
             <div className="flex justify-end mb-4">
@@ -255,7 +255,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
 
             {urcData?.setRefererCodeEventEntities?.length === 0 && (
               <div className="text-center py-10">
-                <p className="text-gray-500">No URCs found</p>
+                <p className="text-gray-500">{t('urc.noUrcFound')}</p>
               </div>
             )}
 

@@ -149,7 +149,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
             <span className="loading loading-spinner loading-lg"></span>
           </div>
         ) : tokenList.filter(token => numberStringToBN(token.amount).gt(BN_ZERO)).length === 0 ? (
-          <p>No tokens found</p>
+          <p>{t('discover.noTokensDescription')}</p>
         ) : !isMobile ? (
           <>
             <div className="flex justify-end mb-4">
