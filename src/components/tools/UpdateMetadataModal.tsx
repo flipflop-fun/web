@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { getTokenMetadataMutable, updateMetaData, uploadToStorage } from '../../utils/web3';
 import { ToastBox } from '../common/ToastBox';
-import { NETWORK, SCANURL } from '../../config/constants';
+import { NETWORK, NETWORK_CONFIGS } from '../../config/constants';
 import { HeaderImageUpload } from './HeaderImageUpload';
 import AlertBox from '../common/AlertBox';
 import { useDeviceType } from '../../hooks/device';
@@ -98,7 +98,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
       if (result.success) {
         toast.success(
           <ToastBox
-            url={`${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+            url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
             urlText="View transaction"
             title={result.message as string}
           />

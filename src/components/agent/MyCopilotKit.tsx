@@ -72,7 +72,7 @@ export const MyCopilotKit = () => {
           if (result.message === "Invalid token") {
             if (!isLoggingIn) handleLogin();
           }
-          else toast.error("MyCopilotKet: " + result.message as string);
+          else toast.error("MyCopilotKit Error, Try again");
           return;
         }
         setFaqs(result.data.data as FAQ[]);

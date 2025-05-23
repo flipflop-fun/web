@@ -121,6 +121,7 @@ export const MyProfile: React.FC = () => {
     if (!token) return;
 
     setLoading(true);
+    // ######
     try {
       if (formData.avatarFile && formData.avatarFile.type !== '' && !formData.avatarFile?.name.startsWith(API_BASE_URI)) {
         const result = await uploadAvatar(token, formData.avatarFile as File);

@@ -3,6 +3,17 @@ import { BN } from '@coral-xyz/anchor';
 
 export type Theme = 'light' | 'dark';
 
+export type TokenParams = {
+  targetEras: string;
+  epochesPerEra: string;
+  targetSecondsPerEpoch: string;
+  reduceRatio: string;
+  initialMintSize: string;
+  initialTargetMintSizePerEpoch: string;
+  feeRate: string;
+  liquidityTokensRatio: string;
+};
+
 export type TokenMetadata = {
   name: string;
   symbol: string;
@@ -533,16 +544,16 @@ export type RemainingAccount = {
   isSigner: boolean
 }
 
-export type TargetTimestampData = {
-  currentTimestamp: number,
-  currentEpoch: number,
-  absoluteSlot: number,
-  slotsInEpoch: number,
-  slotIndex: number,
-  futureTimestamp: number;
-  wait: number;
-  secondsPerSlot: number;
-}
+// export type TargetTimestampData = {
+//   currentTimestamp: number,
+//   currentEpoch: number,
+//   absoluteSlot: number,
+//   slotsInEpoch: number,
+//   slotIndex: number,
+//   futureTimestamp: number;
+//   wait: number;
+//   secondsPerSlot: number;
+// }
 
 export type User = {
   id: number;
@@ -643,3 +654,25 @@ export type FAQ = {
 }
 
 export type Language = 'en-US' | 'zh-CN' | 'zh-TW' | 'ja-JP' | 'es-ES' | 'vi-VN';
+
+export interface NetworkConfig {
+  isPaused: boolean;
+  frontendUrl: string;
+  irysGatewayUrl: string;
+  scanUrl: string;
+  systemDeployer: PublicKey;
+  protocolFeeAccount: PublicKey;
+  tokenMetadataProgramId: PublicKey;
+  cpSwapProgram: PublicKey;
+  cpSwapConfigAddress: PublicKey;
+  createPoolFeeReceive: PublicKey;
+  memoProgram: PublicKey;
+  addressLookupTableAddress: PublicKey;
+  subgraphUrl: string;
+  thegraphApiKey: string;
+}
+
+export interface NetworkConfigs {
+  devnet: NetworkConfig;
+  mainnet: NetworkConfig; // 您可以根据需要调整 mainnet 的具体字段或使其部分可选
+}

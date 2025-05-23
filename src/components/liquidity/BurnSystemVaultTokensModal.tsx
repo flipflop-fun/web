@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import toast from 'react-hot-toast';
 import { InitiazlizedTokenData } from '../../types/types';
-import { NETWORK, SCANURL } from '../../config/constants';
+import { NETWORK, NETWORK_CONFIGS } from '../../config/constants';
 import { ToastBox } from '../common/ToastBox';
 import AlertBox from '../common/AlertBox';
 import { ModalTopBar } from '../common/ModalTopBar';
@@ -52,7 +52,7 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
       );
 
       if (result.success) {
-        const explorerUrl = `${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`;
+        const explorerUrl = `${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`;
         toast.success(
           <ToastBox
             title="Burn system vault tokens successful"

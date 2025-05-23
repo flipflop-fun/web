@@ -7,7 +7,7 @@ import { SocialInformation } from '../components/launchToken/SocialInformation';
 import { ToggleSwitch } from '../components/common/ToggleSwitch';
 import { TokenImageUpload } from '../components/launchToken/TokenImageUpload';
 import toast from 'react-hot-toast';
-import { DEFAULT_PARAMS, MAX_AVATAR_FILE_SIZE, NETWORK, SCANURL, VALID_IMAGE_TYPES } from '../config/constants';
+import { DEFAULT_PARAMS, MAX_AVATAR_FILE_SIZE, NETWORK, NETWORK_CONFIGS, VALID_IMAGE_TYPES } from '../config/constants';
 import { ToastBox } from '../components/common/ToastBox';
 import { BN_LAMPORTS_PER_SOL, numberStringToBN } from '../utils/format';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
@@ -203,7 +203,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
       setIsCreating(false);
       // setSuccess(true);
 
-      const explorerUrl = `${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`;
+      const explorerUrl = `${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`;
       toast.success(
         <ToastBox url={explorerUrl} urlText="View transaction" title="Token created successfully!" />,
         {

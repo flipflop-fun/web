@@ -4,7 +4,7 @@ import { useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
 import { closeToken } from "../../utils/web3";
 import toast from "react-hot-toast";
 import { ToastBox } from "../common/ToastBox";
-import { NETWORK, SCANURL } from "../../config/constants";
+import { NETWORK, NETWORK_CONFIGS } from "../../config/constants";
 import AlertBox from "../common/AlertBox";
 import { ModalTopBar } from "../common/ModalTopBar";
 import { useTranslation } from "react-i18next";
@@ -42,7 +42,7 @@ export const CloseTokenModal: FC<CloseTokenModalProps> = ({ isOpen, onClose, tok
       if (result.success) {
         toast.success(
           <ToastBox
-            url={`${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+            url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
             urlText="View transaction"
             title="Token closed success fully!"
           />

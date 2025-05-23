@@ -26,7 +26,7 @@ import { Toaster } from 'react-hot-toast';
 import { Sidebar } from './components/common/Sidebar';
 import { menuItems } from './config/menu';
 import { TokenDetail } from './pages/TokenDetail';
-import { APP_NAME, COPILOTKIT_RUNTIME_URL, FRONTEND_URL } from './config/constants';
+import { APP_NAME, COPILOTKIT_RUNTIME_URL, NETWORK, NETWORK_CONFIGS } from './config/constants';
 import { Discover } from './pages/Discover';
 import { MyMintedTokens } from './pages/MyMintedTokens';
 import { MyDeployments } from './pages/MyDeployments';
@@ -51,7 +51,7 @@ import { useDeviceType } from './hooks/device';
 import { AuthProvider } from './hooks/auth';
 import './i18n/i18n';
 import { useTranslation } from 'react-i18next';
-
+import MaintenanceBanner from './components/common/MaintenanceBanner';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const AppContent = () => {
@@ -176,8 +176,9 @@ const AppContent = () => {
 };
 
 function App() {
-  const network = process.env.REACT_APP_SOLANA_NETWORK as WalletAdapterNetwork;
+  const network = NETWORK as WalletAdapterNetwork;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
@@ -186,18 +187,26 @@ function App() {
         addressSelector: createDefaultAddressSelector(),
         appIdentity: {
           name: "Flipflop",
-          uri: FRONTEND_URL,
+          uri: NETWORK_CONFIGS[NETWORK].frontendUrl,
           icon: "logo192.png", // resolves to https://myapp.io/relative/path/to/icon.png
         },
         authorizationResultCache: createDefaultAuthorizationResultCache(),
-        cluster: process.env.REACT_APP_SOLANA_NETWORK as WalletAdapterNetwork,
+        cluster: NETWORK as WalletAdapterNetwork,
         onWalletNotFound: createDefaultWalletNotFoundHandler(),
       }),
     ],
     [],
   );
 
-  return (
+  if (NETWORK_CONFIGS[NETWORK].isPaused) {
+    return (
+      <div className="min-h-screen bg-base-100 flex flex-col">
+        <Navbar title={APP_NAME} />
+        <MaintenanceBanner />
+      </div>
+    )
+  } else {
+    return (
       <Router>
         <CopilotKit runtimeUrl={COPILOTKIT_RUNTIME_URL}>
           <ConnectionProvider endpoint={endpoint}>
@@ -217,7 +226,8 @@ function App() {
           </ConnectionProvider>
         </CopilotKit>
       </Router>
-  );
+    )
+  }
 }
 
 export default App;

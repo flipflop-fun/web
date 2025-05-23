@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { proxyBurnLpToken } from "../../utils/web3";
 import { BN } from "@coral-xyz/anchor";
 import { ToastBox } from "../common/ToastBox";
-import { NETWORK, SCANURL } from "../../config/constants";
+import { NETWORK, NETWORK_CONFIGS } from "../../config/constants";
 import { useDeviceType } from "../../hooks/device";
 import { useTranslation } from "react-i18next";
 
@@ -58,7 +58,7 @@ export const LpBurns: FC<LpBurnsProps> = ({
       if (result.success) {
         toast.success(
           <ToastBox
-            url={`${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+            url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
             urlText="View transaction"
             title="Burn liquidity tokens successfully!"
           />,

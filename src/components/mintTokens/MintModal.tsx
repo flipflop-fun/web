@@ -4,7 +4,7 @@ import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import { InitiazlizedTokenData, ReferralData } from '../../types/types';
 import { getReferralDataByCodeHash, getReferrerCodeHash, getSystemConfig, getTokenBalance, mintToken } from '../../utils/web3';
 import toast from 'react-hot-toast';
-import { NETWORK, SCANURL } from '../../config/constants';
+import { NETWORK, NETWORK_CONFIGS } from '../../config/constants';
 import { ToastBox } from '../common/ToastBox';
 import { BN_LAMPORTS_PER_SOL, formatPrice, getFeeValue, numberStringToBN } from '../../utils/format';
 import { AddressDisplay } from '../common/AddressDisplay';
@@ -146,7 +146,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
       if (result.success) {
         toast.success(
           <ToastBox
-            url={`${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+            url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
             urlText="View transaction"
             title="Token minted successfully!"
           />,

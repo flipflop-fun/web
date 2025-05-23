@@ -3,7 +3,7 @@ import { AddressDisplay } from "../common/AddressDisplay"
 import toast from "react-hot-toast"
 import { proxySwapBaseIn, proxySwapBaseOut } from "../../utils/web3"
 import { ToastBox } from "../common/ToastBox"
-import { NETWORK, SCANURL } from "../../config/constants"
+import { NETWORK, NETWORK_CONFIGS } from "../../config/constants"
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react"
 import { BN } from "@coral-xyz/anchor"
 import { InitiazlizedTokenData } from "../../types/types"
@@ -98,7 +98,7 @@ export const Trades: FC<TradesProps> = ({
       if (result.success) {
         toast.success(
           <ToastBox
-              url={`${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+              url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
               urlText="View transaction"
               title="Buy tokens successfully!"
           />,
@@ -148,7 +148,7 @@ export const Trades: FC<TradesProps> = ({
         if (result.success) {
           toast.success(
             <ToastBox
-                url={`${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+                url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
                 urlText="View transaction"
                 title="Sell tokens successfully!"
             />,

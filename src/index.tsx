@@ -4,13 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { subgraphUrl, THEGRAPH_API_KEY } from './config/constants';
+import { NETWORK, NETWORK_CONFIGS } from './config/constants';
 
 const client = new ApolloClient({
-  uri: subgraphUrl,
+  uri: NETWORK_CONFIGS[NETWORK].subgraphUrl,
   cache: new InMemoryCache(),
   headers: {
-    'Authorization': `Bearer ${THEGRAPH_API_KEY}`
+    'Authorization': `Bearer ${NETWORK_CONFIGS[NETWORK].thegraphApiKey}`
   }
 });
 

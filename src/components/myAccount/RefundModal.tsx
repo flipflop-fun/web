@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { InitiazlizedTokenData, RefundModalProps, RefundTokenData } from '../../types/types';
 import { getRefundAccountData, getSystemConfig, getTokenBalanceByMintAndOwner, refund } from '../../utils/web3';
 import { ToastBox } from '../common/ToastBox';
-import { NETWORK, SCANURL } from '../../config/constants';
+import { NETWORK, NETWORK_CONFIGS } from '../../config/constants';
 import { formatPrice } from '../../utils/format';
 import AlertBox from '../common/AlertBox';
 import { ModalTopBar } from '../common/ModalTopBar';
@@ -72,7 +72,7 @@ export const RefundModal: FC<RefundModalProps> = ({
       );
 
       if (result.success) {
-        const explorerUrl = `${SCANURL}/tx/${result.data?.tx}?cluster=${NETWORK}`;
+        const explorerUrl = `${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`;
         toast.success(
           <ToastBox
             title="Refund successful"
