@@ -45,7 +45,8 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     frontendUrl: "https://test.flipflop.fun",
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
-    subgraphUrl: 'https://gateway.thegraph.com/api/subgraphs/id/7XcwHxUun9pcX3nrBwrDdAaWQEFd4fwkwvCjHK6LxvEs',
+    // subgraphUrl: 'https://gateway.thegraph.com/api/subgraphs/id/7XcwHxUun9pcX3nrBwrDdAaWQEFd4fwkwvCjHK6LxvEs',
+    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/my_project',
     thegraphApiKey: '143b826715cb1a3fe26419d02a5d44a3',
     systemDeployer: new PublicKey('CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79'),
     protocolFeeAccount: new PublicKey("CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79"),
@@ -61,7 +62,8 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     frontendUrl: "https://app.flipflop.fun",
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
-    subgraphUrl: 'https://gateway.thegraph.com/api/subgraphs/id/7XcwHxUun9pcX3nrBwrDdAaWQEFd4fwkwvCjHK6LxvEs',
+    // subgraphUrl: 'https://gateway.thegraph.com/api/subgraphs/id/7XcwHxUun9pcX3nrBwrDdAaWQEFd4fwkwvCjHK6LxvEs',
+    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/my_project',
     thegraphApiKey: '143b826715cb1a3fe26419d02a5d44a3',
     systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
     protocolFeeAccount: new PublicKey("7x75mM5g8wx87bhjxhWKJPSb5mUboPGBWhRWA1AUBXmb"),
@@ -70,7 +72,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     cpSwapConfigAddress: new PublicKey("D4FPEruKEHrG5TenZ2mpDGEfu1iUvTiqBxvpU8HLBvC2"),
     createPoolFeeReceive: new PublicKey("DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8"),
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
-    addressLookupTableAddress: new PublicKey("EebRqpLtUgjX17pJJNNbd6ngtYa34VGa51oYsibwJRXy"),
+    addressLookupTableAddress: new PublicKey("7DK7pmNkUeeFB3yxt6bJcPCWcG4L3AdCe2WZaBguy9sq"),
   } as NetworkConfig,
 };
 

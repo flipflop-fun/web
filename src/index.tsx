@@ -9,9 +9,9 @@ import { NETWORK, NETWORK_CONFIGS } from './config/constants';
 const client = new ApolloClient({
   uri: NETWORK_CONFIGS[NETWORK].subgraphUrl,
   cache: new InMemoryCache(),
-  headers: {
-    'Authorization': `Bearer ${NETWORK_CONFIGS[NETWORK].thegraphApiKey}`
-  }
+  // headers: {
+  //   'Authorization': `Bearer ${NETWORK_CONFIGS[NETWORK].thegraphApiKey}`
+  // }
 });
 
 const root = ReactDOM.createRoot(
