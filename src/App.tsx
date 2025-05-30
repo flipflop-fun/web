@@ -177,7 +177,7 @@ const AppContent = () => {
 
 function App() {
   const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
-  const endpoint = useMemo(() => clusterApiUrl(network as WalletAdapterNetwork), [network]);
+  const endpoint = useMemo(() => clusterApiUrl(network.replace("_", "-") as WalletAdapterNetwork), [network]);
 
   const wallets = useMemo(
     () => [

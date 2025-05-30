@@ -675,5 +675,5 @@ export interface NetworkConfig {
 
 export interface NetworkConfigs {
   devnet: NetworkConfig;
-  mainnet: NetworkConfig; // 您可以根据需要调整 mainnet 的具体字段或使其部分可选
+  mainnet_beta: NetworkConfig; // 您可以根据需要调整 mainnet 的具体字段或使其部分可选
 }

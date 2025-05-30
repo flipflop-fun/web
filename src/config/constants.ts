@@ -54,7 +54,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("EebRqpLtUgjX17pJJNNbd6ngtYa34VGa51oYsibwJRXy"),
   } as NetworkConfig,
-  mainnet: {
+  mainnet_beta: {
     isPaused: true,
     frontendUrl: "https://app.flipflop.fun",
     irysGatewayUrl: "https://gateway.irys.xyz",
