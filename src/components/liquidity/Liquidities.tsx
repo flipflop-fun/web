@@ -5,7 +5,7 @@ import { proxyAddLiquidity, proxyRemoveLiquidity } from "../../utils/web3"
 import { BN } from "@coral-xyz/anchor"
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react"
 import { ToastBox } from "../common/ToastBox"
-import { NETWORK, NETWORK_CONFIGS } from "../../config/constants"
+import { NETWORK_CONFIGS } from "../../config/constants"
 import { InitiazlizedTokenData } from "../../types/types"
 import { useDeviceType } from "../../hooks/device"
 import { useTranslation } from "react-i18next"
@@ -48,6 +48,8 @@ export const Liquidities: FC<LiquiditiesProps> = ({
   const wallet = useAnchorWallet();
   const { t } = useTranslation();
   // Add Liquidity
+
+  const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
   const handleAddLiquidity = async () => {
     if (!tokenData) return;
     setLoading(true);
@@ -75,7 +77,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
       if (result.success) {
         toast.success(
           <ToastBox
-            url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+            url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
             urlText="View transaction"
             title="Add liquidity successfully!"
           />,
@@ -120,7 +122,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
       if (result.success) {
         toast.success(
           <ToastBox
-            url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+            url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
             urlText="View transaction"
             title="Remove liquidity successfully!"
           />,

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ARSEEDING_GATEWAY_URL, ARWEAVE_GATEWAY_URL, MAX_HEADER_FILE_SIZE, NETWORK, NETWORK_CONFIGS, STORAGE, VALID_IMAGE_TYPES } from '../../config/constants';
+import { ARSEEDING_GATEWAY_URL, ARWEAVE_GATEWAY_URL, MAX_HEADER_FILE_SIZE, NETWORK_CONFIGS, STORAGE, VALID_IMAGE_TYPES } from '../../config/constants';
 import { useTranslation } from 'react-i18next';
 
 type HeaderImageUploadProps = {
@@ -95,7 +95,7 @@ export const HeaderImageUpload: React.FC<HeaderImageUploadProps> = ({
 
   const hasImage = () => {
     if (STORAGE === "arweave") return currentHeader && currentHeader !== ARWEAVE_GATEWAY_URL + "/" && currentHeader !== ARSEEDING_GATEWAY_URL + "/"
-    else if (STORAGE === "irys") return currentHeader && currentHeader !== NETWORK_CONFIGS[NETWORK].irysGatewayUrl + "/"
+    else if (STORAGE === "irys") return currentHeader && currentHeader !== NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].irysGatewayUrl + "/"
     else return false
   }
 

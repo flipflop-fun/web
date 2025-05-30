@@ -3,7 +3,7 @@ import { AddressDisplay } from "../common/AddressDisplay"
 import toast from "react-hot-toast"
 import { proxySwapBaseIn, proxySwapBaseOut } from "../../utils/web3"
 import { ToastBox } from "../common/ToastBox"
-import { NETWORK, NETWORK_CONFIGS } from "../../config/constants"
+import { NETWORK_CONFIGS } from "../../config/constants"
 import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react"
 import { BN } from "@coral-xyz/anchor"
 import { InitiazlizedTokenData } from "../../types/types"
@@ -14,6 +14,8 @@ const SLIPPAGE_KEY = 'trade_slippage';
 const DEFAULT_SLIPPAGE = 0.5;
 const MIN_SLIPPAGE = 0.1;
 const MAX_SLIPPAGE = 100;
+
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
 export type TradesProps = {
     tradesData: any[];
@@ -98,7 +100,7 @@ export const Trades: FC<TradesProps> = ({
       if (result.success) {
         toast.success(
           <ToastBox
-              url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+              url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
               urlText="View transaction"
               title="Buy tokens successfully!"
           />,
@@ -148,7 +150,7 @@ export const Trades: FC<TradesProps> = ({
         if (result.success) {
           toast.success(
             <ToastBox
-                url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+                url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
                 urlText="View transaction"
                 title="Sell tokens successfully!"
             />,

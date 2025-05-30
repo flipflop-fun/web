@@ -37,17 +37,16 @@ export const DEFAULT_PARAMS = {
 } as Record<string, TokenParams>;
 
 // Solana program config
-export const NETWORK = 'devnet';
-
 export const NETWORK_CONFIGS: NetworkConfigs = {
   devnet: {
     isPaused: false,
     frontendUrl: "https://test.flipflop.fun",
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
+    apiBaseUrl: 'https://api-dev.flipflop.plus',
     // subgraphUrl: 'https://gateway.thegraph.com/api/subgraphs/id/7XcwHxUun9pcX3nrBwrDdAaWQEFd4fwkwvCjHK6LxvEs',
     subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/my_project',
-    thegraphApiKey: '143b826715cb1a3fe26419d02a5d44a3',
+    // thegraphApiKey: '143b826715cb1a3fe26419d02a5d44a3',
     systemDeployer: new PublicKey('CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79'),
     protocolFeeAccount: new PublicKey("CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79"),
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
@@ -62,9 +61,10 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     frontendUrl: "https://app.flipflop.fun",
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
+    apiBaseUrl: 'https://api.flipflop.plus',
     // subgraphUrl: 'https://gateway.thegraph.com/api/subgraphs/id/7XcwHxUun9pcX3nrBwrDdAaWQEFd4fwkwvCjHK6LxvEs',
-    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/my_project',
-    thegraphApiKey: '143b826715cb1a3fe26419d02a5d44a3',
+    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/flipflop-mainnet',
+    // thegraphApiKey: '143b826715cb1a3fe26419d02a5d44a3',
     systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
     protocolFeeAccount: new PublicKey("7x75mM5g8wx87bhjxhWKJPSb5mUboPGBWhRWA1AUBXmb"),
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
@@ -102,7 +102,8 @@ export const DEFAULT_IMAGE = "/images/flip-flops-outline.png";
 export const COMMENT_MIN_BALANCE = 0.2;
 
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
-export const API_BASE_URI = process.env.REACT_APP_ENV === "development" ? "http://127.0.0.1:8000" : "https://api-pearl-two-75.vercel.app"; // "https://flipflop-api.vercel.app"; // "api-pearl-two-75.vercel.app";
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
+export const API_BASE_URI = process.env.REACT_APP_ENV === "development" ? "http://127.0.0.1:8000" : NETWORK_CONFIGS[network].apiBaseUrl; // "https://flipflop-api.vercel.app"; // "api-pearl-two-75.vercel.app";
 export const STORAGE = "irys" as "irys" | "arweave";
 export const UPLOAD_API_URL = STORAGE === "arweave" ? `${API_BASE_URI}/api/arweave` : `${API_BASE_URI}/api/irys`; // PRODUCTION
 export const COPILOTKIT_RUNTIME_URL = `${API_BASE_URI}/api/gpt/copilotkit`;

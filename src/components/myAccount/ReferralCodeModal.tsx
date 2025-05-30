@@ -4,12 +4,14 @@ import { PublicKey } from '@solana/web3.js';
 import { getMyReferrerData, getReferrerDataByReferralAccount, getSystemConfig, reactiveReferrerCode, setReferrerCode } from '../../utils/web3';
 import toast from 'react-hot-toast';
 import { InitiazlizedTokenData, ReferralCodeModalProps, ReferrerData } from '../../types/types';
-import { LOCAL_STORAGE_MY_REFERRAL_CODE, NETWORK, NETWORK_CONFIGS } from '../../config/constants';
+import { LOCAL_STORAGE_MY_REFERRAL_CODE, NETWORK_CONFIGS } from '../../config/constants';
 import { ToastBox } from '../common/ToastBox';
 import AlertBox from '../common/AlertBox';
 import { ModalTopBar } from '../common/ModalTopBar';
 import { ShareButton } from '../common/ShareButton';
 import { useTranslation } from 'react-i18next';
+
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
 export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
   isOpen,
@@ -73,7 +75,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
       if (!result.success) {
         throw new Error(result.message);
       }
-      const explorerUrl = `${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`;
+      const explorerUrl = `${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`;
       toast.success(
         <ToastBox url={explorerUrl} urlText="View transaction" title="Got URC successfully!" />,
       );
@@ -117,7 +119,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
       if (result.data?.tx === "mine") {
         // code is exists
       } else {
-        const explorerUrl = `${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`;
+        const explorerUrl = `${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`;
         toast.success(
           <ToastBox url={explorerUrl} urlText="View transaction" title="Got URC successfully!" />,
         );

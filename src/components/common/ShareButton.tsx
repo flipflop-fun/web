@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TwitterShareButton } from 'react-share';
 import toast from 'react-hot-toast';
 import { InitiazlizedTokenData, ShareButtonProps, TokenMetadataIPFS } from '../../types/types';
-import { APP_NAME, NETWORK_CONFIGS, NETWORK } from '../../config/constants';
+import { APP_NAME, NETWORK_CONFIGS } from '../../config/constants';
 import { drawShareImage } from '../../utils/shareimage';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { getMintDiscount } from '../../utils/web3';
@@ -19,11 +19,12 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
   const [isProcessing, setIsProcessing] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const { t } = useTranslation();
+  const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
   React.useEffect(() => {
-    const newUrl = urcCode === "" ? `${NETWORK_CONFIGS[NETWORK].frontendUrl}/token/${token.mint}` : `${NETWORK_CONFIGS[NETWORK].frontendUrl}/token/${token.mint}/${urcCode}`;
+    const newUrl = urcCode === "" ? `${NETWORK_CONFIGS[network].frontendUrl}/token/${token.mint}` : `${NETWORK_CONFIGS[network].frontendUrl}/token/${token.mint}/${urcCode}`;
     setCurrentUrl(newUrl);
-  }, [token, urcCode]);
+  }, [network, token, urcCode]);
 
   const handleCopyLink = async () => {
     try {

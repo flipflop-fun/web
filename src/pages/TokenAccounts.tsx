@@ -2,7 +2,9 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token';
 import { useEffect, useState } from 'react';
 import { TokenAccount } from '../types/types';
-import { NETWORK, NETWORK_CONFIGS } from '../config/constants';
+import { NETWORK_CONFIGS } from '../config/constants';
+
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
 export const TokenAccounts = () => {
   const { connection } = useConnection();
@@ -67,7 +69,7 @@ export const TokenAccounts = () => {
                   <tr key={token.mint}>
                     <td className="truncate max-w-xs">
                       <a
-                        href={`${NETWORK_CONFIGS[NETWORK].scanUrl}/address/${token.mint}?cluster=${NETWORK}`}
+                        href={`${NETWORK_CONFIGS[network].scanUrl}/address/${token.mint}?cluster=${network}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="link link-primary"

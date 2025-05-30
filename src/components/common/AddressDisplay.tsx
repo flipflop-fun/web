@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatAddress } from '../../utils/format';
 import { AddressDisplayProps } from '../../types/types';
-import { NETWORK, NETWORK_CONFIGS } from '../../config/constants';
+import { NETWORK_CONFIGS } from '../../config/constants';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +16,7 @@ export const AddressDisplay: React.FC<AddressDisplayProps> = ({
     toast.success(t('common.copied'));
   };
 
-  const explorerUrl = `${NETWORK_CONFIGS[NETWORK].scanUrl}/${type}/${address}?cluster=${NETWORK}`;
+  const explorerUrl = `${NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].scanUrl}/${type}/${address}?cluster=${(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"}`;
 
   return (
     <div className="flex items-center gap-2">

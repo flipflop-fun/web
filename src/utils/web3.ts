@@ -10,7 +10,7 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js';
 import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
-import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK, NETWORK_CONFIGS } from '../config/constants';
+import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK_CONFIGS } from '../config/constants';
 import { InitializeTokenConfig, InitiazlizedTokenData, MetadataAccouontData, RemainingAccount, ResponseData, TokenMetadata, TokenMetadataIPFS } from '../types/types';
 import { AnchorWallet } from '@solana/wallet-adapter-react';
 import { FairMintToken } from '../types/fair_mint_token';
@@ -24,7 +24,8 @@ import { RENT_PROGRAM_ID, SYSTEM_PROGRAM_ID } from '@raydium-io/raydium-sdk-v2';
 import { ASSOCIATED_PROGRAM_ID } from '@coral-xyz/anchor/dist/cjs/utils/token';
 import jwt from 'jsonwebtoken';
 
-const fairMintTokenIdl = require(`../idl/${NETWORK}/fair_mint_token.json`);
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
+const fairMintTokenIdl = require(`../idl/${network}/fair_mint_token.json`);
 
 export const getProvider = (wallet: AnchorWallet, connection: Connection) => {
   return new AnchorProvider(
@@ -97,8 +98,8 @@ export const initializeToken = async (
       }
     }
     const [metadataAccountPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId.toBuffer(), mintPda.toBuffer()],
-      NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId,
+      [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[network].tokenMetadataProgramId.toBuffer(), mintPda.toBuffer()],
+      NETWORK_CONFIGS[network].tokenMetadataProgramId,
     );
     const metadataAccountInfo = await connection.getAccountInfo(metadataAccountPda);
     if (metadataAccountInfo) {
@@ -109,7 +110,7 @@ export const initializeToken = async (
     }
 
     const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[NETWORK].systemDeployer.toBuffer()],
+      [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
       program.programId,
     );
     const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configPda, true, TOKEN_PROGRAM_ID);
@@ -126,8 +127,8 @@ export const initializeToken = async (
       wsolMint: NATIVE_MINT,
       wsolVault: wsolVaultAta,
       systemConfigAccount: systemConfigAccountPda,
-      protocolFeeAccount: NETWORK_CONFIGS[NETWORK].protocolFeeAccount,
-      tokenMetadataProgram: NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId,
+      protocolFeeAccount: NETWORK_CONFIGS[network].protocolFeeAccount,
+      tokenMetadataProgram: NETWORK_CONFIGS[network].tokenMetadataProgramId,
     }
 
     const instructionInitializeToken = await program.methods
@@ -280,7 +281,7 @@ export const reactiveReferrerCode = async (
 
   // Get system config account
   const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[NETWORK].systemDeployer.toBuffer()],
+    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
     program.programId,
   );
 
@@ -401,7 +402,7 @@ export const setReferrerCode = async (
   );
 
   const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[NETWORK].systemDeployer.toBuffer()],
+    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
     program.programId,
   );
 
@@ -515,7 +516,7 @@ export const getSystemConfig = async (
   try {
     const program = getProgram(wallet, connection);
     const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[NETWORK].systemDeployer.toBuffer()],
+      [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
       program.programId,
     );
     const systemConfigData = await program.account.systemConfigData.fetch(systemConfigAccountPda);
@@ -573,7 +574,7 @@ export const refund = async (
   }
   const program = getProgram(wallet, connection);
   const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[NETWORK].systemDeployer.toBuffer()],
+    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
     program.programId,
   );
   const [refundAccountPda] = PublicKey.findProgramAddressSync(
@@ -589,7 +590,7 @@ export const refund = async (
   }
   const tokenAta = await getAssociatedTokenAddress(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const payerWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
-  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[NETWORK].protocolFeeAccount, false, TOKEN_PROGRAM_ID);
+  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, false, TOKEN_PROGRAM_ID);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, new PublicKey(token.configAccount), true, TOKEN_PROGRAM_ID);
 
   const refundAccounts = {
@@ -598,7 +599,7 @@ export const refund = async (
     configAccount: new PublicKey(token.configAccount),
     tokenAta,
     tokenVault: new PublicKey(token.tokenVault),
-    protocolFeeAccount: NETWORK_CONFIGS[NETWORK].protocolFeeAccount,
+    protocolFeeAccount: NETWORK_CONFIGS[network].protocolFeeAccount,
     systemConfigAccount: systemConfigAccountPda,
     payer: wallet.publicKey,
     wsolVault: wsolVaultAta,
@@ -629,7 +630,7 @@ export const refund = async (
     if (!protocolWsolAtaData) tx.add(createAssociatedTokenAccountInstruction(
       wallet.publicKey,
       protocolWsolAta,
-      NETWORK_CONFIGS[NETWORK].protocolFeeAccount,
+      NETWORK_CONFIGS[network].protocolFeeAccount,
       NATIVE_MINT,
       TOKEN_PROGRAM_ID
     ));
@@ -711,13 +712,13 @@ export const mintToken = async (
     program.programId,
   );
   const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[NETWORK].systemDeployer.toBuffer()],
+    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
     program.programId,
   );
 
   const configAccountPda = new PublicKey(token.configAccount);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configAccountPda, true, TOKEN_PROGRAM_ID);
-  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[NETWORK].protocolFeeAccount, false, TOKEN_PROGRAM_ID);
+  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, false, TOKEN_PROGRAM_ID);
   const destinationWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const destinationWsolInfo = await connection.getAccountInfo(destinationWsolAta);
   const mintTokenVaultAta = await getAssociatedTokenAddress(new PublicKey(token.mint), new PublicKey(token.mint), true, TOKEN_PROGRAM_ID);
@@ -727,7 +728,7 @@ export const mintToken = async (
   if (compareMints(token0Mint, token1Mint) > 0) {
     [token0Mint, token1Mint] = [token1Mint, token0Mint];
   }
-  const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[NETWORK].cpSwapProgram);
+  const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[network].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[network].cpSwapProgram);
 
   const mintAccounts = {
     mint: new PublicKey(token.mint),
@@ -744,11 +745,11 @@ export const mintToken = async (
     referrerAta: referrerAta,
     referrerMain: referrerMain,
     referralAccount: referralAccountPda,
-    protocolFeeAccount: NETWORK_CONFIGS[NETWORK].protocolFeeAccount,
+    protocolFeeAccount: NETWORK_CONFIGS[network].protocolFeeAccount,
     protocolWsolVault: protocolWsolAta,
     poolState: poolAddress,
-    ammConfig: NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
-    cpSwapProgram: NETWORK_CONFIGS[NETWORK].cpSwapProgram,
+    ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
+    cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     token0Mint: token0Mint,
     token1Mint: token1Mint,
   };
@@ -774,9 +775,9 @@ export const mintToken = async (
   );
   const remainingAccounts = getRemainingAccountsForMintTokens(new PublicKey(token.mint), wallet.publicKey);
   // Create versioned transaction with LUT
-  const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[NETWORK].addressLookupTableAddress);
+  const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[network].addressLookupTableAddress);
   const lookupTable = new AddressLookupTableAccount({
-    key: NETWORK_CONFIGS[NETWORK].addressLookupTableAddress,
+    key: NETWORK_CONFIGS[network].addressLookupTableAddress,
     state: AddressLookupTableAccount.deserialize(accountInfo!.data),
   });
 
@@ -869,18 +870,18 @@ const getRemainingAccountsForMintTokens = (
     [token0, token1] = [token1, token0];
     [token0Program, token1Program] = [token1Program, token0Program];
   }
-  const [authority] = getAuthAddress(NETWORK_CONFIGS[NETWORK].cpSwapProgram);
-  const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress, token0, token1, NETWORK_CONFIGS[NETWORK].cpSwapProgram);
-  const [lpMintAddress] = getPoolLpMintAddress(poolAddress, NETWORK_CONFIGS[NETWORK].cpSwapProgram);
-  const [vault0] = getPoolVaultAddress(poolAddress, token0, NETWORK_CONFIGS[NETWORK].cpSwapProgram);
-  const [vault1] = getPoolVaultAddress(poolAddress, token1, NETWORK_CONFIGS[NETWORK].cpSwapProgram);
-  const [observationAddress] = getOrcleAccountAddress(poolAddress, NETWORK_CONFIGS[NETWORK].cpSwapProgram);
+  const [authority] = getAuthAddress(NETWORK_CONFIGS[network].cpSwapProgram);
+  const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[network].cpSwapConfigAddress, token0, token1, NETWORK_CONFIGS[network].cpSwapProgram);
+  const [lpMintAddress] = getPoolLpMintAddress(poolAddress, NETWORK_CONFIGS[network].cpSwapProgram);
+  const [vault0] = getPoolVaultAddress(poolAddress, token0, NETWORK_CONFIGS[network].cpSwapProgram);
+  const [vault1] = getPoolVaultAddress(poolAddress, token1, NETWORK_CONFIGS[network].cpSwapProgram);
+  const [observationAddress] = getOrcleAccountAddress(poolAddress, NETWORK_CONFIGS[network].cpSwapProgram);
   const creatorLpTokenAddress = getAssociatedTokenAddressSync(lpMintAddress, user, false, TOKEN_PROGRAM_ID);
   const creatorToken0 = getAssociatedTokenAddressSync(token0, user, false, token0Program);
   const creatorToken1 = getAssociatedTokenAddressSync(token1, user, false, token1Program);
 
   return [{
-    pubkey: NETWORK_CONFIGS[NETWORK].cpSwapProgram, // <- 1
+    pubkey: NETWORK_CONFIGS[network].cpSwapProgram, // <- 1
     isWritable: false,
     isSigner: false,
   }, {
@@ -888,7 +889,7 @@ const getRemainingAccountsForMintTokens = (
     isWritable: true,
     isSigner: true,
   }, {
-    pubkey: NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress, // <- 3
+    pubkey: NETWORK_CONFIGS[network].cpSwapConfigAddress, // <- 3
     isWritable: true,
     isSigner: false,
   }, {
@@ -932,7 +933,7 @@ const getRemainingAccountsForMintTokens = (
     isWritable: true,
     isSigner: false,
   }, {
-    pubkey: NETWORK_CONFIGS[NETWORK].createPoolFeeReceive, // <- 14
+    pubkey: NETWORK_CONFIGS[network].createPoolFeeReceive, // <- 14
     isWritable: true,
     isSigner: false,
   }, {
@@ -1064,7 +1065,7 @@ export const generateArweaveUrl = (updateTimestamp: number, id: string) => {
 };
 
 export const generateIrysUrl = (updateTimestamp: number, id: string) => {
-  return `${NETWORK_CONFIGS[NETWORK].irysGatewayUrl}/${id}`;
+  return `${NETWORK_CONFIGS[network].irysGatewayUrl}/${id}`;
 }
 
 export const fetchMetadata = async (token: InitiazlizedTokenData): Promise<TokenMetadataIPFS | null> => {
@@ -1174,8 +1175,8 @@ export const updateMetaData = async (
     const program = getProgram(wallet, connection);
 
     const [metadataAccountPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId.toBuffer(), new PublicKey(token.mint).toBuffer()],
-      NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId,
+      [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[network].tokenMetadataProgramId.toBuffer(), new PublicKey(token.mint).toBuffer()],
+      NETWORK_CONFIGS[network].tokenMetadataProgramId,
     );
 
     const systemConfig = await getSystemConfig(wallet, connection);
@@ -1194,7 +1195,7 @@ export const updateMetaData = async (
       metadata: metadataAccountPda,
       systemConfigAccount: new PublicKey(systemConfigData.systemConfigAccountPda),
       protocolFeeAccount: systemConfigData.systemConfigData.protocolFeeAccount,
-      tokenMetadataProgram: NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId,
+      tokenMetadataProgram: NETWORK_CONFIGS[network].tokenMetadataProgramId,
     };
 
     // console.log("update metadata context", Object.fromEntries(
@@ -1269,8 +1270,8 @@ export const revokeMetadataUpdateAuthority = async (
     const program = getProgram(wallet, connection);
 
     const [metadataAccountPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId.toBuffer(), new PublicKey(token.mint).toBuffer()],
-      NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId,
+      [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[network].tokenMetadataProgramId.toBuffer(), new PublicKey(token.mint).toBuffer()],
+      NETWORK_CONFIGS[network].tokenMetadataProgramId,
     );
 
     const context = {
@@ -1278,7 +1279,7 @@ export const revokeMetadataUpdateAuthority = async (
       metadata: metadataAccountPda,
       payer: wallet.publicKey,
       configAccount: new PublicKey(token.configAccount),
-      tokenMetadataProgram: NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId,
+      tokenMetadataProgram: NETWORK_CONFIGS[network].tokenMetadataProgramId,
     };
     const metadataParams = {
       name: token.tokenName as string,
@@ -1357,7 +1358,7 @@ export const uploadToStorage = async (file: File, action: string = 'avatar', con
 
     if (response.data.status === 'success') {
       if (STORAGE === "arweave") return `${ARWEAVE_GATEWAY_URL}/${response.data.fileInfo.itemId}`;
-      else if (STORAGE === "irys") return `${NETWORK_CONFIGS[NETWORK].irysGatewayUrl}/${response.data.fileInfo.itemId}`;
+      else if (STORAGE === "irys") return `${NETWORK_CONFIGS[network].irysGatewayUrl}/${response.data.fileInfo.itemId}`;
     }
     throw new Error('Upload failed: ' + JSON.stringify(response.data));
   } catch (error) {
@@ -1639,8 +1640,8 @@ async function getLegacyTokenMetadataAccountData(connection: Connection, metadat
 
 export async function getTokenMetadataMutable(connection: Connection, mint: PublicKey): Promise<boolean> {
   const metadataAccountPda = PublicKey.findProgramAddressSync(
-    [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId.toBuffer(), new PublicKey(mint).toBuffer()],
-    NETWORK_CONFIGS[NETWORK].tokenMetadataProgramId,
+    [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[network].tokenMetadataProgramId.toBuffer(), new PublicKey(mint).toBuffer()],
+    NETWORK_CONFIGS[network].tokenMetadataProgramId,
   )[0];
   const metadataAccouontData = (await getLegacyTokenMetadataAccountData(connection, metadataAccountPda)).data as MetadataAccouontData;
   return metadataAccouontData !== undefined ? metadataAccouontData.isMutable : false;
@@ -1715,7 +1716,7 @@ export async function proxyCreatePool(
   //   program.programId,
   // );
   const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[NETWORK].systemDeployer.toBuffer()],
+    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
     program.programId,
   );
 
@@ -1731,7 +1732,7 @@ export async function proxyCreatePool(
   if (compareMints(token0Mint, token1Mint) > 0) {
     [token0Mint, token1Mint] = [token1Mint, token0Mint];
   }
-  const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[NETWORK].cpSwapProgram);
+  const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[network].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[network].cpSwapProgram);
 
   const contextProxyInitialize = {
     creator: wallet.publicKey,
@@ -1744,8 +1745,8 @@ export async function proxyCreatePool(
     wsolVault: wsolVaultAta,
     wsolMint: NATIVE_MINT,
     poolState: poolAddress,
-    ammConfig: NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
-    cpSwapProgram: NETWORK_CONFIGS[NETWORK].cpSwapProgram,
+    ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
+    cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     token0Mint: token0Mint,
     token1Mint: token1Mint,
     tokenProgram: TOKEN_PROGRAM_ID,
@@ -1757,9 +1758,9 @@ export async function proxyCreatePool(
   const instructionCreateTokenAta = createAssociatedTokenAccountInstruction(wallet.publicKey, destinationAta, wallet.publicKey, new PublicKey(token.mint), TOKEN_PROGRAM_ID);
   const remainingAccounts = getRemainingAccountsForMintTokens(new PublicKey(token.mint), wallet.publicKey);
 
-  const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[NETWORK].addressLookupTableAddress);
+  const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[network].addressLookupTableAddress);
   const lookupTable = new AddressLookupTableAccount({
-    key: NETWORK_CONFIGS[NETWORK].addressLookupTableAddress,
+    key: NETWORK_CONFIGS[network].addressLookupTableAddress,
     state: AddressLookupTableAccount.deserialize(accountInfo!.data),
   });
 

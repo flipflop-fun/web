@@ -6,7 +6,7 @@ import { ModalTopBar } from '../common/ModalTopBar';
 import { revokeMetadataUpdateAuthority, delegateValueManager, getTokenMetadataMutable } from '../../utils/web3';
 import { PublicKey } from '@solana/web3.js';
 import AlertBox from '../common/AlertBox';
-import { NETWORK, NETWORK_CONFIGS } from '../../config/constants';
+import { NETWORK_CONFIGS } from '../../config/constants';
 import { ToastBox } from '../common/ToastBox';
 import { SYSTEM_PROGRAM_ID } from '@raydium-io/raydium-sdk-v2';
 import { useTranslation } from 'react-i18next';
@@ -82,9 +82,10 @@ export const UpdateAuthoritiesModal: React.FC<UpdateAuthoritiesModalProps> = ({
       if (!result.success) {
         throw new Error(result.message);
       }
+      const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
       toast.success(
         <ToastBox
-          url={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${result.data?.tx}?cluster=${NETWORK}`}
+          url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
           urlText="View transaction"
           title="Value manager delegated successfully!"
         />,

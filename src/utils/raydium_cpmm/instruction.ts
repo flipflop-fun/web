@@ -24,8 +24,9 @@ import {
 import { ASSOCIATED_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import { CpmmPoolInfoLayout } from "@raydium-io/raydium-sdk-v2";
 import { getTokenBalance } from "../web3";
-import { CONFIG_DATA_SEED, MINT_SEED, NETWORK, NETWORK_CONFIGS } from "../../config/constants";
+import { CONFIG_DATA_SEED, MINT_SEED, NETWORK_CONFIGS } from "../../config/constants";
 import { CpSwapPoolStateData } from "../../types/types";
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
 export async function getPoolData (
   program: Program<FairMintToken>,
@@ -33,10 +34,10 @@ export async function getPoolData (
   token1: PublicKey // always wsol
 ) {
   const [poolAddress] = getPoolAddress(
-    NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    NETWORK_CONFIGS[network].cpSwapConfigAddress,
     token0,
     token1,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   
   const accountInfo = await program.provider.connection.getAccountInfo(poolAddress);
@@ -274,26 +275,26 @@ export async function poolDepositInstructions(
   maximum_token_0_amount: BN,
   maximum_token_1_amount: BN,
 ): Promise<Array<TransactionInstruction>> {
-  const [auth] = getAuthAddress(NETWORK_CONFIGS[NETWORK].cpSwapProgram);
+  const [auth] = getAuthAddress(NETWORK_CONFIGS[network].cpSwapProgram);
   const [poolAddress] = getPoolAddress(
-    NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    NETWORK_CONFIGS[network].cpSwapConfigAddress,
     token0,
     token1,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   const [lpMintAddress] = getPoolLpMintAddress(
     poolAddress,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   const [vault0] = getPoolVaultAddress(
     poolAddress,
     token0,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   const [vault1] = getPoolVaultAddress(
     poolAddress,
     token1,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [mintAccount] = PublicKey.findProgramAddressSync(
@@ -340,7 +341,7 @@ export async function poolDepositInstructions(
   console.log("token1 account", onwerToken1.toBase58());
 
   const contextProxyDeposit = {
-    cpSwapProgram: NETWORK_CONFIGS[NETWORK].cpSwapProgram,
+    cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     owner: owner,
     mint: mintAccount,
     configAccount,
@@ -393,27 +394,27 @@ export async function poolWithdrawInstructions(
   minimum_token_0_amount: BN,
   minimum_token_1_amount: BN,
 ): Promise<Array<TransactionInstruction>> {
-  const [auth] = getAuthAddress(NETWORK_CONFIGS[NETWORK].cpSwapProgram);
+  const [auth] = getAuthAddress(NETWORK_CONFIGS[network].cpSwapProgram);
   const [poolAddress] = getPoolAddress(
-    NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    NETWORK_CONFIGS[network].cpSwapConfigAddress,
     token0,
     token1,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [lpMintAddress] = getPoolLpMintAddress(
     poolAddress,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   const [vault0] = getPoolVaultAddress(
     poolAddress,
     token0,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   const [vault1] = getPoolVaultAddress(
     poolAddress,
     token1,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [mintAccount] = PublicKey.findProgramAddressSync(
@@ -449,7 +450,7 @@ export async function poolWithdrawInstructions(
   );
 
   const contextProxyWithdraw = {
-    cpSwapProgram: NETWORK_CONFIGS[NETWORK].cpSwapProgram,
+    cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     owner: owner,
     mint: mintAccount,
     configAccount,
@@ -465,7 +466,7 @@ export async function poolWithdrawInstructions(
     vault0Mint: token0,
     vault1Mint: token1,
     lpMint: lpMintAddress,
-    memoProgram: NETWORK_CONFIGS[NETWORK].memoProgram,
+    memoProgram: NETWORK_CONFIGS[network].memoProgram,
   };
 
   try {
@@ -501,23 +502,23 @@ export async function poolSwapBaseInInstructions(
   amount_in: BN,
   minimum_amount_out: BN,
 ): Promise<Array<TransactionInstruction>> {
-  const [auth] = getAuthAddress(NETWORK_CONFIGS[NETWORK].cpSwapProgram);
+  const [auth] = getAuthAddress(NETWORK_CONFIGS[network].cpSwapProgram);
   const [poolAddress] = getPoolAddress(
-    NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    NETWORK_CONFIGS[network].cpSwapConfigAddress,
     outputToken, // WSOL
     inputToken, // spl token
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [inputVault] = getPoolVaultAddress(
     poolAddress,
     inputToken,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   const [outputVault] = getPoolVaultAddress(
     poolAddress,
     outputToken,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [mintAccount] = PublicKey.findProgramAddressSync(
@@ -544,16 +545,16 @@ export async function poolSwapBaseInInstructions(
   );
   const [observationAddress] = getOrcleAccountAddress(
     poolAddress,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const contextProxySwapBaseInput = {
-    cpSwapProgram: NETWORK_CONFIGS[NETWORK].cpSwapProgram,
+    cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     payer: owner,
     mint: mintAccount,
     configAccount,
     authority: auth,
-    ammConfig: NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
     poolState: poolAddress,
     inputTokenAccount,
     outputTokenAccount,
@@ -600,23 +601,23 @@ export async function poolSwapBaseOutInstructions(
   amount_out: BN,
   max_amount_in: BN,
 ): Promise<Array<TransactionInstruction>> {
-  const [auth] = getAuthAddress(NETWORK_CONFIGS[NETWORK].cpSwapProgram);
+  const [auth] = getAuthAddress(NETWORK_CONFIGS[network].cpSwapProgram);
   const [poolAddress] = getPoolAddress(
-    NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    NETWORK_CONFIGS[network].cpSwapConfigAddress,
     inputToken, // WSOL
     outputToken, // spl token
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [inputVault] = getPoolVaultAddress(
     poolAddress,
     inputToken,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
   const [outputVault] = getPoolVaultAddress(
     poolAddress,
     outputToken,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [mintAccount] = PublicKey.findProgramAddressSync(
@@ -643,16 +644,16 @@ export async function poolSwapBaseOutInstructions(
   );
   const [observationAddress] = getOrcleAccountAddress(
     poolAddress,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const contextProxySwapBaseOutput = {
-    cpSwapProgram: NETWORK_CONFIGS[NETWORK].cpSwapProgram,
+    cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     payer: owner,
     mint: mintAccount,
     configAccount,
     authority: auth,
-    ammConfig: NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
     poolState: poolAddress,
     inputTokenAccount,
     outputTokenAccount,
@@ -697,15 +698,15 @@ export async function poolBurnLpTokensInstructions(
   lpAmount: BN,
 ): Promise<Array<TransactionInstruction>> {
   const [poolAddress] = getPoolAddress(
-    NETWORK_CONFIGS[NETWORK].cpSwapConfigAddress,
+    NETWORK_CONFIGS[network].cpSwapConfigAddress,
     token0,
     token1,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [lpMintAddress] = getPoolLpMintAddress(
     poolAddress,
-    NETWORK_CONFIGS[NETWORK].cpSwapProgram
+    NETWORK_CONFIGS[network].cpSwapProgram
   );
 
   const [mintAccount] = PublicKey.findProgramAddressSync(

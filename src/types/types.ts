@@ -659,6 +659,7 @@ export interface NetworkConfig {
   isPaused: boolean;
   frontendUrl: string;
   irysGatewayUrl: string;
+  apiBaseUrl: string;
   scanUrl: string;
   systemDeployer: PublicKey;
   protocolFeeAccount: PublicKey;
@@ -669,7 +670,7 @@ export interface NetworkConfig {
   memoProgram: PublicKey;
   addressLookupTableAddress: PublicKey;
   subgraphUrl: string;
-  thegraphApiKey: string;
+  thegraphApiKey?: string;
 }
 
 export interface NetworkConfigs {

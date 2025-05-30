@@ -1,7 +1,9 @@
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { ConfirmedSignatureInfo } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
-import { NETWORK, NETWORK_CONFIGS } from '../config/constants';
+import { NETWORK_CONFIGS } from '../config/constants';
+
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
 export const TransactionHistory = () => {
   const { connection } = useConnection();
@@ -56,7 +58,7 @@ export const TransactionHistory = () => {
                   <tr key={tx.signature}>
                     <td className="truncate max-w-xs">
                       <a
-                        href={`${NETWORK_CONFIGS[NETWORK].scanUrl}/tx/${tx.signature}?cluster=${NETWORK}`}
+                        href={`${NETWORK_CONFIGS[network].scanUrl}/tx/${tx.signature}?cluster=${network}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="link link-primary"

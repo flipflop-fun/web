@@ -26,7 +26,7 @@ import { Toaster } from 'react-hot-toast';
 import { Sidebar } from './components/common/Sidebar';
 import { menuItems } from './config/menu';
 import { TokenDetail } from './pages/TokenDetail';
-import { APP_NAME, COPILOTKIT_RUNTIME_URL, NETWORK, NETWORK_CONFIGS } from './config/constants';
+import { APP_NAME, COPILOTKIT_RUNTIME_URL, NETWORK_CONFIGS } from './config/constants';
 import { Discover } from './pages/Discover';
 import { MyMintedTokens } from './pages/MyMintedTokens';
 import { MyDeployments } from './pages/MyDeployments';
@@ -176,8 +176,8 @@ const AppContent = () => {
 };
 
 function App() {
-  const network = NETWORK as WalletAdapterNetwork;
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
+  const endpoint = useMemo(() => clusterApiUrl(network as WalletAdapterNetwork), [network]);
 
   const wallets = useMemo(
     () => [
@@ -187,18 +187,18 @@ function App() {
         addressSelector: createDefaultAddressSelector(),
         appIdentity: {
           name: "Flipflop",
-          uri: NETWORK_CONFIGS[NETWORK].frontendUrl,
+          uri: NETWORK_CONFIGS[network].frontendUrl,
           icon: "logo192.png", // resolves to https://myapp.io/relative/path/to/icon.png
         },
         authorizationResultCache: createDefaultAuthorizationResultCache(),
-        cluster: NETWORK as WalletAdapterNetwork,
+        cluster: process.env.REACT_APP_NETWORK as WalletAdapterNetwork,
         onWalletNotFound: createDefaultWalletNotFoundHandler(),
       }),
     ],
     [],
   );
 
-  if (NETWORK_CONFIGS[NETWORK].isPaused) {
+  if (NETWORK_CONFIGS[network].isPaused) {
     return (
       <div className="min-h-screen bg-base-100 flex flex-col">
         <Navbar title={APP_NAME} />
