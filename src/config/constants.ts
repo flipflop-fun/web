@@ -60,7 +60,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
     apiBaseUrl: 'https://api.flipflop.plus',
-    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/flipflop-mainnet',
+    subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/flipflop-mainnet',
     systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
     protocolFeeAccount: new PublicKey("7x75mM5g8wx87bhjxhWKJPSb5mUboPGBWhRWA1AUBXmb"),
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),

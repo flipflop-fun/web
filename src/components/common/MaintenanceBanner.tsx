@@ -11,7 +11,7 @@ const MaintenanceBanner: React.FC = () => {
         <div className="justify-center text-lg mb-8">
           <div className='mr-3'>Or you can use the testnet </div>
           <a href="https://test.flipflop.plus" target="_blank" className="text-blue-500 hover:underline" rel="noreferrer">
-            https://test.flipflop.xyz
+            https://test.flipflop.plus
           </a>
         </div>
       </div>
