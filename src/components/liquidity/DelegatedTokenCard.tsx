@@ -3,7 +3,7 @@ import { InitiazlizedTokenData, TokenMetadataIPFS } from '../../types/types';
 import { TokenImage } from '../mintTokens/TokenImage';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { useNavigate } from 'react-router-dom';
-import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+// import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 import { useTranslation } from 'react-i18next';
 
 type DelegatedTokenCardProps = {
@@ -24,7 +24,7 @@ export const DelegatedTokenCard: FC<DelegatedTokenCardProps> = ({
 
   return (
     <div className="pixel-box mb-4 p-4 cursor-pointer overflow-hidden relative">
-      {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />}
+      {/* {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />} */}
       <div className="relative z-10 flex items-start gap-4">
         <div className='flex flex-col items-center'>
           {metadata?.image &&

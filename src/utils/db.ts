@@ -153,13 +153,16 @@ export const fetchImageFromUrlOrCache = async (imageUrl: string, metadataTimesta
     const cachedImage = await getCachedData(itemId);
 
     if (cachedImage) {
-      // console.log('Using cached image', itemId);
       const cachedImageType = detectImageType(cachedImage as unknown as Buffer);
       if (!cachedImageType) {
         throw new Error('Invalid cached image format');
       }
       const blobUrl = createBlobUrl(cachedImage);
-      return { blobUrl, imageType: cachedImageType as string };
+      const result = {
+        blobUrl,
+        imageType: cachedImageType
+      };
+      return result;
     }
 
     let url = STORAGE === "arweave" ? generateArweaveUrl(metadataTimestamp, itemId) : generateIrysUrl(metadataTimestamp, itemId);

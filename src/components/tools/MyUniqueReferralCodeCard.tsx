@@ -4,7 +4,7 @@ import { TokenImage } from '../mintTokens/TokenImage';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { useNavigate } from 'react-router-dom';
 import { useDeviceType } from '../../hooks/device';
-import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+// import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 import { useTranslation } from 'react-i18next';
 
 type MyUniqueReferralCodeCardProps = {
@@ -45,7 +45,7 @@ export const MyUniqueReferralCodeCard: FC<MyUniqueReferralCodeCardProps> = ({
 
   return (
     <div className="pixel-box mb-4 p-4 cursor-pointer overflow-hidden relative">
-      {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />}
+      {/* {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />} */}
       <div className="relative z-10 flex items-start gap-4">
         <div className="flex flex-col items-center">
           {metadata?.image &&

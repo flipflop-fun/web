@@ -13,13 +13,12 @@ export const TokenBackgroundImage: React.FC<TokenBackgroundImageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
   const [imageData, setImageData] = useState("");
-
+  
   useEffect(() => {
     const controller = new AbortController();
     if (imageUrl) {
       setIsLoading(true);
       fetchImageFromUrlOrCache(imageUrl, metadataTimestamp).then((imageData) => {
-        // console.log('fetchImageFromUrlOrCache', imageData);
         setImageData(imageData.blobUrl as string);
         setIsLoading(false);
         setRetryCount(0);
@@ -41,7 +40,7 @@ export const TokenBackgroundImage: React.FC<TokenBackgroundImageProps> = ({
         URL.revokeObjectURL(imageData);
       }
     };
-  }, [imageData, imageUrl, metadataTimestamp, retryCount]);
+  }, [imageUrl, metadataTimestamp, retryCount]); // Can not include imageData
 
   if (isLoading) {
     return (

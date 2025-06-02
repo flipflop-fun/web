@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { TokenCardMobileProps, TokenMetadataIPFS } from '../../types/types';
+import { TokenCardWebProps, TokenMetadataIPFS } from '../../types/types';
 import { TokenImage } from './TokenImage';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useNavigate } from 'react-router-dom';
@@ -7,9 +7,9 @@ import { fetchMetadata } from '../../utils/web3';
 import {
   calculateMaxSupply,
 } from '../../utils/format';
-import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+// import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 
-export const TokenCardSimple: React.FC<TokenCardMobileProps> = ({ token, number, type }) => {
+export const TokenCardSimple: React.FC<TokenCardWebProps> = ({ token, number, type }) => {
   const navigate = useNavigate();
   const [metadata, setMetadata] = useState<TokenMetadataIPFS | null>(null);
 
@@ -56,12 +56,13 @@ export const TokenCardSimple: React.FC<TokenCardMobileProps> = ({ token, number,
     const initialMintSize = Number(token.initialMintSize) / LAMPORTS_PER_SOL;
     return initialMintSize > 0 ? feeRateInSol / initialMintSize : 0;
   }, [token.initialMintSize, feeRateInSol]);
+
   return (
     <div
       className={`pixel-box p-4 cursor-pointer relative overflow-hidden 'w-38'`}
       onClick={handleCardClick}
     >
-      {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />}
+      {/* {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />} */}
       <div className="flex flex-col items-center gap-2">
         <TokenImage
           imageUrl={metadata?.image as string}

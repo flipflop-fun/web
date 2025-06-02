@@ -6,7 +6,7 @@ import { FaSearch } from 'react-icons/fa';
 import { ErrorBox } from '../components/common/ErrorBox';
 import { filterTokens, formatAddress } from '../utils/format';
 import { BADGE_BG_COLORS, BADGE_TEXT_COLORS, SEARCH_CACHE_ITEMS } from '../config/constants';
-import { TokenCardMobile } from '../components/mintTokens/TokenCardMobile';
+import { TokenCardWeb } from '../components/mintTokens/TokenCardWeb';
 import { PageHeader } from '../components/common/PageHeader';
 import { useDeviceType } from '../hooks/device';
 import { ScrollCards } from '../components/common/ScrollCards';
@@ -209,7 +209,7 @@ export const Discover: React.FC<DiscoverProps> = ({
 
         <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-6">
           {displayData.initializeTokenEventEntities.map((token: InitiazlizedTokenData) =>
-            <TokenCardMobile key={token.tokenId} token={token} />
+            <TokenCardWeb key={token.mint} token={token} />
           )}
         </div>
 
@@ -230,7 +230,7 @@ export const Discover: React.FC<DiscoverProps> = ({
             ) : (
               <div className="grid grid-cols-3 gap-4 p-1">
                 {latestDisplayData.initializeTokenEventEntities.map((token: InitiazlizedTokenData) =>
-                  <TokenCardMobile key={token.tokenId} token={token} />
+                  <TokenCardWeb key={token.mint} token={token} />
                 )}
               </div>
             )}
@@ -244,14 +244,14 @@ export const Discover: React.FC<DiscoverProps> = ({
             {isMobile ? (
               <div className="grid grid-cols-2 gap-4 p-1">
                 {filteredHotTokens.map((token: InitiazlizedTokenData, index: number) =>
-                  <TokenCardSimple key={token.tokenId} token={token} number={index + 1} type="static" />
+                  <TokenCardSimple key={token.mint} token={token} number={index + 1} type="static" />
                 )}
               </div>
 
             ) : (
               <div className="grid grid-cols-3 gap-4 p-1">
                 {filteredHotTokens.map((token: InitiazlizedTokenData, index: number) =>
-                  <TokenCardMobile key={token.tokenId} token={token} number={index + 1} type="static" />
+                  <TokenCardWeb key={token.mint} token={token} number={index + 1} type="static" />
                 )}
               </div>
             )}

@@ -5,7 +5,7 @@ import { AddressDisplay } from '../common/AddressDisplay';
 import { useNavigate } from 'react-router-dom';
 import { useDeviceType } from '../../hooks/device';
 import { BN_LAMPORTS_PER_SOL, numberStringToBN } from '../../utils/format';
-import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+// import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 import { useTranslation } from 'react-i18next';
 
 type MyMintedTokenCardProps = {
@@ -46,7 +46,7 @@ export const MyMintedTokenCard: FC<MyMintedTokenCardProps> = ({
 
   return (
     <div className="pixel-box mb-4 p-4 cursor-pointer overflow-hidden relative">
-      {token.metadata?.header && <TokenBackgroundImage imageUrl={token.metadata.header} metadataTimestamp={Number(token.tokenData?.metadataTimestamp) || 0} />}
+      {/* {token.metadata?.header && <TokenBackgroundImage imageUrl={token.metadata.header} metadataTimestamp={Number(token.tokenData?.metadataTimestamp) || 0} />} */}
       <div className="relative z-10 flex items-start gap-4">
         <div className="flex flex-col items-center">
           {token.metadata?.image &&
