@@ -5,7 +5,7 @@ import { AddressDisplay } from '../common/AddressDisplay';
 import { useNavigate } from 'react-router-dom';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { formatTimestamp } from '../../utils/format';
-import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+// import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 import { useTranslation } from 'react-i18next';
 
 type MyDeploymentCardProps = {
@@ -50,7 +50,7 @@ export const MyDeploymentCard: FC<MyDeploymentCardProps> = ({
 
     return (
         <div className="pixel-box mb-4 p-4 cursor-pointer overflow-hidden relative">
-            {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />}
+            {/* {metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />} */}
             <div className="relative z-10 flex items-start gap-4">
                 <div className='flex flex-col items-center'>
                     {metadata?.image &&

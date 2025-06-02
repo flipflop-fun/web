@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { TokenCardMobileProps, TokenMetadataIPFS } from '../../types/types';
+import { TokenCardWebProps, TokenMetadataIPFS } from '../../types/types';
 import { TokenImage } from './TokenImage';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useNavigate } from 'react-router-dom';
@@ -7,10 +7,10 @@ import { fetchMetadata } from '../../utils/web3';
 import {
   calculateMaxSupply,
 } from '../../utils/format';
-import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 import { useTranslation } from 'react-i18next';
+import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 
-export const TokenCardMobile: React.FC<TokenCardMobileProps> = ({ token }) => {
+export const TokenCardWeb: React.FC<TokenCardWebProps> = ({ token }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [metadata, setMetadata] = useState<TokenMetadataIPFS | null>(null);
@@ -69,7 +69,7 @@ export const TokenCardMobile: React.FC<TokenCardMobileProps> = ({ token }) => {
       onClick={handleCardClick}
     >
       {!isLoading && metadata?.header && <TokenBackgroundImage imageUrl={metadata.header} metadataTimestamp={Number(token.metadataTimestamp)} />}
-      <div className="relative flex items-start gap-4">
+      {!isLoading && <div className="relative flex items-start gap-4">
         <div className="flex flex-col items-center">
           <TokenImage
             imageUrl={metadata?.image as string}
@@ -116,7 +116,7 @@ export const TokenCardMobile: React.FC<TokenCardMobileProps> = ({ token }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

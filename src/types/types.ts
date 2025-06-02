@@ -212,7 +212,7 @@ export type TokenCardProps = {
   token: InitiazlizedTokenData;
 }
 
-export type TokenCardMobileProps = {
+export type TokenCardWebProps = {
   token: InitiazlizedTokenData;
   number?: number;
   type?: "static" | "scroll";

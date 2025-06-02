@@ -1,6 +1,5 @@
 import { MyProfile } from "../components/social/MyProfile";
 import { PageHeader } from "../components/common/PageHeader";
-// import { API_BASE_URI } from "../config/constants";
 import { useTranslation } from "react-i18next";
 
 type SocialProfileProps = {

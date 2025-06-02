@@ -13,7 +13,7 @@ import { CommentBox } from "../components/social/CommentBox";
 import { useLazyQuery } from "@apollo/client";
 import { queryInitializeTokenEventByMints, queryMyDelegatedTokens, queryMyDeployments, querySetRefererCodeEntitiesByOwner } from "../utils/graphql";
 import { TokenCardSimple } from "../components/mintTokens/TokenCardSimple";
-import { TokenCardMobile } from "../components/mintTokens/TokenCardMobile";
+import { TokenCardWeb } from "../components/mintTokens/TokenCardWeb";
 import { SocialButtonsUser } from "../components/social/SocialButtonsUser";
 import { FaAngleDoubleDown } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -232,7 +232,7 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
               ) : (
                 <div className="grid grid-cols-3 gap-4 p-1">
                   {tokensByAdmin.map((tokenData: InitiazlizedTokenData, index: number) =>
-                    <TokenCardMobile key={index} token={tokenData} number={index + 1} type="static" />
+                    <TokenCardWeb key={index} token={tokenData} number={index + 1} type="static" />
                   )}
                 </div>
               ))}
@@ -247,7 +247,7 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
               ) : (
                 <div className="grid grid-cols-3 gap-4 p-1">
                   {tokensByValueManager.map((tokenData: InitiazlizedTokenData, index: number) =>
-                    <TokenCardMobile key={index} token={tokenData} number={index + 1} type="static" />
+                    <TokenCardWeb key={index} token={tokenData} number={index + 1} type="static" />
                   )}
                 </div>
               ))}
@@ -262,7 +262,7 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
               ) : (
                 <div className="grid grid-cols-3 gap-4 p-1">
                   {tokensByPromoter.map((tokenData: InitiazlizedTokenData, index: number) =>
-                    <TokenCardMobile key={index} token={tokenData} number={index + 1} type="static" />
+                    <TokenCardWeb key={index} token={tokenData} number={index + 1} type="static" />
                   )}
                 </div>
               ))}

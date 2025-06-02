@@ -27,7 +27,6 @@ export const CheckURC: FC<CheckURCProps> = ({ expanded }) => {
     setLoading(true);
 
     const codeHashData = getReferrerCodeHash(wallet, connection, searchId.trim());
-    console.log("###### codeHashData: " + codeHashData.data?.toString() + " ######")
     if (codeHashData.success) {
       getReferralDataByCodeHash(wallet, connection, codeHashData.data as PublicKey).then(async (result) => {
         if (result?.success && result.data) {
