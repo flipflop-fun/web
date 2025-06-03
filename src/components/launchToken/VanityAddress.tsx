@@ -49,7 +49,7 @@ export const VanityAddress: FC<VanityAddressProps> = ({
             let found = false;
             let attempts = 0;
 
-            // 使用 setTimeout 来避免阻塞 UI
+            
             const runBatch = () => {
                 const batchSize = 1000;
                 let batchCount = 0;
