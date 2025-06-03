@@ -20,7 +20,11 @@
     "copied": "已複製",
     "rowsPerPage": "每頁行數",
     "showing": "顯示",
-    "page": "頁"
+    "page": "頁",
+    "underConstruction": "=== 建設中 ===",
+    "aiPlaceholder": "AI功能將在此實現...",
+    "tokenNotFound": "找不到代幣",
+    "amount": "數量"
   },
   "menu": {
     "discover": "發現",
@@ -359,5 +363,63 @@
     "currentReferralFee": "已支付給推薦人的總費用（SOL）",
     "difficultyOfCurrentEpoch": "目前檢查點的難度",
     "difficultyOfLastEpoch": "上一個檢查點的難度"
+  },
+  "tokenAccounts": {
+    "title": "代幣帳戶",
+    "connectWalletMessage": "請連接您的錢包以查看代幣帳戶",
+    "tokenMint": "代幣鑄造"
+  },
+  "transactionHistory": {
+    "title": "最近交易",
+    "connectWalletMessage": "請連接您的錢包以查看交易",
+    "signature": "簽名",
+    "slot": "插槽"
+  },
+  "myMintedTokens": {
+    "connectWalletMessage": "請連接您的錢包以查看您的帳戶"
+  },
+  "createLiquidityPool": {
+    "tokenMintAddress": "代幣鑄造地址",
+    "currentEra": "當前時代：",
+    "targetEra": "目標時代：",
+    "tokenVault": "代幣金庫：",
+    "tokenVaultBalance": "代幣金庫餘額：",
+    "solVaultBalance": "SOL金庫餘額：",
+    "valueManager": "價值管理者：",
+    "graduateEpoch": "畢業時期：",
+    "currentEpoch": "當前時期：",
+    "poolCreated": "池子已創建：",
+    "poolAddress": "池子地址：",
+    "yes": "是"
+  },
+  "socialUserDetails": {
+    "userDetails": "用戶詳情",
+    "copyAddress": "複製地址",
+    "copyToken": "複製代幣",
+    "userNotFound": "找不到用戶。請返回。"
+  },
+  "errors": {
+    "fetchTokenData": "獲取代幣數據失敗",
+    "fetchCurrentEpoch": "獲取當前時期失敗",
+    "enterMintAddress": "請輸入鑄造地址",
+    "invalidMintAddress": "無效的鑄造地址",
+    "poolCreatedSuccess": "池子創建成功",
+    "failedCreatePool": "創建池子失敗",
+    "errorLoadingTokenDetails": "載入代幣詳情時出錯",
+    "enterUsernameOrAddress": "請輸入用戶名或錢包地址進行搜索",
+    "failedFetchActivities": "獲取活動失敗",
+    "errorFetchingTokenAccounts": "獲取代幣帳戶時出錯",
+    "errorFetchingTransactions": "獲取交易時出錯"
+  },
+  "auth": {
+    "refreshFollowingError": "刷新關注時出錯：",
+    "loginFailed": "登入失敗：",
+    "registrationSuccessful": "註冊成功！",
+    "registrationFailed": "註冊失敗：",
+    "registrationFailedGeneric": "註冊失敗。請重試。",
+    "authProviderError": "useAuth 必須在 AuthProvider 內使用"
+  },
+  "theme": {
+    "themeProviderError": "useTheme 必須在 ThemeProvider 內使用"
   }
 }

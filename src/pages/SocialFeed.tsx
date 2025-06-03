@@ -34,7 +34,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({ expanded }) => {
       }
       setActivities(result.data);
     } catch (error) {
-      console.error('Failed to fetch activities:', error);
+      console.error(t('errors.failedFetchActivities'), error);
     } finally {
       setLoading(false);
     }

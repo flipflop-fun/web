@@ -20,7 +20,11 @@
     "copied": "コピーされました",
     "rowsPerPage": "ページあたりの行数",
     "showing": "表示中",
-    "page": "ページ"
+    "page": "ページ",
+    "underConstruction": "=== 建設中 ===",
+    "aiPlaceholder": "AI機能はここに実装される予定です..",
+    "tokenNotFound": "トークンが見つかりません",
+    "amount": "数量"
   },
   "menu": {
     "discover": "発見",
@@ -59,10 +63,10 @@
     "myLiquidities": "私の流動性管理",
     "tokenList": "トークンリスト",
     "noTokens": "トークンなし",
-    "noTokensDescription": "トークンなし",
-    "noTokensDescription2": "トークンを発行してください",
-    "noTokensDescription3": "トークン発行ボタンをクリック",
-    "noTokensDescription4": "最初のトークン発行を開始"
+    "noTokensDescription": "トークンが見つかりません。",
+    "noTokensDescription2": "トークンを発行してください。",
+    "noTokensDescription3": "トークン発行ボタンをクリックしてください。",
+    "noTokensDescription4": "最初のトークン発行を開始してください。"
   },
   "tokenInfo": {
     "currentMilestone": "現在のマイルストーン",
@@ -102,7 +106,7 @@
     "transactionId": "取引ID",
     "referrerFee": "紹介報酬",
     "refunder": "返金者",
-    "refundSol": "返金額",
+    "refundSol": "返金額（SOL）",
     "burn": "バーン",
     "user": "ユーザー",
     "vault": "ボールト",
@@ -359,5 +363,63 @@
     "currentReferralFee": "紹介者に支払われた合計手数料（SOL）",
     "difficultyOfCurrentEpoch": "現在のチェックポイントの難易度",
     "difficultyOfLastEpoch": "最後のチェックポイントの難易度"
+  },
+  "tokenAccounts": {
+    "title": "トークンアカウント",
+    "connectWalletMessage": "トークンアカウントを表示するにはウォレットを接続してください",
+    "tokenMint": "トークンミント"
+  },
+  "transactionHistory": {
+    "title": "最近の取引",
+    "connectWalletMessage": "取引を表示するにはウォレットを接続してください",
+    "signature": "署名",
+    "slot": "スロット"
+  },
+  "myMintedTokens": {
+    "connectWalletMessage": "アカウントを表示するにはウォレットを接続してください"
+  },
+  "createLiquidityPool": {
+    "tokenMintAddress": "トークンミントアドレス",
+    "currentEra": "現在のエラ:",
+    "targetEra": "目標エラ:",
+    "tokenVault": "トークンボールト:",
+    "tokenVaultBalance": "トークンボールト残高:",
+    "solVaultBalance": "SOLボールト残高:",
+    "valueManager": "バリューマネージャー:",
+    "graduateEpoch": "卒業エポック:",
+    "currentEpoch": "現在のエポック:",
+    "poolCreated": "プール作成済み:",
+    "poolAddress": "プールアドレス:",
+    "yes": "はい"
+  },
+  "socialUserDetails": {
+    "userDetails": "ユーザー詳細",
+    "copyAddress": "アドレスをコピー",
+    "copyToken": "トークンをコピー",
+    "userNotFound": "ユーザーが見つかりません。戻ってください。"
+  },
+  "errors": {
+    "fetchTokenData": "トークンデータの取得に失敗しました",
+    "fetchCurrentEpoch": "現在のエポックの取得に失敗しました",
+    "enterMintAddress": "ミントアドレスを入力してください",
+    "invalidMintAddress": "無効なミントアドレス",
+    "poolCreatedSuccess": "プールが正常に作成されました",
+    "failedCreatePool": "プールの作成に失敗しました",
+    "errorLoadingTokenDetails": "トークン詳細の読み込みエラー",
+    "enterUsernameOrAddress": "検索するユーザー名またはウォレットアドレスを入力してください",
+    "failedFetchActivities": "アクティビティの取得に失敗しました",
+    "errorFetchingTokenAccounts": "トークンアカウントの取得エラー",
+    "errorFetchingTransactions": "取引の取得エラー"
+  },
+  "auth": {
+    "refreshFollowingError": "フォロー更新エラー: ",
+    "loginFailed": "ログインに失敗しました: ",
+    "registrationSuccessful": "登録が成功しました！",
+    "registrationFailed": "登録に失敗しました: ",
+    "registrationFailedGeneric": "登録に失敗しました。もう一度お試しください。",
+    "authProviderError": "useAuthはAuthProvider内で使用する必要があります"
+  },
+  "theme": {
+    "themeProviderError": "useThemeはThemeProvider内で使用する必要があります"
   }
 }

@@ -133,7 +133,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title">{t('menu.myTokens')}</h2>
-            <p>Please connect your wallet to view your account</p>
+            <p>{t('myMintedTokens.connectWalletMessage')}</p>
           </div>
         </div>
       </div>

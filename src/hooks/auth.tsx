@@ -13,6 +13,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { WALLET_SIGN_MESSAGE } from "../config/constants";
 import bs58 from 'bs58';
 import { PublicKey } from "@solana/web3.js";
+import { useTranslation } from "react-i18next";
 
 type AuthContextType = {
   token: string | null;
@@ -45,6 +46,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const initialLoginAttemptedRef = useRef(false); // Use this as signal to prevent multiple login attempts
   const handledLoginRef = useRef(false); // Use this as signal to prevent multiple login attempts
   const isLoggingIn = useRef(false);
+  const { t } = useTranslation();
 
   // Define callback functions first
   const refreshFollowing = useCallback(async () => {
@@ -55,7 +57,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           if (result.message === "Invalid token") {
             if (!isLoggingIn.current) handleLogin();
           }
-          else toast.error("refreshFolling: " + result.message as string);
+          else toast.error(result.message as string);
           return;
         }
         setFollowing(result.data);
@@ -97,7 +99,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         setIsUsernameModalOpen(true);
       }
     } catch (error: any) {
-      alert('Login failed: ' + error.message);
+      alert(t('auth.loginFailed') + error.message);
       await connect();
     } finally {
       isLoggingIn.current = false;
@@ -112,7 +114,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       const roles = 'issuer,participant,promoter'; // Deprecated => roles: participant, promoter, manager, issuer
       const result = await register(publicKey, username, roles, signatureBase58, message);
       if (result.success) {
-        toast.success("Registration successful!")
+        toast.success(t('auth.registrationSuccessful'))
         setIsUsernameModalOpen(false);
         const token = result.data.token;
         setToken(token);
@@ -120,12 +122,12 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         localStorage.setItem('flipflop_token', token);
         await refreshFollowing();
       } else {
-        toast.error("Registration failed: " + result.message as string);
+        toast.error(t('auth.registrationFailed') + ': ' + result.message as string);
         setPendingRegistration({ publicKey, signatureBase58, message });
         setIsUsernameModalOpen(true);
       }
     } catch (error) {
-      alert('Registration failed. Please try again.');
+      alert(t('auth.registrationFailedGeneric'));
     }
   };
 
@@ -190,7 +192,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 };
 
 export const useAuth = () => {
+  const { t } = useTranslation();
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) throw new Error(t('auth.authProviderError'));
   return context;
 };

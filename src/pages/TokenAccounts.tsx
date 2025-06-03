@@ -3,6 +3,7 @@ import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token';
 import { useEffect, useState } from 'react';
 import { TokenAccount } from '../types/types';
 import { NETWORK_CONFIGS } from '../config/constants';
+import { useTranslation } from 'react-i18next';
 
 const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
@@ -10,6 +11,7 @@ export const TokenAccounts = () => {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
   const [tokenAccounts, setTokenAccounts] = useState<TokenAccount[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!publicKey) return;
@@ -31,7 +33,7 @@ export const TokenAccounts = () => {
 
         setTokenAccounts(tokens);
       } catch (e) {
-        console.error('Error fetching token accounts:', e);
+        console.error(t('errors.errorFetchingTokenAccounts'), e);
       }
     };
 
@@ -43,8 +45,8 @@ export const TokenAccounts = () => {
       <div className='flex justify-center items-center'>
         <div className="card w-96 bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title">Token Accounts</h2>
-            <p>Please connect your wallet to view token accounts</p>
+            <h2 className="card-title">{t('tokenAccounts.title')}</h2>
+            <p>{t('tokenAccounts.connectWalletMessage')}</p>
           </div>
         </div>
       </div>
@@ -55,13 +57,13 @@ export const TokenAccounts = () => {
     <div className='flex justify-center items-center'>
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title">Token Accounts</h2>
+          <h2 className="card-title">{t('tokenAccounts.title')}</h2>
           <div className="overflow-x-auto bg-base-100 rounded-xl shadow-xl">
             <table className="table w-full">
               <thead>
                 <tr>
-                  <th>Token Mint</th>
-                  <th>Amount</th>
+                  <th>{t('tokenAccounts.tokenMint')}</th>
+                  <th>{t('common.amount')}</th>
                 </tr>
               </thead>
               <tbody>

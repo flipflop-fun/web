@@ -138,8 +138,8 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
   if (!user) {
     return (
       <div className={`space-y-3 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-        <PageHeader title="User Details" bgImage="/bg/group1/22.jpg" />
-        <p className="text-gray-400">User not found. Please go back.</p>
+        <PageHeader title={t('socialUserDetails.userDetails')} bgImage="/bg/group1/22.jpg" />
+        <p className="text-gray-400">{t('socialUserDetails.userNotFound')}</p>
       </div>
     );
   }
@@ -153,14 +153,6 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
 
   return (
     <div className={`space-y-4 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      {/* <button
-        onClick={handleCopy}
-        className="btn-ghost p-2"
-        title="Copy Address"
-      >
-        Copy token
-      </button> */}
-
       <div
         className="pixel-box flex flex-col items-center space-y-3"
         style={{

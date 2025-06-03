@@ -93,7 +93,7 @@ export const SocialExplore: React.FC<SocialExploreProps> = ({ expanded }) => {
 
   const handleSearch = async () => {
     if (!searchTerm.trim()) {
-      toast.error('Please enter username or wallet address to search');
+      toast.error(t('errors.enterUsernameOrAddress'));
       return;
     }
     setLoading(true);

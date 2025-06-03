@@ -66,7 +66,7 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
         );
       },
       onError: (error) => {
-        toast.error("Failed to fetch tokenData data");
+        toast.error(t('errors.fetchTokenData'));
         console.error("Error fetching tokenData data:", error);
       },
     }
@@ -79,14 +79,14 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
       setCurrentEpoch(epochInfo.epoch);
     } catch (error) {
       console.error("Error fetching epoch:", error);
-      toast.error("Failed to fetch current epoch");
+      toast.error(t('errors.fetchCurrentEpoch'));
     }
   }, [connection]);
 
   const handleFetch = useCallback(
     async (mint: string) => {
       if (!mint.trim()) {
-        toast.error("Please enter a mint address");
+        toast.error(t('errors.enterMintAddress'));
         return;
       }
       try {
@@ -100,7 +100,7 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
           },
         });
       } catch (error) {
-        toast.error("Invalid mint address");
+        toast.error(t('errors.invalidMintAddress'));
         return;
       }
     },
@@ -127,9 +127,9 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
   //       toast.error(result?.message as string);
   //       return;
   //     }
-  //     toast.success("Pool created successfully");
+  //     toast.success(t('errors.poolCreatedSuccess'));
   //   } catch (error) {
-  //     toast.error("Failed to create pool");
+  //     toast.error(t('errors.failedCreatePool'));
   //     console.error("Error creating pool:", error);
   //   } finally {
   //     setLoading(false);
@@ -146,7 +146,7 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl mb-6">Token Mint Address</h1>
+          <h1 className="text-2xl mb-6">{t('createLiquidityPool.tokenMintAddress')}</h1>
           {!mint && (
             <div className="mb-6">
               <div className="flex gap-2">
@@ -171,32 +171,32 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
           {/* show token information */}
           {tokenData && (
             <div className="bg-base-200 p-4 rounded-lg mb-6">
-              <h2 className="text-xl font-semibold mb-4">Token Information</h2>
+              <h2 className="text-xl font-semibold mb-4">{t('urc.tokenInformation')}</h2>
               <div className="grid gap-3">
                 <div className="flex justify-between">
-                  <span>Token Name:</span>
+                  <span>{t('launch.tokenName')}</span>
                   <span>{tokenData.tokenName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Token Symbol:</span>
+                  <span>{t('launch.tokenSymbol')}</span>
                   <span>{tokenData.tokenSymbol}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Current Era:</span>
+                  <span>{t('createLiquidityPool.currentEra')}</span>
                   <span>{tokenData.currentEra}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Target Era:</span>
+                  <span>{t('createLiquidityPool.targetEra')}</span>
                   <span>{tokenData.targetEras}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Token Vault:</span>
+                  <span>{t('createLiquidityPool.tokenVault')}</span>
                   <span className="">
                     <AddressDisplay address={tokenData.tokenVault} />
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Token Vault Balance:</span>
+                  <span>{t('createLiquidityPool.tokenVaultBalance')}</span>
                   <span className="">
                     {tokenVaultBalance} {tokenData.tokenSymbol}
                   </span>
@@ -208,17 +208,17 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>SOL Vault Balance:</span>
+                  <span>{t('createLiquidityPool.solVaultBalance')}</span>
                   <span className="">{wsolVaultBalance} SOL</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Value Manager:</span>
+                  <span>{t('createLiquidityPool.valueManager')}</span>
                   <span className="">
                     <AddressDisplay address={tokenData.valueManager} />
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Graduate Epoch:</span>
+                  <span>{t('createLiquidityPool.graduateEpoch')}</span>
                   <span>
                     {parseInt(tokenData.graduateEpoch) === 4294967295
                       ? "Not graduated"
@@ -227,18 +227,18 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
                 </div>
                 {currentEpoch !== null && (
                   <div className="flex justify-between">
-                    <span>Current Epoch:</span>
+                    <span>{t('createLiquidityPool.currentEpoch')}</span>
                     <span>{currentEpoch}</span>
                   </div>
                 )}
                 {poolAddress !== "" && (
                   <div className="grid gap-3 mt-3">
                     <div className="flex justify-between">
-                      <span>Pool Created:</span>
+                      <span>{t('createLiquidityPool.poolCreated')}</span>
                       <span className="">Yes</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Pool Address:</span>
+                      <span>{t('createLiquidityPool.poolAddress')}</span>
                       <span className="">
                         <AddressDisplay address={poolAddress} />
                       </span>

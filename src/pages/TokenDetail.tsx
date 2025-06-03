@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { CommentBox } from '../components/social/CommentBox';
 import { getTokenDataByMint } from '../utils/user';
 import { useAuth } from '../hooks/auth';
+import { useTranslation } from 'react-i18next';
 
 export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
   const { tokenMintAddress, referrerCode } = useParams();
@@ -22,6 +23,7 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [mint, setMint] = useState<string | null>(null);
   const { token: userToken } = useAuth();
+  const { t } = useTranslation();
 
   const { loading, error, data } = useQuery(queryInitializeTokenEventBySearch, {
     variables: {
@@ -91,7 +93,7 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
   if (error) {
     return (
       <div className={`${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-        <ErrorBox title="Error loading token details" message={error.message} />
+        <ErrorBox title={t('errors.errorLoadingTokenDetails')} message={error.message} />
       </div>
     );
   }
@@ -111,7 +113,7 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-yellow-800">Token not found</h3>
+                <h3 className="text-sm font-medium text-yellow-800">{t('common.tokenNotFound')}</h3>
                 <div className="mt-2 text-sm text-yellow-700">
                   No token found with address: {tokenMintAddress}
                 </div>

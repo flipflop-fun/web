@@ -3,6 +3,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { DARK_THEME, LIGHT_THEME, LOCAL_STORAGE_KEY_THEME } from "../config/constants";
+import { useTranslation } from "react-i18next";
 
 // ===========================================
 type ThemeContextType = {
@@ -59,8 +60,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
+  const {t} = useTranslation();
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error(t('auth.themeProviderError'));
   }
   return context;
 };

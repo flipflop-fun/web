@@ -20,7 +20,11 @@
     "copied": "Copiado",
     "rowsPerPage": "Filas por página",
     "showing": "Mostrando",
-    "page": "Página"
+    "page": "Página",
+    "underConstruction": "=== En construcción ===",
+    "aiPlaceholder": "La funcionalidad de IA se implementará aquí..",
+    "tokenNotFound": "Token no encontrado",
+    "amount": "Cantidad"
   },
   "menu": {
     "discover": "Descubrir",
@@ -359,5 +363,63 @@
     "currentReferralFee": "Tarifa total (SOL) pagada a los referentes",
     "difficultyOfCurrentEpoch": "Dificultad del punto de control actual",
     "difficultyOfLastEpoch": "Dificultad del último punto de control"
+  },
+  "tokenAccounts": {
+    "title": "Cuentas de Tokens",
+    "connectWalletMessage": "Por favor conecte su billetera para ver las cuentas de tokens",
+    "tokenMint": "Acuñación de Token"
+  },
+  "transactionHistory": {
+    "title": "Transacciones Recientes",
+    "connectWalletMessage": "Por favor conecte su billetera para ver las transacciones",
+    "signature": "Firma",
+    "slot": "Slot"
+  },
+  "myMintedTokens": {
+    "connectWalletMessage": "Por favor conecte su billetera para ver su cuenta"
+  },
+  "createLiquidityPool": {
+    "tokenMintAddress": "Dirección de Acuñación del Token",
+    "currentEra": "Era Actual:",
+    "targetEra": "Era Objetivo:",
+    "tokenVault": "Bóveda de Tokens:",
+    "tokenVaultBalance": "Saldo de la Bóveda de Tokens:",
+    "solVaultBalance": "Saldo de la Bóveda de SOL:",
+    "valueManager": "Gestor de Valor:",
+    "graduateEpoch": "Época de Graduación:",
+    "currentEpoch": "Época Actual:",
+    "poolCreated": "Pool Creado:",
+    "poolAddress": "Dirección del Pool:",
+    "yes": "Sí"
+  },
+  "socialUserDetails": {
+    "userDetails": "Detalles del Usuario",
+    "copyAddress": "Copiar Dirección",
+    "copyToken": "Copiar token",
+    "userNotFound": "Usuario no encontrado. Por favor regrese."
+  },
+  "errors": {
+    "fetchTokenData": "Error al obtener datos del token",
+    "fetchCurrentEpoch": "Error al obtener la época actual",
+    "enterMintAddress": "Por favor ingrese una dirección de acuñación",
+    "invalidMintAddress": "Dirección de acuñación inválida",
+    "poolCreatedSuccess": "Pool creado exitosamente",
+    "failedCreatePool": "Error al crear el pool",
+    "errorLoadingTokenDetails": "Error al cargar los detalles del token",
+    "enterUsernameOrAddress": "Por favor ingrese nombre de usuario o dirección de billetera para buscar",
+    "failedFetchActivities": "Error al obtener actividades",
+    "errorFetchingTokenAccounts": "Error al obtener cuentas de tokens",
+    "errorFetchingTransactions": "Error al obtener transacciones"
+  },
+  "auth": {
+    "refreshFollowingError": "Error al actualizar seguimientos: ",
+    "loginFailed": "Error de inicio de sesión: ",
+    "registrationSuccessful": "¡Registro exitoso!",
+    "registrationFailed": "Error de registro: ",
+    "registrationFailedGeneric": "Error de registro. Por favor intente de nuevo.",
+    "authProviderError": "useAuth debe usarse dentro de un AuthProvider"
+  },
+  "theme": {
+    "themeProviderError": "useTheme debe usarse dentro de un ThemeProvider"
   }
 }

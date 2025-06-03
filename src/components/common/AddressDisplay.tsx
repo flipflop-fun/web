@@ -24,7 +24,7 @@ export const AddressDisplay: React.FC<AddressDisplayProps> = ({
       <button
         onClick={handleCopy}
         className="btn-ghost btn-xs p-0 min-h-0 h-auto"
-        title="Copy Address"
+        title={t('socialUserDetails.copyAddress')}
       >
         <svg className='w-4 h-4' fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 2h11v2H6v13H4V2zm4 4h12v16H8V6zm2 2v12h8V8h-8z" fill="currentColor" /> </svg>
         {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">

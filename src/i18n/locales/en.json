@@ -20,7 +20,11 @@
     "copied": "Copied",
     "rowsPerPage": "Rows per page",
     "showing": "Showing",
-    "page": "Page"
+    "page": "Page",
+    "underConstruction": "=== Under construction ===",
+    "aiPlaceholder": "AI functionality will be implemented here..",
+    "tokenNotFound": "Token not found",
+    "amount": "Amount"
   },
   "menu": {
     "discover": "Discover",
@@ -359,5 +363,63 @@
     "currentReferralFee": "Total fee(SOL) paid to referrers",
     "difficultyOfCurrentEpoch": "Difficulty of current checkpoint",
     "difficultyOfLastEpoch": "Difficulty of last checkpoint"
+  },
+  "tokenAccounts": {
+    "title": "Token Accounts",
+    "connectWalletMessage": "Please connect your wallet to view token accounts",
+    "tokenMint": "Token Mint"
+  },
+  "transactionHistory": {
+    "title": "Recent Transactions",
+    "connectWalletMessage": "Please connect your wallet to view transactions",
+    "signature": "Signature",
+    "slot": "Slot"
+  },
+  "myMintedTokens": {
+    "connectWalletMessage": "Please connect your wallet to view your account"
+  },
+  "createLiquidityPool": {
+    "tokenMintAddress": "Token Mint Address",
+    "currentEra": "Current Era:",
+    "targetEra": "Target Era:",
+    "tokenVault": "Token Vault:",
+    "tokenVaultBalance": "Token Vault Balance:",
+    "solVaultBalance": "SOL Vault Balance:",
+    "valueManager": "Value Manager:",
+    "graduateEpoch": "Graduate Epoch:",
+    "currentEpoch": "Current Epoch:",
+    "poolCreated": "Pool Created:",
+    "poolAddress": "Pool Address:",
+    "yes": "Yes"
+  },
+  "socialUserDetails": {
+    "userDetails": "User Details",
+    "copyAddress": "Copy Address",
+    "copyToken": "Copy token",
+    "userNotFound": "User not found. Please go back."
+  },
+  "errors": {
+    "fetchTokenData": "Failed to fetch tokenData data",
+    "fetchCurrentEpoch": "Failed to fetch current epoch",
+    "enterMintAddress": "Please enter a mint address",
+    "invalidMintAddress": "Invalid mint address",
+    "poolCreatedSuccess": "Pool created successfully",
+    "failedCreatePool": "Failed to create pool",
+    "errorLoadingTokenDetails": "Error loading token details",
+    "enterUsernameOrAddress": "Please enter username or wallet address to search",
+    "failedFetchActivities": "Failed to fetch activities",
+    "errorFetchingTokenAccounts": "Error fetching token accounts",
+    "errorFetchingTransactions": "Error fetching transactions"
+  },
+  "auth": {
+    "refreshFollowingError": "Error refreshing following: ",
+    "loginFailed": "Login failed: ",
+    "registrationSuccessful": "Registration successful!",
+    "registrationFailed": "Registration failed: ",
+    "registrationFailedGeneric": "Registration failed. Please try again.",
+    "authProviderError": "useAuth must be used within an AuthProvider"
+  },
+  "theme": {
+    "themeProviderError": "useTheme must be used within a ThemeProvider"
   }
 }
