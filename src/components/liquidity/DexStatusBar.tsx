@@ -1,6 +1,7 @@
 import { useConnection } from "@solana/wallet-adapter-react";
 import { EpochInfo } from "@solana/web3.js";
 import { FC, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next";
 
 type DexStatusBarProps = {
   openTime: number,
@@ -15,7 +16,7 @@ export const DexStatusBar:FC<DexStatusBarProps> = ({
 }) => {
   const { connection } = useConnection();
   const [remainingTime, setRemainingTime] = useState<string>("");
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchEpochInfo = async () => {
       try {
@@ -29,7 +30,7 @@ export const DexStatusBar:FC<DexStatusBarProps> = ({
           const hours = Math.floor((timeUntilOpen % (24 * 60 * 60)) / (60 * 60));
           const minutes = Math.floor((timeUntilOpen % (60 * 60)) / 60);
 
-          setRemainingTime(`Will open in ${days}d ${hours}h ${minutes}m`);
+          setRemainingTime(t('vm.willOpenIn') + ` ${days}d ${hours}h ${minutes}m`);
         }
       } catch (error) {
         console.error("Error fetching epoch info:", error);
@@ -48,7 +49,7 @@ export const DexStatusBar:FC<DexStatusBarProps> = ({
       <div className="mt-3 space-y-2 text-error font-bold">
         <div className="flex justify-between mb-2">
           <span className="">
-            DEX Progress: {isDexOpen ? `Opened` : "Not open"}
+            {t('vm.dexProgress')}: {isDexOpen ? t('vm.opened') : t('vm.notOpen')}
           </span>
           <span className="">
             {remainingTime}

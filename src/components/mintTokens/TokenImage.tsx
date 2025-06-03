@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TokenImageProps } from '../../types/types';
 import { fetchImageFromUrlOrCache } from '../../utils/db';
+import { useTranslation } from 'react-i18next';
 
 export const TokenImage: React.FC<TokenImageProps> = ({
   imageUrl,
@@ -14,7 +15,8 @@ export const TokenImage: React.FC<TokenImageProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const [imageData, setImageData] = useState("");
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
     const controller = new AbortController();
 
@@ -61,7 +63,7 @@ export const TokenImage: React.FC<TokenImageProps> = ({
         style={{ width: size, height: size }}
         title={error}
       >
-        <span className="text-red-500">N/A</span>
+        <span className="text-red-500">{t('common.notAvailable')}</span>
       </div>
     );
   }

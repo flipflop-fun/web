@@ -54,12 +54,12 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
 
   const handleReactiveCode = async () => {
     if (myReferrerCode === "" || myReferrerCode === null) {
-      toast.error("Referrer code is empty");
+      toast.error(t('common.referrerCodeEmpty'));
       return;
     }
     // Check if the code contains only letters, numbers and underscore
     if (!/^[a-zA-Z0-9_]+$/.test(myReferrerCode)) {
-      toast.error("Referrer code can only contain letters, numbers and underscore");
+      toast.error(t('common.referrerCodeInvalidChars'));
       return;
     }
     setLoading(true);
@@ -77,7 +77,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
       }
       const explorerUrl = `${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`;
       toast.success(
-        <ToastBox url={explorerUrl} urlText="View transaction" title="Got URC successfully!" />,
+        <ToastBox url={explorerUrl} urlText={t('common.viewTransaction')} title={t('urc.gotUrcSuccessfully')} />,
       );
 
       const referralAccount = result.data?.referralAccount as string
@@ -87,7 +87,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
       });
       localStorage.setItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58(), myReferrerCode);
     } catch (error: any) {
-      toast.error("ReferralCodeModal.handleReactiveCode.2" + error.message || 'Failed to generate referral code');
+      toast.error(t('urc.failedToGenerateReferralCode') + ": " + (error.message || ''));
     } finally {
       setLoading(false);
     }
@@ -95,12 +95,12 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
 
   const handleGetCode = async () => {
     if (myReferrerCode === "" || myReferrerCode === null) {
-      toast.error("Referrer code is empty");
+      toast.error(t('common.referrerCodeEmpty'));
       return;
     }
     // Check if the code contains only letters, numbers and underscore
     if (!/^[a-zA-Z0-9_]+$/.test(myReferrerCode)) {
-      toast.error("Referrer code can only contain letters, numbers and underscore");
+      toast.error(t('common.referrerCodeInvalidChars'));
       return;
     }
     setLoading(true);
@@ -121,7 +121,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
       } else {
         const explorerUrl = `${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`;
         toast.success(
-          <ToastBox url={explorerUrl} urlText="View transaction" title="Got URC successfully!" />,
+          <ToastBox url={explorerUrl} urlText={t('common.viewTransaction')} title={t('urc.gotUrcSuccessfully')} />,
         );
       }
 
@@ -132,7 +132,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
       });
       localStorage.setItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58(), myReferrerCode);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to generate referral code');
+      toast.error(t('urc.failedToGenerateReferralCode') + ": " + (error.message || ''));
     } finally {
       setLoading(false);
     }
@@ -142,9 +142,9 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
     const link = `${window.location.origin}/token/${token.tokenData?.mint}/${myReferrerCode}`;
     try {
       await navigator.clipboard.writeText(link);
-      toast.success('Link copied to clipboard!');
+      toast.success(t('common.linkCopiedToClipboard'));
     } catch (err) {
-      toast.error('Failed to copy link');
+      toast.error(t('common.failedToCopyLink'));
     }
   };
 

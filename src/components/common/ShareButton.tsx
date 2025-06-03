@@ -29,15 +29,15 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(currentUrl);
-      toast.success('Link copied to clipboard!');
+      toast.success(t('common.linkCopiedToClipboard'));
     } catch (err) {
-      toast.error('Failed to copy link');
+      toast.error(t('common.failedToCopyLink'));
     }
   };
 
   const handleURCSubmit = async () => {
     if (!urcCode.trim()) {
-      toast.error('Please enter a URC code');
+      toast.error(t('common.pleaseEnterUrcCode'));
       return;
     }
     setIsProcessing(true);
@@ -75,10 +75,10 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
       link.click();
 
       setIsGenerating(false);
-      toast.success('Image downloaded successfully!');
+      toast.success(t('common.imageDownloadedSuccessfully'));
     } catch (error) {
       console.error('Failed to generate image:', error);
-      toast.error('Failed to generate image');
+      toast.error(t('common.failedToGenerateImage'));
       setIsGenerating(false);
     }
   };
@@ -124,7 +124,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
               <div className="w-full px-4 py-2 text-sm text-left hover:bg-base-200">
                 <TwitterShareButton
                   url={currentUrl}
-                  title={`Hey buddy, joint me to mint ${token.tokenSymbol} on ${APP_NAME}!`}
+                  title={t('social.shareOnTwitter', { symbol: token.tokenSymbol, appName: APP_NAME })}
                   className="flex items-center gap-2"
                 >
                   <svg className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -151,7 +151,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
       {showURCModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="modal-box pixel-box p-6 max-w-md w-full mx-4">
-            <ModalTopBar title="Enter URC Code" onClose={() => { setShowURCModal(false); setUrcCode(''); }} />
+            <ModalTopBar title={t('common.enterUrcCode')} onClose={() => { setShowURCModal(false); setUrcCode(''); }} />
             <input
               type="text"
               value={urcCode}
@@ -165,7 +165,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
                 className="btn btn-primary btn-sm"
                 disabled={isProcessing}
               >
-                {isProcessing ? 'Processing...' : 'Submit'}
+                {isProcessing ? t('common.processing') : t('common.submit')}
               </button>
             </div>
           </div>

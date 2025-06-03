@@ -23,7 +23,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { icon: <FaGithub className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.github },
     { icon: <FaMedium className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.medium },
   ];
-
   const { isMobile } = useDeviceType();
 
   useEffect(() => {

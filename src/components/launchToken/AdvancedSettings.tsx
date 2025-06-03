@@ -164,7 +164,7 @@ export const AdvancedSettings: React.FC<AdvancedSettingsProps> = ({
 
       <AlertBox
         title="Info"
-        message="Default params are popular and suggested, if you want to customize params, 0.15 SOL will be charged"
+        message={t('launch.defaultParamsInfo')}
       />
     </div>
   );

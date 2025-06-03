@@ -102,7 +102,7 @@ export const Trades: FC<TradesProps> = ({
           <ToastBox
               url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
               urlText="View transaction"
-              title="Buy tokens successfully!"
+              title={t('vm.buyTokensSuccessfully')}
           />,
           {
               id: toastId,
@@ -115,7 +115,7 @@ export const Trades: FC<TradesProps> = ({
       }
     } catch (error) {
       console.error('Buy error:', error);
-      toast.error('Buy failed');
+      toast.error(t('vm.buyFailed'));
     } finally {
       setLoading(false);
     }
@@ -152,7 +152,7 @@ export const Trades: FC<TradesProps> = ({
             <ToastBox
                 url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
                 urlText="View transaction"
-                title="Sell tokens successfully!"
+                title={t('vm.sellTokensSuccessfully')}
             />,
             {
                 id: toastId,
@@ -165,7 +165,7 @@ export const Trades: FC<TradesProps> = ({
         }
       } catch (error) {
         console.error('Sell error:', error);
-        toast.error('Sell failed');
+        toast.error(t('vm.sellFailed'));
       } finally {
         setLoading(false);
       }
@@ -181,7 +181,7 @@ export const Trades: FC<TradesProps> = ({
             className="btn btn-ghost btn-xs"
             onClick={() => setShowSlippageSettings(!showSlippageSettings)}
           >
-            Setup
+            {t('common.setup')}
           </button>
         </div>
 
@@ -200,7 +200,7 @@ export const Trades: FC<TradesProps> = ({
               <span>%</span>
             </div>
             <div className="mt-2 text-sm">
-              <p>Min: {MIN_SLIPPAGE}% | Max: {MAX_SLIPPAGE}%</p>
+              <p>{t('common.min')}: {MIN_SLIPPAGE}% | {t('common.max')}: {MAX_SLIPPAGE}%</p>
             </div>
           </div>
         )}
@@ -221,8 +221,8 @@ export const Trades: FC<TradesProps> = ({
                 setBuy1Amount('0');
               } else {
                 const wsolNeeded = amount * currentPrice;
-                if(amount > poolTokenBalance) setMessageBuy("Exceed tokens in pool: " + poolTokenBalance.toFixed(4) + " " + tokenData?.tokenSymbol);
-                else if(wsolNeeded > wsolVaultBalance) setMessageBuy("Exceed SOL vault balance: " + wsolVaultBalance.toFixed(4) + " SOL");
+                if(amount > poolTokenBalance) setMessageBuy(t('common.exceedTokensInPool') + ": " + poolTokenBalance.toFixed(4) + " " + tokenData?.tokenSymbol);
+                else if(wsolNeeded > wsolVaultBalance) setMessageBuy(t('common.exceedSolVaultBalance') + ": " + wsolVaultBalance.toFixed(4) + " SOL");
                 else {
                   setMessageBuy('');
                   setBuy1Amount((amount * currentPrice).toFixed(4));
@@ -256,8 +256,8 @@ export const Trades: FC<TradesProps> = ({
                 setSell1Amount('0');
               } else {
                 const wsolGet = amount * currentPrice;
-                if(wsolGet > poolSOLBalance) setMessageSell("Exceed SOL in pool: " + poolSOLBalance.toFixed(4) + " SOL");
-                else if(amount > tokenVaultBalance) setMessageSell("Exceed token vault balance: " + tokenVaultBalance.toFixed(4) + " " + tokenData?.tokenSymbol);
+                if(wsolGet > poolSOLBalance) setMessageSell(t('common.exceedSolInPoolBalance') + ": " + poolSOLBalance.toFixed(4) + " SOL");
+                else if(amount > tokenVaultBalance) setMessageSell(t('common.exceedTokenVaultBalance') + ": " + tokenVaultBalance.toFixed(4) + " " + tokenData?.tokenSymbol);
                 else {
                   setMessageSell('');
                   setSell1Amount((amount * currentPrice).toFixed(4));

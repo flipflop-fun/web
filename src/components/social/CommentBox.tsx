@@ -287,7 +287,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
 
   return (
     <div className={`fixed bottom-0 left-0 right-0 bg-white border-t-2 border-black ${expanded ? 'md:left-64' : 'md:left-20'}`}>
-      <div className="flex justify-end text-2xl mr-3 mt-1 cursor-pointer" onClick={() => setIsOpen(false)}>x</div>
+      <div className="flex justify-end text-2xl mr-3 mt-1 cursor-pointer" onClick={() => setIsOpen(false)}>{t('social.close')}</div>
 
       <div>
         <form onSubmit={handleCommentSubmit} className="join flex mb-4 px-3">
@@ -320,8 +320,8 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
               <div className="flex-1">
                 <div className="flex gap-2 text-sm font-semibold">
                   <div className="text-gray-400">{comment.username}</div>
-                  {comment.walletAddress === orderedData.admin && <div className="text-blue-400">Host</div>}
-                  {comment.walletAddress === walletAddress && <div className="text-blue-400">You</div>}
+                  {comment.walletAddress === orderedData.admin && <div className="text-blue-400">{t('social.host')}</div>}
+                  {comment.walletAddress === walletAddress && <div className="text-blue-400">{t('social.you')}</div>}
                   <div className="text-gray-300">@{formatDistanceToNow(new Date(comment.createdAt), {
                     addSuffix: true,
                   })}
@@ -332,10 +332,10 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
                   <div className="flex space-x-3">
                     {comment.replies && comment.replies?.length > 0 ?
                     <button onClick={() => closeReply(comment.id)}>
-                      Hide replies |
+                      {t('social.hideReplies')}
                     </button> :
                     comment.totalReplies ? <button onClick={() => openReply(comment.id)}>
-                      Show {comment.totalReplies} replies |
+                      {t('social.showReplies', { count: comment.totalReplies })}
                     </button> : ''
                     }
                     <button onClick={() => window.open(`/social-user-details/${comment.walletAddress}`, "_blank")}>
@@ -390,7 +390,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
                   className="btn btn-secondary join-item"
                   disabled={sendReplyLoading}
                 >
-                  Reply
+                  {t('social.reply')}
                 </button>
               </form>
             )}
@@ -406,8 +406,8 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
                 <div className="flex-1">
                   <div className="flex gap-2 text-sm font-semibold">
                     <div className="text-gray-400">{reply.username}</div>
-                    {reply.walletAddress === orderedData.admin && <div className="text-blue-400">Host</div>}
-                    {comment.walletAddress === walletAddress && <div className="text-blue-400">You</div>}
+                    {reply.walletAddress === orderedData.admin && <div className="text-blue-400">{t('social.host')}</div>}
+                    {comment.walletAddress === walletAddress && <div className="text-blue-400">{t('social.you')}</div>}
                     <div className="text-gray-300">@{formatDistanceToNow(new Date(reply.createdAt), {
                       addSuffix: true,
                     })}
@@ -444,7 +444,7 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
           </div>
         ))}
         {hasMore && (
-          <p className="text-center text-gray-400 text-sm">Loading more...</p>
+          <p className="text-center text-gray-400 text-sm">{t('social.loadingMore')}</p>
         )}
       </div>
     </div>

@@ -8,6 +8,7 @@ import { TokenImage } from "../mintTokens/TokenImage";
 import { fetchImageFromUrlOrCache } from "../../utils/db";
 import { SocialButtonsToken } from "../social/SocialButtonsToken";
 import { useAuth } from "../../hooks/auth";
+import { useTranslation } from "react-i18next";
 
 export const TokenHero: React.FC<TokenHeroProps> = ({
   token,
@@ -21,6 +22,7 @@ export const TokenHero: React.FC<TokenHeroProps> = ({
   const [retryCount, setRetryCount] = useState(0);
   const [imageData, setImageData] = useState("");
   const { token: userToken } = useAuth();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -60,7 +62,7 @@ export const TokenHero: React.FC<TokenHeroProps> = ({
         ? (
           <img
             src={imageData}
-            alt="Token Header"
+            alt={t('common.tokenHeader')}
             className="pixel-box w-full h-auto aspect-[3/1] object-cover"
             style={{ padding: 0 }}
           />

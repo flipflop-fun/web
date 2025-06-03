@@ -102,7 +102,7 @@ export const PoolInformation: FC<PoolInformationProps> = ({
         })
         // console.log("open time", poolData.cpSwapPoolState.openTime);
       } else {
-        toast.error("Load pool information failed: " + res.message as string);
+        toast.error(t('vm.loadPoolInformationFailed') + ": " + res.message as string);
       }
     })
   }, [connection, nonce, setCurrentPrice, setPoolData, setPoolSOLBalance, setPoolTokenBalance, setTokenVaultBalance, setTotalLpToken, setVaultLpTokenBalance, setWsolVaultBalance, tokenData, wallet]);

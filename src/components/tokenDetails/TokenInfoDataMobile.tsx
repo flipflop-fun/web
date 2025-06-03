@@ -50,7 +50,7 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
       <div className="space-y-2">
         <DataBlock
           label={t('tokenInfo.currentMilestone') + "/" + t('tokenInfo.currentCheckpoint')}
-          value={`Milestone #${token.currentEra} / Checkpoint #${token.currentEpoch}`}
+          value={`${t('tokenInfo.milestoneNumber', { number: token.currentEra })} / ${t('tokenInfo.checkpointNumber', { number: token.currentEpoch })}`}
           tooltip={t('tooltip.currentEra')}
         />
         <DataBlock
@@ -195,7 +195,7 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
 
       {hasStarted && (
         <div>
-          <h3 className="text-base-content">Minted tokens to target supply</h3>
+          <h3 className="text-base-content">{t('tokenInfo.mintedTokensToTargetSupply')}</h3>
           <div className="text-sm font-medium mb-1 text-base-content">
             {mintedSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })} / {totalSupplyToTargetEras.toLocaleString(undefined, { maximumFractionDigits: 2 })} ({progressPercentage.toFixed(2)}%)
           </div>
@@ -210,7 +210,7 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
 
       {hasStarted && (
         <div>
-          <h3 className="text-base-content">Minted tokens to target mint size of current checkpoint</h3>
+          <h3 className="text-base-content">{t('tokenInfo.mintedTokensToCurrentCheckpoint')}</h3>
           <div className="text-sm font-medium mb-1 text-base-content">
             {(numberStringToBN(token.quantityMintedEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })} / {(numberStringToBN(token.targetMintSizeEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })} ({progressPercentageOfEpoch.toFixed(2)}%)
           </div>

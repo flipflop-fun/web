@@ -192,7 +192,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
             {code &&
               <div className="pixel-box mt-4 space-y-2 bg-base-200 p-4">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">Current fee</span>
+                  <span className="text-base-content/70">{t('mint.currentFee')}</span>
                   <span className="text-medium">{
                     isValidCode ?
                       (parseInt(token.feeRate) / LAMPORTS_PER_SOL).toFixed(4) + " SOL"
@@ -201,7 +201,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">Current mint size</span>
+                  <span className="text-base-content/70">{t('mint.currentMintSize')}</span>
                   <span className="text-medium">{
                     isValidCode ?
                       (parseFloat(token.mintSizeEpoch) / LAMPORTS_PER_SOL).toFixed(4) + " " + token.tokenSymbol
@@ -210,7 +210,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">Current price</span>
+                  <span className="text-base-content/70">{t('mint.currentPrice')}</span>
                   <span className="text-medium">{
                     isValidCode ?
                       formatPrice(parseFloat(token.feeRate) / parseFloat(token.mintSizeEpoch)) + " SOL"
@@ -219,7 +219,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">URC provider</span>
+                  <span className="text-base-content/70">{t('mint.urcProvider')}</span>
                   <span className="text-medium">{
                     isValidCode ?
                       <AddressDisplay address={referralData?.referrerMain?.toBase58() as string} />
@@ -228,7 +228,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">URC provider balance</span>
+                  <span className="text-base-content/70">{t('mint.urcProviderBalance')}</span>
                   <span className="text-medium">{
                     isValidCode && referralData ?
                       referralData.tokenBalance?.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + token.tokenSymbol
@@ -237,7 +237,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">URC usage count</span>
+                  <span className="text-base-content/70">{t('mint.urcUsageCount')}</span>
                   {isValidCode ?
                     <div className='flex items-center gap-2 text-medium'>
                       {referralData?.usageCount}
@@ -249,7 +249,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                     : '-'}
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">Bonus to URC provider</span>
+                  <span className="text-base-content/70">{t('mint.bonusToUrcProvider')}</span>
                   <span>{
                     isValidCode ?
                       formatPrice(parseInt(referralData?.urcProviderBonus?.toString() || '0') / LAMPORTS_PER_SOL) + " SOL"
@@ -258,11 +258,11 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                   </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-base-content/70">Discount of URC</span>
+                  <span className="text-base-content/70">{t('mint.discountOfUrc')}</span>
                   <span className="text-medium text-error">-{isValidCode && (100 - Number(referralData?.acturalPay) / parseInt(token.feeRate) * 100).toFixed(2) + "%"}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm text-medium border-t border-base-300 pt-2 mt-2">
-                  <span>Actual pay</span>
+                  <span>{t('mint.actualPay')}</span>
                   <span>{
                     isValidCode ?
                       formatPrice(parseInt(referralData?.acturalPay?.toString() || '0') / LAMPORTS_PER_SOL) + " SOL"
@@ -278,7 +278,7 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
                 onClick={handleMint}
                 disabled={loading || !isValidCode || !code || !usageCountOk}
               >
-                {loading ? 'Processing...' : t('common.mint')}
+                {loading ? t('common.processing') : t('common.mint')}
               </button>
             </div>
           </div>

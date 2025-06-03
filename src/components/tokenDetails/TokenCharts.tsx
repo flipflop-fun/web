@@ -13,7 +13,7 @@ const USE_CACHE = false;
 
 const timeFrameDatas = {
   "1min": {
-    label: "1 Minute",
+    label: "1 Minutes",
     bars: 240,
     minutes: 1,
   },
@@ -525,7 +525,7 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
       if (chartContainerRef.current) {
         chartContainerRef.current.innerHTML = `
                     <div class="flex items-center justify-center h-[560px]">
-                        <div class="text-base-content">Loading chart data...</div>
+                        <div class="text-base-content">{t('common.loadingChartData')}</div>
                     </div>
                 `;
       }
@@ -533,7 +533,7 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
     } else if (error) {
       if (chartContainerRef.current) {
         chartContainerRef.current.innerHTML = `
-                    <ErrorBox title="Error loading chart data" message={error.message} />
+                    <ErrorBox title={t('common.errorLoadingChartData')} message={error.message} />
                 `;
       }
       return;

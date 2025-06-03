@@ -147,7 +147,7 @@ export const HeaderImageUpload: React.FC<HeaderImageUploadProps> = ({
               className="w-full h-auto aspect-[3/1] object-cover"
             />
             <div className="absolute top-2 right-2 bg-base-100 px-2 py-1 rounded text-sm opacity-75">
-              Current Header
+              {t('common.current')}
             </div>
           </div>
         ) : (

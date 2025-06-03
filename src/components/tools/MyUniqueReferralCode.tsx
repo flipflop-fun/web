@@ -152,7 +152,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
       <div className={`hero min-h-[400px] bg-base-200 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
         <div className="hero-content text-center">
           <div className="max-w-md">
-            <p className="py-6">Something is wrong!</p>
+            <p className="py-6">{t('common.somethingIsWrong')}</p>
           </div>
         </div>
       </div>
@@ -168,7 +168,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
             <span className="loading loading-spinner loading-lg"></span>
           </div>
         ) : urcError ? (
-          <ErrorBox title="Error loading URCs" message={urcError.message} />
+          <ErrorBox title={t('common.errorLoadingUrcs')} message={urcError.message} />
         ) : urcData?.setRefererCodeEventEntities?.length === 0 ? (
           <p>{t('urc.noUrcFound')}</p>
         ) : !isMobile ? (

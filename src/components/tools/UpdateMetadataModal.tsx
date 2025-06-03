@@ -187,7 +187,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                 {/* Website */}
                 <div>
                   <label className="label">
-                    <span className="label-text">Website</span>
+                    <span className="label-text">{t('launch.website')}</span>
                   </label>
                   <input
                     type="url"
@@ -201,7 +201,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                 {/* Twitter */}
                 <div>
                   <label className="label">
-                    <span className="label-text">X(Twitter)</span>
+                    <span className="label-text">{t('launch.twitter')}</span>
                   </label>
                   <input
                     type="url"
@@ -215,7 +215,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                 {/* Discord */}
                 <div>
                   <label className="label">
-                    <span className="label-text">Discord</span>
+                    <span className="label-text">{t('launch.discord')}</span>
                   </label>
                   <input
                     type="url"
@@ -229,7 +229,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                 {/* Telegram */}
                 <div>
                   <label className="label">
-                    <span className="label-text">Telegram</span>
+                    <span className="label-text">{t('launch.telegram')}</span>
                   </label>
                   <input
                     type="url"
@@ -243,7 +243,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                 {/* GitHub */}
                 <div>
                   <label className="label">
-                    <span className="label-text">GitHub</span>
+                    <span className="label-text">{t('launch.github')}</span>
                   </label>
                   <input
                     type="url"
@@ -257,7 +257,7 @@ export const UpdateMetadataModal: React.FC<UpdateMetadataModalProps> = ({
                 {/* Medium */}
                 <div>
                   <label className="label">
-                    <span className="label-text">Medium</span>
+                    <span className="label-text">{t('launch.medium')}</span>
                   </label>
                   <input
                     type="url"

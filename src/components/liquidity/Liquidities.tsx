@@ -62,7 +62,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
     try {
       const amount = parseFloat(addLiquidityAmount);
       if (isNaN(amount) || amount <= 0) {
-        toast.error('Please enter a valid amount');
+        toast.error(t('common.pleaseEnterValidAmount'));
         return;
       }
 
@@ -79,7 +79,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
           <ToastBox
             url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
             urlText="View transaction"
-            title="Add liquidity successfully!"
+            title={t('vm.addLiquiditySuccessfully')}
           />,
           {
             id: toastId,
@@ -155,10 +155,10 @@ export const Liquidities: FC<LiquiditiesProps> = ({
       const wsolNeeded = poolSOLBalance * vaultLpTokenBalance / totalLpToken * percent / 100;
       console.log(amount, wsolNeeded)
       if(amount > poolTokenBalance) {
-        setMessageRemoveLiquidity("Exceed token in pool: " + poolTokenBalance.toFixed(4) + " " + tokenData.tokenSymbol);
+        setMessageRemoveLiquidity(t('common.exceedTokenInPool') + ": " + poolTokenBalance.toFixed(4) + " " + tokenData.tokenSymbol);
       }
       else if(wsolNeeded > poolSOLBalance) {
-        setMessageRemoveLiquidity("Exceed SOL in pool: " + poolSOLBalance.toFixed(4) + " SOL");
+        setMessageRemoveLiquidity(t('common.exceedSolInPool') + ": " + poolSOLBalance.toFixed(4) + " SOL");
       }
       else {
         setMessageRemoveLiquidity('');
@@ -266,7 +266,7 @@ export const Liquidities: FC<LiquiditiesProps> = ({
                     setRemoveLiquidityDataByRadio(100);
                   }}
                 >
-                  MAX
+                  {t('common.max')}
                 </button>
               </div>
             </div>

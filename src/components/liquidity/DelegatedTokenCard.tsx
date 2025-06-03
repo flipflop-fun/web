@@ -42,7 +42,7 @@ export const DelegatedTokenCard: FC<DelegatedTokenCardProps> = ({
           </div>
 
           <div className="flex gap-2">
-            <div className="text-sm mt-0.5 opacity-70">Mint:</div>
+            <div className="text-sm mt-0.5 opacity-70">{t('tokenInfo.mint')}:</div>
             <AddressDisplay address={token.mint} showCharacters={5} />
           </div>
           <div className="flex gap-2 justify-end mt-2">

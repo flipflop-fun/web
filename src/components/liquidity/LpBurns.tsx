@@ -35,7 +35,7 @@ export const LpBurns: FC<LpBurnsProps> = ({
   const handleBurnLpToken = async () => {
     if (!tokenData) return;
     setLoading(true);
-    const toastId = toast.loading('Burn liquidity tokens...', {
+    const toastId = toast.loading(t('vm.burnLiquidityTokens') + '...', {
       style: {
         background: 'var(--fallback-b1,oklch(var(--b1)))',
         color: 'var(--fallback-bc,oklch(var(--bc)))',
@@ -44,7 +44,7 @@ export const LpBurns: FC<LpBurnsProps> = ({
     try {
       const amount = parseFloat(burnLpAmount);
       if (isNaN(amount) || amount <= 0) {
-        toast.error('Please enter a valid amount');
+        toast.error(t('common.pleaseEnterValidAmount'));
         return;
       }
 
@@ -61,7 +61,7 @@ export const LpBurns: FC<LpBurnsProps> = ({
           <ToastBox
             url={`${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`}
             urlText="View transaction"
-            title="Burn liquidity tokens successfully!"
+            title={t('vm.burnLiquidityTokensSuccessfully')}
           />,
           {
             id: toastId,
@@ -70,11 +70,11 @@ export const LpBurns: FC<LpBurnsProps> = ({
         setBurnLpAmount('');
         onDone();
       } else {
-        toast.error("Burn failed: " + result.message || 'Failed to burn LP tokens');
+        toast.error(t('vm.burnFailed') + ": " + result.message || t('vm.failedToBurnLpTokens'));
       }
     } catch (error) {
       console.error('Burn LP token error:', error);
-      toast.error('Failed to burn LP tokens');
+      toast.error(t('vm.failedToBurnLpTokens'));
     } finally {
       setLoading(false);
     }

@@ -34,11 +34,11 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
   const handleBurn = async () => {
     const burnAmount = new BN(parseInt(amount)).mul(new BN(10**9));
     if (burnAmount.eq(new BN(0))) {
-      toast.error('Wrong amount');
+      toast.error(t('common.wrongAmount'));
       return;
     }
     if (parseFloat(amount) > totalBalance) {
-      toast.error('Insufficient balance');
+      toast.error(t('common.insufficientBalance'));
       return;
     }
 
@@ -56,14 +56,14 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
         const explorerUrl = `${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`;
         toast.success(
           <ToastBox
-            title="Burn system vault tokens successful"
+            title={t('vm.burnSystemVaultTokensSuccessful')}
             url={explorerUrl}
             urlText="View transaction"
           />,
         );
         close();
       } else {
-        toast.error("Burn failed: " + result.message as string);
+        toast.error(t('vm.burnFailed') + ": " + result.message as string);
       }
     } catch (error) {
       console.error('Burn error:', error);
@@ -83,7 +83,7 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
   return (
     <div className="modal modal-open">
       <div className="modal-box pixel-box relative p-3">
-        <ModalTopBar title="Burn system vault tokens" onClose={onClose} />
+        <ModalTopBar title={t('vm.burnSystemVaultTokens')} onClose={onClose} />
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <div className="space-y-4">
               <div className="space-y-2">

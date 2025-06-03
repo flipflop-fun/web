@@ -49,17 +49,17 @@ export const RefundModal: FC<RefundModalProps> = ({
 
   const handleRefund = async () => {
     if (!wallet) {
-      toast.error('Please connect wallet (RefundModal)');
+      toast.error(t('common.pleaseConnectWallet'));
       return;
     }
 
     if (!refundAccountData) {
-      toast.error('No refund data available');
+      toast.error(t('mint.noRefundDataAvailable'));
       return;
     }
 
     if (refundAccountData.totalTokens.isZero()) {
-      toast.error('No tokens available for refund');
+      toast.error(t('mint.noTokensAvailableForRefund'));
       return;
     }
 
@@ -76,18 +76,18 @@ export const RefundModal: FC<RefundModalProps> = ({
         const explorerUrl = `${NETWORK_CONFIGS[network].scanUrl}/tx/${result.data?.tx}?cluster=${network}`;
         toast.success(
           <ToastBox
-            title="Refund successful"
+            title={t('mint.refundSuccessful')}
             url={explorerUrl}
-            urlText="View transaction"
+            urlText={t('common.viewTransaction')}
           />,
         );
         close();
       } else {
-        toast.error("RefundModal.handleRefund: " + result.message as string);
+        toast.error(t('common.operationFailed') + ": " + result.message as string);
       }
     } catch (error) {
       console.error('Refund error:', error);
-      toast.error('Refund failed');
+      toast.error(t('common.operationFailed'));
     } finally {
       setLoading(false);
     }

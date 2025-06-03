@@ -94,7 +94,7 @@ export const CloseTokenModal: FC<CloseTokenModalProps> = ({ isOpen, onClose, tok
                 onClick={handleClose}
                 disabled={!confirmed}
               >
-                {loading ? 'Processing...' : t('mint.closeMint')}
+                {loading ? t('common.processing') : t('mint.closeMint')}
               </button>
             </div>
           </div>

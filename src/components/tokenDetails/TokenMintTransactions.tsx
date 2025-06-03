@@ -69,7 +69,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
     return (
       <div className="bg-base-200 rounded-lg shadow-lg p-6 mt-6">
         <ErrorBox
-          title="Get recent mint error"
+          title={t('common.getRecentMintError')}
           message={error.message}
         />
       </div>
@@ -120,7 +120,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
             )) : Array.from({ length: pageSize }, (_, index) => (
               <tr key={`placeholder-${index}`} className="opacity-50">
                 <td colSpan={5} className="text-center bg-base-300">
-                  {loading ? '...' : 'No data available'}
+                  {loading ? t('common.loadingDots') : t('common.noDataAvailable')}
                 </td>
               </tr>
             ))}

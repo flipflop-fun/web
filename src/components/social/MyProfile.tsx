@@ -136,7 +136,7 @@ export const MyProfile: React.FC = () => {
       }
 
       if (formData.bio.length >= 200) {
-        toast.error('Bio must be less than 200 characters');
+        toast.error(t('social.bioTooLong'));
         return;
       }
 
@@ -161,26 +161,26 @@ export const MyProfile: React.FC = () => {
       await fetchUserData();
       setIsEditing(false);
     } catch (error) {
-      toast.error('Failed to update profile');
+      toast.error(t('social.failedToUpdateProfile'));
     } finally {
       setLoading(false);
     }
   };
 
+  
   if (loading && !user) {
-    return <div className="text-center text-gray-400">Loading...</div>;
+    return <div className="text-center text-gray-400">{t('social.loading')}</div>;
   }
 
   if (!user) {
-    return <div className="text-center text-gray-400">Please log in to view your profile.</div>;
+    return <div className="text-center text-gray-400">{t('social.pleaseLoginToViewProfile')}</div>;
   }
 
   return (
     <div>
-      {/* <div className='mb-1 font-semibold'>My Profile</div> */}
       {!token && (
         <div className="text-center mt-10">
-          <p className="text-gray-300 mb-4">Please log in to view your feed.</p>
+          <p className="text-gray-300 mb-4">{t('social.pleaseLoginToViewFeed')}</p>
           {/* <p className="text-gray-300 mb-4">{USER_API_URL}</p> */}
           <button
             onClick={handleLogin}
@@ -196,11 +196,11 @@ export const MyProfile: React.FC = () => {
           <div className="">
             {user.avatar && !isEditing ? (
               <div className='w-16 h-16 rounded-full overflow-hidden flex items-center justify-center'>
-                <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" onError={() => console.log('Image load failed')} />
+                <img src={user.avatar} alt={t('social.avatar')} className="w-full h-full object-cover" onError={() => console.log(t('social.imageLoadFailed'))} />
               </div>
             ) : formData.avatarPreview ? (
               <div className='w-16 h-16 rounded-full overflow-hidden flex items-center justify-center'>
-                <img src={formData.avatarPreview} alt="Preview" className="w-full h-full object-cover" />
+                <img src={formData.avatarPreview} alt={t('social.preview')} className="w-full h-full object-cover" />
               </div>
             ) : (
               <div className="w-16 h-16 rounded-full border-2 border-black flex items-center justify-center text-2xl">

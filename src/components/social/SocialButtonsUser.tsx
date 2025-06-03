@@ -4,6 +4,7 @@ import toast from "react-hot-toast"
 import { followUser, likeUser, unfollowUser, unlikeUser } from "../../utils/user"
 import { useAuth } from "../../hooks/auth"
 import LoadingSpinner from "../common/LoadingSpinner"
+import { useTranslation } from 'react-i18next';
 
 type SocialButtonsUserProps = {
   user: OrderedUser | null;
@@ -19,12 +20,13 @@ export const SocialButtonsUser: FC<SocialButtonsUserProps> = ({
   fetchUserData 
 }) => {  
   const { token, handleLogin, isLoggingIn } = useAuth();
+  const { t } = useTranslation();
   const [loadingFollow, setLoadingFollow] = useState(false);
   const [loadingLike, setLoadingLike] = useState(false);
   
   const follow = async () => {
     if (!user?.userId) {
-      toast.error("User has not registered");
+      toast.error(t('social.userNotRegistered'));
       return;
     }
     setLoadingFollow(true);
@@ -43,7 +45,7 @@ export const SocialButtonsUser: FC<SocialButtonsUserProps> = ({
 
   const unfollow = async () => {
     if (!user?.userId) {
-      toast.error("User has not registered");
+      toast.error(t('social.userNotRegistered'));
       return;
     }
     setLoadingFollow(true);
@@ -62,7 +64,7 @@ export const SocialButtonsUser: FC<SocialButtonsUserProps> = ({
 
   const like = async () => {
     if (!user?.userId) {
-      toast.error("User has not registered");
+      toast.error(t('social.userNotRegistered'));
       return;
     }
     setLoadingLike(true);
@@ -81,7 +83,7 @@ export const SocialButtonsUser: FC<SocialButtonsUserProps> = ({
 
   const unlike = async () => {
     if (!user?.userId) {
-      toast.error("User has not registered");
+      toast.error(t('social.userNotRegistered'));
       return;
     }
     setLoadingLike(true);
