@@ -187,7 +187,7 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
                 </div>
                 <AlertBox title={t('common.attention')} message={t('urc.attentionMessage2')} />
 
-                <p className="">{t('urc.currentUsedCount')} ({t('urc.max')}: {referralUsageMaxCount})</p>
+                <p className="">{t('urc.currentUsedCount')} ({t('common.max')}: {referralUsageMaxCount})</p>
                 <div className="pixel-box bg-base-200 p-2 break-all">
                   {referralData.usageCount}
                 </div>

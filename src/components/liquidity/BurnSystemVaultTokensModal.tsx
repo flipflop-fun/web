@@ -87,7 +87,7 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
         <div className="max-h-[calc(100vh-12rem)] overflow-y-auto p-1">
           <div className="space-y-4">
               <div className="space-y-2">
-                <p>{t('vm.burnAmountOfSystemVault')} (t('urc.max'): {formatPrice(totalBalance, 3)} {token.tokenSymbol})</p>
+                <p>{t('vm.burnAmountOfSystemVault')} (t('common.max'): {formatPrice(totalBalance, 3)} {token.tokenSymbol})</p>
                 <input
                   type="text"
                   value={amount}

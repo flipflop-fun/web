@@ -69,6 +69,7 @@ export const MyCopilotKit = () => {
     if(token) {
       loadFAQs(token as string).then(result => {
         if(!result.success) {
+          console.log("loadFAQ", result.message);
           if (result.message === "Invalid token") {
             if (!isLoggingIn) handleLogin();
           }
