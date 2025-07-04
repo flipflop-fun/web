@@ -90,16 +90,26 @@ export const getCachedData = async (url: string): Promise<ArrayBuffer | null> =>
       };
 
       request.onsuccess = () => {
-        db.close();
         if (request.result && Date.now() - request.result.timestamp < CACHE_DURATION) {
+          db.close();
           resolve(request.result.data);
         } else if (request.result) {
-          // Remove expired cache
+          // Remove expired cache - keep db open for delete operation
           const deleteTransaction = db.transaction(STORE_NAME_IMAGE, 'readwrite');
           const deleteStore = deleteTransaction.objectStore(STORE_NAME_IMAGE);
-          deleteStore.delete(url);
-          resolve(null);
+          const deleteRequest = deleteStore.delete(url);
+          
+          deleteRequest.onsuccess = () => {
+            db.close();
+            resolve(null);
+          };
+          
+          deleteRequest.onerror = () => {
+            db.close();
+            resolve(null); // 即使删除失败也返回 null，避免阻塞
+          };
         } else {
+          db.close();
           resolve(null);
         }
       };

@@ -20,7 +20,7 @@ import {
   createDefaultAuthorizationResultCache,
   createDefaultWalletNotFoundHandler,
 } from '@solana-mobile/wallet-adapter-mobile';
-import { clusterApiUrl } from '@solana/web3.js';
+// import { clusterApiUrl } from '@solana/web3.js';
 import { Navbar } from './components/common/Navbar';
 import { Toaster } from 'react-hot-toast';
 import { Sidebar } from './components/common/Sidebar';
@@ -177,7 +177,11 @@ const AppContent = () => {
 
 function App() {
   const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
-  const endpoint = useMemo(() => clusterApiUrl(network.replace("_", "-") as WalletAdapterNetwork), [network]);
+  // const endpoint = useMemo(() => clusterApiUrl(network.replace("_", "-") as WalletAdapterNetwork), [network]);
+  const endpoint = network === 'devnet' ?
+      `https://devnet.helius-rpc.com/?api-key=${process.env.REACT_APP_HELIUS_API_KEY}`
+    : `https://mainnet.helius-rpc.com/?api-key=${process.env.REACT_APP_HELIUS_API_KEY}`;
+  console.log('endpoint', endpoint);
 
   const wallets = useMemo(
     () => [
