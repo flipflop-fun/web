@@ -2,7 +2,7 @@
   "address": "FLipXx1W9mSeLpqbUbjsEDwaraXD2AtjSmM4xNXuMfWm",
   "metadata": {
     "name": "fair_mint_token",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
   },
@@ -378,41 +378,8 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "admin"
               }
             ]
           }
@@ -553,6 +520,7 @@
         },
         {
           "name": "system_config_account",
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -579,41 +547,9 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "system_config_account.admin",
+                "account": "SystemConfigData"
               }
             ]
           }
@@ -804,41 +740,9 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "system_config_account.admin",
+                "account": "SystemConfigData"
               }
             ]
           }
@@ -1204,41 +1108,9 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "system_config_account.admin",
+                "account": "SystemConfigData"
               }
             ]
           }
@@ -2511,41 +2383,9 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "system_config_account.admin",
+                "account": "SystemConfigData"
               }
             ]
           }
@@ -2832,41 +2672,9 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "system_config_account.admin",
+                "account": "SystemConfigData"
               }
             ]
           }
@@ -2978,41 +2786,9 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "system_config_account.admin",
+                "account": "SystemConfigData"
               }
             ]
           }
@@ -3060,7 +2836,7 @@
           "type": "u64"
         },
         {
-          "name": "max_graduate_fee",
+          "name": "min_graduate_fee",
           "type": "u64"
         },
         {
@@ -3216,41 +2992,9 @@
                 ]
               },
               {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
+                "kind": "account",
+                "path": "system_config_account.admin",
+                "account": "SystemConfigData"
               }
             ]
           }
@@ -3408,19 +3152,6 @@
       ]
     },
     {
-      "name": "FreezeTokenEvent",
-      "discriminator": [
-        82,
-        18,
-        159,
-        89,
-        129,
-        1,
-        145,
-        83
-      ]
-    },
-    {
       "name": "InitializeTokenEvent",
       "discriminator": [
         108,
@@ -3470,19 +3201,6 @@
         228,
         15,
         218
-      ]
-    },
-    {
-      "name": "ThawTokenEvent",
-      "discriminator": [
-        50,
-        242,
-        230,
-        113,
-        49,
-        117,
-        236,
-        112
       ]
     },
     {
@@ -4066,26 +3784,6 @@
       }
     },
     {
-      "name": "FreezeTokenEvent",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "mint",
-            "type": "pubkey"
-          },
-          {
-            "name": "destination",
-            "type": "pubkey"
-          },
-          {
-            "name": "config_account",
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
       "name": "InitializeTokenConfigData",
       "type": {
         "kind": "struct",
@@ -4661,7 +4359,7 @@
             "type": "u64"
           },
           {
-            "name": "max_graduate_fee",
+            "name": "min_graduate_fee",
             "type": "u64"
           },
           {
@@ -4675,26 +4373,6 @@
           {
             "name": "is_pause",
             "type": "bool"
-          }
-        ]
-      }
-    },
-    {
-      "name": "ThawTokenEvent",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "mint",
-            "type": "pubkey"
-          },
-          {
-            "name": "destination",
-            "type": "pubkey"
-          },
-          {
-            "name": "config_account",
-            "type": "pubkey"
           }
         ]
       }
