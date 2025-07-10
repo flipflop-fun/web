@@ -26,6 +26,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
   const { t } = useTranslation();
+  const [isPaused] = useState(NETWORK_CONFIGS[process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS].isPaused);
   // const [success, setSuccess] = useState(false);
   // const [decimals, setDecimals] = useState(9);
 
@@ -84,7 +85,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
 
     // Check file size (4MB = 4 * 1024 * 1024 bytes)
     if (file.size > MAX_AVATAR_FILE_SIZE) {
-      setError(`${t('launch.imageSize', {size: MAX_AVATAR_FILE_SIZE / 1024, unit: "K"})}`);
+      setError(`${t('launch.imageSize', {size: MAX_AVATAR_FILE_SIZE / 1024 / 1024, unit: "M"})}`);
       return false;
     }
 
@@ -281,6 +282,16 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
       <PageHeader title={t('launch.title')} bgImage='/bg/group1/2.jpg' />
+      
+      {/* Warning banner for rehearsal mode */}
+      {isPaused && 
+      <div className="alert alert-warning mb-4 text-red-600 font-bold flex justify-center items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+        </svg>
+        <span>{t("common.launchPausedAlert")}</span>
+      </div>}
+      
       <div className="flex flex-col lg:flex-row lg:justify-center lg:items-start lg:gap-8">
         <form onSubmit={handleSubmit} className="w-full lg:w-[480px] space-y-4 md:p-4">
           <div className="">
@@ -456,7 +467,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
                 ? 'bg-gray-300 cursor-not-allowed'
                 : 'bg-primary hover:bg-primary'
               }`}
-            disabled={isCreating || isUploading || !name || !symbol || !imageUrl}
+            disabled={isCreating || isUploading || !name || !symbol || !imageUrl || isPaused}
           >
             {isCreating ? t('launch.createToken') + '...' : t('launch.createToken')}
           </button>

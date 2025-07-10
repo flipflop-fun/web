@@ -2,6 +2,7 @@ import { PublicKey } from '@solana/web3.js';
 import { TokenParams, NetworkConfig, NetworkConfigs } from '../types/types';
 
 export const APP_NAME = 'flipflop';
+export const VERSION_DESCRIPTION = 'Rehearsal';
 
 export const DEFAULT_PARAMS = {
     "standard": { // must be same as program default params
@@ -14,26 +15,26 @@ export const DEFAULT_PARAMS = {
         feeRate: '200000000',
         liquidityTokensRatio: '20',
     },
-    // "meme": { // config for mainnet 
-    //     targetEras: '1',
-    //     epochesPerEra: '250',
-    //     targetSecondsPerEpoch: '2000',
-    //     reduceRatio: '75',
-    //     initialMintSize: '10000000000000',
-    //     initialTargetMintSizePerEpoch: '1000000000000000',
-    //     feeRate: '10000000',
-    //     liquidityTokensRatio: '20',
-    // },
-    "meme": { // config for dev
+    "meme": { // config for mainnet 
         targetEras: '1',
-        epochesPerEra: '2',
-        targetSecondsPerEpoch: '60',
+        epochesPerEra: '250',
+        targetSecondsPerEpoch: '2000',
         reduceRatio: '75',
-        initialMintSize: '1000000000000',
-        initialTargetMintSizePerEpoch: '10000000000000',
+        initialMintSize: '10000000000000',
+        initialTargetMintSizePerEpoch: '1000000000000000',
         feeRate: '10000000',
         liquidityTokensRatio: '20',
     },
+    // "meme": { // config for dev
+    //     targetEras: '1',
+    //     epochesPerEra: '2',
+    //     targetSecondsPerEpoch: '60',
+    //     reduceRatio: '75',
+    //     initialMintSize: '1000000000000',
+    //     initialTargetMintSizePerEpoch: '10000000000000',
+    //     feeRate: '10000000',
+    //     liquidityTokensRatio: '20',
+    // },
 } as Record<string, TokenParams>;
 
 // Solana program config
@@ -55,12 +56,12 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     addressLookupTableAddress: new PublicKey("EebRqpLtUgjX17pJJNNbd6ngtYa34VGa51oYsibwJRXy"),
   } as NetworkConfig,
   mainnet_beta: {
-    isPaused: true,
+    isPaused: true, // launching is paused, should be same as on-chain
     frontendUrl: "https://app.flipflop.fun",
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
     apiBaseUrl: 'https://api.flipflop.plus',
-    subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/flipflop-mainnet',
+    subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/proof_of_mint',
     systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
     protocolFeeAccount: new PublicKey("7x75mM5g8wx87bhjxhWKJPSb5mUboPGBWhRWA1AUBXmb"),
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),

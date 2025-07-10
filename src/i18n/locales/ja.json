@@ -83,7 +83,9 @@
     "loadingDots": "...",
     "current": "現在",
     "somethingIsWrong": "何か問題があります！",
-    "errorLoadingUrcs": "URCの読み込みエラー"
+    "errorLoadingUrcs": "URCの読み込みエラー",
+    "rehearsalAlert": "これは正式なメインネットの前のリハーサルであり、最低資金とテスト返金の参加を行います！",
+    "launchPausedAlert": "リハーサルバージョンでは、トークンを作成できません！"
   },
   "menu": {
     "discover": "発見",

@@ -83,7 +83,9 @@
     "loadingDots": "...",
     "current": "Current",
     "somethingIsWrong": "Something is wrong!",
-    "errorLoadingUrcs": "Error loading URCs"
+    "errorLoadingUrcs": "Error loading URCs",
+    "rehearsalAlert": "This is the Rehearsal version before the formal Mainnet, participating in the minimum fund and test refund!",
+    "launchPausedAlert": "In the Rehearsal version, tokens can not be created!"
   },
   "menu": {
     "discover": "Discover",

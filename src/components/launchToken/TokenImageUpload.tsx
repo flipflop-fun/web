@@ -16,7 +16,7 @@ export const TokenImageUpload: React.FC<TokenImageUploadProps> = ({
     return new Promise((resolve) => {
       // Check file size
       if (file.size > MAX_AVATAR_FILE_SIZE) {
-        setError(t('launch.imageSize', {size: 250}));
+        setError(t('launch.imageSize', {size: MAX_AVATAR_FILE_SIZE / 1024 / 1024, unit: "M"}));
         resolve(false);
         return;
       }

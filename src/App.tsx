@@ -51,7 +51,7 @@ import { useDeviceType } from './hooks/device';
 import { AuthProvider } from './hooks/auth';
 import './i18n/i18n';
 import { useTranslation } from 'react-i18next';
-import MaintenanceBanner from './components/common/MaintenanceBanner';
+// import MaintenanceBanner from './components/common/MaintenanceBanner';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const AppContent = () => {
@@ -174,14 +174,11 @@ const AppContent = () => {
     </div>
   );
 };
-
+// https://brinna-qcbvnp-fast-mainnet.helius-rpc.com
 function App() {
   const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
   // const endpoint = useMemo(() => clusterApiUrl(network.replace("_", "-") as WalletAdapterNetwork), [network]);
-  const endpoint = network === 'devnet' ?
-      `https://devnet.helius-rpc.com/?api-key=${process.env.REACT_APP_HELIUS_API_KEY}`
-    : `https://mainnet.helius-rpc.com/?api-key=${process.env.REACT_APP_HELIUS_API_KEY}`;
-  console.log('endpoint', endpoint);
+  const endpoint = network === 'devnet' ? process.env.REACT_APP_DEVNET_RPC : process.env.REACT_APP_MAINNET_RPC;
 
   const wallets = useMemo(
     () => [
@@ -202,18 +199,18 @@ function App() {
     [],
   );
 
-  if (NETWORK_CONFIGS[network].isPaused) {
-    return (
-      <div className="min-h-screen bg-base-100 flex flex-col">
-        <Navbar title={APP_NAME} />
-        <MaintenanceBanner />
-      </div>
-    )
-  } else {
+  // if (NETWORK_CONFIGS[network].isPaused) {
+  //   return (
+  //     <div className="min-h-screen bg-base-100 flex flex-col">
+  //       <Navbar title={APP_NAME} />
+  //       <MaintenanceBanner />
+  //     </div>
+  //   )
+  // } else {
     return (
       <Router>
         <CopilotKit runtimeUrl={COPILOTKIT_RUNTIME_URL}>
-          <ConnectionProvider endpoint={endpoint}>
+          <ConnectionProvider endpoint={endpoint || "https://api.devnet.solana.com"}>
             <WalletProvider
               wallets={wallets}
               autoConnect
@@ -231,7 +228,7 @@ function App() {
         </CopilotKit>
       </Router>
     )
-  }
+  // }
 }
 
 export default App;

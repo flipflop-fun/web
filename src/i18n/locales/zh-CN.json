@@ -83,7 +83,9 @@
     "loadingDots": "...",
     "current": "当前",
     "somethingIsWrong": "出错了！",
-    "errorLoadingUrcs": "加载URCs出错"
+    "errorLoadingUrcs": "加载URCs出错",
+    "rehearsalAlert": "这是正式主网之前的彩排，参与最低资金和测试退款!",
+    "launchPausedAlert": "在彩排版本中，无法创建代币!"
   },
   "menu": {
     "discover": "发现",

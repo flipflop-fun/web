@@ -83,7 +83,10 @@
     "loadingDots": "...",
     "current": "Hiện tại",
     "somethingIsWrong": "Có gì đó không ổn!",
-    "errorLoadingUrcs": "Lỗi khi tải URCs"
+    "errorLoadingUrcs": "Lỗi khi tải URCs",
+    "rehearsalAlert": "Đây là buổi diễn tập trước Mainnet chính thức, tham gia vào quỹ tối thiểu và kiểm tra hoàn tiền!",
+    "launchPausedAlert": "Trong phiên bản Diễn tập, không thể tạo mã thông báo!"
+
   },
   "menu": {
     "discover": "Khám phá",
