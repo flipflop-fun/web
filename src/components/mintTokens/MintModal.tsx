@@ -101,12 +101,16 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
   }, [code, wallet, connection, fetchReferralData]);
 
   useEffect(() => {
-    if (referralData?.usageCount !== undefined && Number(referralData?.usageCount) >= 0 && referralUsageMaxCount > 0) {
+    console.log(referralData?.referrerMain.toBase58())
+    console.log(token.admin);
+    if (referralData?.usageCount !== undefined && Number(referralData?.usageCount) >= 0 && referralUsageMaxCount > 0 && referralData?.referrerMain.toBase58() !== token.admin) {
       setUsageCountOk(referralData?.usageCount < referralUsageMaxCount);
+    } else if (referralData?.referrerMain.toBase58() === token.admin) {
+      setUsageCountOk(true)
     } else {
       setUsageCountOk(false);
     }
-  }, [referralData?.usageCount, referralUsageMaxCount]);
+  }, [referralData?.referrerMain, referralData?.usageCount, referralUsageMaxCount, token.admin]);
   // const close = () => {
   //     setLoading(false);
   //     setTimeout(() => {
