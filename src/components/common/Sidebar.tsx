@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaDiscord } from 'react-icons/fa';
 import { MenuItem, SidebarProps } from '../../types/types';
 import { LOCAL_STORAGE_KEY_EXPANDED, VERSION_DESCRIPTION } from '../../config/constants';
 import { FaTwitter, FaTelegram, FaGithub, FaMedium } from 'react-icons/fa';
@@ -18,7 +18,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [expandedSubMenus, setExpandedSubMenus] = useState<string[]>([]);
   const socialIcons = [
     { icon: <FaTwitter className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.twitter },
-    // { icon: <FaDiscord className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.discord },
+    { icon: <FaDiscord className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.discord },
     { icon: <FaTelegram className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.telegram },
     { icon: <FaGithub className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.github },
     { icon: <FaMedium className="w-5 h-5 md:w-6 md:h-6" />, ...socialLinks.medium },

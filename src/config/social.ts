@@ -7,7 +7,7 @@ export const socialLinks: Record<string, SocialLink> = {
   },
   discord: {
     name: 'Discord',
-    url: 'https://discord.com/channels/@flipfloplaunch/1349317269540311074'
+    url: ' https://discord.gg/DtwkgAyD'
   },
   telegram: {
     name: 'Telegram',
