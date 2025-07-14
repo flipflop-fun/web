@@ -663,6 +663,7 @@ export interface NetworkConfig {
   scanUrl: string;
   systemDeployer: PublicKey;
   protocolFeeAccount: PublicKey;
+  allowOwnerOffCurveForProtocolFeeAccount: boolean;
   tokenMetadataProgramId: PublicKey;
   cpSwapProgram: PublicKey;
   cpSwapConfigAddress: PublicKey;
