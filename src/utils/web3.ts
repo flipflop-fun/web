@@ -590,7 +590,8 @@ export const refund = async (
   }
   const tokenAta = await getAssociatedTokenAddress(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const payerWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
-  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, false, TOKEN_PROGRAM_ID);
+  // ! If protocol fee account is PDA account, the allowOwnerOffCurve should be true
+  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, true, TOKEN_PROGRAM_ID);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, new PublicKey(token.configAccount), true, TOKEN_PROGRAM_ID);
 
   const refundAccounts = {
@@ -715,10 +716,10 @@ export const mintToken = async (
     [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
     program.programId,
   );
-
   const configAccountPda = new PublicKey(token.configAccount);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configAccountPda, true, TOKEN_PROGRAM_ID);
-  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, false, TOKEN_PROGRAM_ID);
+  // ! If protocol fee account is PDA account, the allowOwnerOffCurve should be true
+  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, true, TOKEN_PROGRAM_ID);
   const destinationWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const destinationWsolInfo = await connection.getAccountInfo(destinationWsolAta);
   const mintTokenVaultAta = await getAssociatedTokenAddress(new PublicKey(token.mint), new PublicKey(token.mint), true, TOKEN_PROGRAM_ID);
@@ -1464,7 +1465,6 @@ const processTransaction = async (
 }
 
 function parseAnchorError(logs: string[]): string {
-  console.log("parseAnchorError logs", logs);
   // TODO:
   // for (const log of logs) {
   //   const anchorErrorMatch = log.match(/Error Code: (\d+)\. Error Message: (.+)/);

@@ -101,8 +101,6 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
   }, [code, wallet, connection, fetchReferralData]);
 
   useEffect(() => {
-    console.log(referralData?.referrerMain.toBase58())
-    console.log(token.admin);
     if (referralData?.usageCount !== undefined && Number(referralData?.usageCount) >= 0 && referralUsageMaxCount > 0 && referralData?.referrerMain.toBase58() !== token.admin) {
       setUsageCountOk(referralData?.usageCount < referralUsageMaxCount);
     } else if (referralData?.referrerMain.toBase58() === token.admin) {
