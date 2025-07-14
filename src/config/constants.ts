@@ -62,8 +62,8 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     scanUrl: 'https://explorer.solana.com',
     apiBaseUrl: 'https://api.flipflop.plus',
     subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/proof_of_mint',
-    systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
-    protocolFeeAccount: new PublicKey("7x75mM5g8wx87bhjxhWKJPSb5mUboPGBWhRWA1AUBXmb"),
+    systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'), // Must be the original deployer to fix the system config pda account
+    protocolFeeAccount: new PublicKey("AJW5egb1aDk8Jv8WKURQhnM2z5RAnQrRBFwEz1TBa6Nz"),
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
     cpSwapProgram: new PublicKey("CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C"),
     cpSwapConfigAddress: new PublicKey("D4FPEruKEHrG5TenZ2mpDGEfu1iUvTiqBxvpU8HLBvC2"),
