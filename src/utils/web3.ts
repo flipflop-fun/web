@@ -116,6 +116,8 @@ export const initializeToken = async (
     const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configPda, true, TOKEN_PROGRAM_ID);
     const tokenVaultAta = await getAssociatedTokenAddress(mintPda, configPda, true, TOKEN_PROGRAM_ID);
     const mintTokenVaultAta = await getAssociatedTokenAddress(mintPda, mintPda, true, TOKEN_PROGRAM_ID);
+    const systemConfigData = await program.account.systemConfigData.fetch(systemConfigAccountPda);
+    const protocolFeeAccount = systemConfigData.protocolFeeAccount;
 
     const contextInitializeTokenAccounts = {
       metadata: metadataAccountPda,
@@ -127,7 +129,7 @@ export const initializeToken = async (
       wsolMint: NATIVE_MINT,
       wsolVault: wsolVaultAta,
       systemConfigAccount: systemConfigAccountPda,
-      protocolFeeAccount: NETWORK_CONFIGS[network].protocolFeeAccount,
+      protocolFeeAccount: protocolFeeAccount,
       tokenMetadataProgram: NETWORK_CONFIGS[network].tokenMetadataProgramId,
     }
 
@@ -536,7 +538,7 @@ export const getSystemConfig = async (
   }
 }
 
-export const getRefundAccountData = async (wallet: AnchorWallet, connection: Connection, token: InitiazlizedTokenData) => {
+export const getRefundAccountData = async (wallet: AnchorWallet, connection: Connection, mint: PublicKey) => {
   if (!wallet) return {
     success: false,
     message: 'Please connect wallet (web3.getRefundAccountData)'
@@ -544,7 +546,7 @@ export const getRefundAccountData = async (wallet: AnchorWallet, connection: Con
   const program = getProgram(wallet, connection);
   try {
     const [refundAccountPda] = PublicKey.findProgramAddressSync(
-      [Buffer.from(REFUND_SEEDS), new PublicKey(token.mint).toBuffer(), wallet.publicKey.toBuffer()],
+      [Buffer.from(REFUND_SEEDS), mint.toBuffer(), wallet.publicKey.toBuffer()],
       program.programId,
     );
     const refundAccountData = await program.account.tokenRefundData.fetch(refundAccountPda);
@@ -590,6 +592,8 @@ export const refund = async (
   }
   const tokenAta = await getAssociatedTokenAddress(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const payerWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
+  const systemConfigData = await program.account.systemConfigData.fetch(systemConfigAccountPda);
+  const protocolFeeAccount = systemConfigData.protocolFeeAccount;
   const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, new PublicKey(token.configAccount), true, TOKEN_PROGRAM_ID);
 
@@ -599,7 +603,7 @@ export const refund = async (
     configAccount: new PublicKey(token.configAccount),
     tokenAta,
     tokenVault: new PublicKey(token.tokenVault),
-    protocolFeeAccount: NETWORK_CONFIGS[network].protocolFeeAccount,
+    protocolFeeAccount: protocolFeeAccount,
     systemConfigAccount: systemConfigAccountPda,
     payer: wallet.publicKey,
     wsolVault: wsolVaultAta,
@@ -630,7 +634,7 @@ export const refund = async (
     if (!protocolWsolAtaData) tx.add(createAssociatedTokenAccountInstruction(
       wallet.publicKey,
       protocolWsolAta,
-      NETWORK_CONFIGS[network].protocolFeeAccount,
+      protocolFeeAccount,
       NATIVE_MINT,
       TOKEN_PROGRAM_ID
     ));
@@ -717,7 +721,9 @@ export const mintToken = async (
   );
   const configAccountPda = new PublicKey(token.configAccount);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configAccountPda, true, TOKEN_PROGRAM_ID);
-  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
+  const systemConfigData = await program.account.systemConfigData.fetch(systemConfigAccountPda);
+  const protocolFeeAccount = systemConfigData.protocolFeeAccount;
+  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
   const destinationWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const destinationWsolInfo = await connection.getAccountInfo(destinationWsolAta);
   const mintTokenVaultAta = await getAssociatedTokenAddress(new PublicKey(token.mint), new PublicKey(token.mint), true, TOKEN_PROGRAM_ID);
@@ -744,7 +750,7 @@ export const mintToken = async (
     referrerAta: referrerAta,
     referrerMain: referrerMain,
     referralAccount: referralAccountPda,
-    protocolFeeAccount: NETWORK_CONFIGS[network].protocolFeeAccount,
+    protocolFeeAccount: protocolFeeAccount,
     protocolWsolVault: protocolWsolAta,
     poolState: poolAddress,
     ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
@@ -752,10 +758,6 @@ export const mintToken = async (
     token0Mint: token0Mint,
     token1Mint: token1Mint,
   };
-
-  // console.log("=== mint accounts ===", Object.fromEntries(
-  //     Object.entries(mintAccounts).map(([key, value]) => [key, value.toString()])
-  // ));
 
   const instructionSetComputerUnitLimit = ComputeBudgetProgram.setComputeUnitLimit({ units: 500000 }); // or use --compute-unit-limit 400000 to run solana-test-validator
   const instructionCreateWSOLAta = createAssociatedTokenAccountInstruction( // Create WSOL for user if don't has

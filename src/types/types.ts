@@ -258,6 +258,7 @@ export type TokenListItem = {
   amount: string;
   tokenData?: InitiazlizedTokenData;
   metadata?: TokenMetadataIPFS | undefined;
+  totalMintFee?: BN;
 }
 
 export type HolderData = {

@@ -85,7 +85,8 @@
     "somethingIsWrong": "何か問題があります！",
     "errorLoadingUrcs": "URCの読み込みエラー",
     "rehearsalAlert": "これは正式なメインネットの前のリハーサルであり、最低資金とテスト返金の参加を行います！",
-    "launchPausedAlert": "リハーサルバージョンでは、トークンを作成できません！"
+    "launchPausedAlert": "リハーサルバージョンでは、トークンを作成できません！",
+    "avgPrice": "平均価格"
   },
   "menu": {
     "discover": "発見",

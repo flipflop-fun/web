@@ -525,7 +525,7 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
       if (chartContainerRef.current) {
         chartContainerRef.current.innerHTML = `
                     <div class="flex items-center justify-center h-[560px]">
-                        <div class="text-base-content">{t('common.loadingChartData')}</div>
+                        <div class="text-base-content">${t('common.loadingChartData')}</div>
                     </div>
                 `;
       }

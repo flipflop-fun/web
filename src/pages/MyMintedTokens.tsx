@@ -5,8 +5,8 @@ import { queryMyTokenList, queryTokensByMints } from '../utils/graphql';
 import { InitiazlizedTokenData, MyAccountProps, TokenListItem, TokenMetadataIPFS } from '../types/types';
 import { AddressDisplay } from '../components/common/AddressDisplay';
 import { TokenImage } from '../components/mintTokens/TokenImage';
-import { fetchMetadata } from '../utils/web3';
-import { BN_LAMPORTS_PER_SOL, BN_ZERO, filterTokenListItem, filterTokens, numberStringToBN } from '../utils/format';
+import { fetchMetadata, getRefundAccountData } from '../utils/web3';
+import { BN_LAMPORTS_PER_SOL, BN_ZERO, filterTokenListItem, filterTokens, formatPrice, numberStringToBN } from '../utils/format';
 import { useNavigate } from 'react-router-dom';
 import { ReferralCodeModal } from '../components/myAccount/ReferralCodeModal';
 import { RefundModal } from '../components/myAccount/RefundModal';
@@ -16,6 +16,7 @@ import { useDeviceType } from '../hooks/device';
 import { MyMintedTokenCard } from '../components/myAccount/MyMintedTokenCard';
 import { PageHeader } from '../components/common/PageHeader';
 import { useTranslation } from 'react-i18next';
+import { PublicKey } from '@solana/web3.js';
 
 export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   const { connection } = useConnection();
@@ -80,13 +81,30 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   }, [connection, wallet?.publicKey]);
 
   useEffect(() => {
-    if (myTokensData?.holdersEntities) {
-      // console.log('myTokensData', myTokensData?.holdersEntities)
+    if (myTokensData?.holdersEntities && wallet) {
       const tokensAfterFilter = filterTokenListItem(myTokensData?.holdersEntities);
       const mints = tokensAfterFilter.map((token: TokenListItem) => token.mint);
       setSearchMints(mints);
-      setTokenList(tokensAfterFilter);
       setTotalCount(Math.max(totalCount, (currentPage - 1) * pageSize + (mints.length ?? 0)));
+      const processTokens = async () => {
+        const processedTokens = await Promise.all(
+          tokensAfterFilter.map(async (token: TokenListItem) => {
+            const refundData = await getRefundAccountData(wallet, connection, new PublicKey(token.mint));
+            if (refundData.success && refundData.data) {
+              return {
+                ...token,
+                totalMintFee: refundData.data.totalMintFee
+              };
+            }
+            return {
+              ...token,
+              totalMintFee: null
+            };
+          })
+        );
+        setTokenList(processedTokens as TokenListItem[]);
+      };
+      processTokens();
     }
   }, [currentPage, myTokensData, pageSize, totalCount]);
 
@@ -176,7 +194,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
                   <th className=" text-left">{t('launch.tokenName')}/{t('launch.tokenSymbol')}</th>
                   <th className=" text-left">{t('tokenInfo.tokenAddress')}</th>
                   <th className=" text-right">{t('common.milestone')}</th>
-                  {/* <th className=" text-right">Status</th> */}
+                  <th className=" text-right">{t('common.avgPrice')}</th>
                   <th className=" text-right">{t('mint.minted')}</th>
                   <th className=" text-center">{t('common.actions')}</th>
                 </tr>
@@ -207,13 +225,9 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
                       <td className=" text-right">
                         {token.tokenData?.currentEra || '1'}
                       </td>
-                      {/* <td className=' text-right'>
-                                                {frozenStates[token.mint] !== undefined ? (frozenStates[token.mint] ? 
-                                                    <svg fill="none" className='w-4 h-4 text-error' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M15 2H9v2H7v4H4v14h16V8h-3V4h-2V2zm0 2v4H9V4h6zm-6 6h9v10H6V10h3zm4 3h-2v4h2v-4z" fill="currentColor"/> </svg> 
-                                                    : 
-                                                    <svg fill="none" className='w-4 h-4 text-success' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M15 2H9v2H7v2h2V4h6v4H4v14h16V8h-3V4h-2V2zm0 8h3v10H6V10h9zm-2 3h-2v4h2v-4z" fill="currentColor"/> </svg>) 
-                                                    : 'Loading...'}
-                                            </td> */}
+                      <td className=' text-right'>
+                        {formatPrice(Number(token.totalMintFee)/Number(numberStringToBN(token.amount)))} SOL
+                      </td>
                       <td className=" text-right">
                         {(numberStringToBN(token.amount).div(BN_LAMPORTS_PER_SOL)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       </td>

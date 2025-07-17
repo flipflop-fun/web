@@ -47,7 +47,6 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     apiBaseUrl: 'https://api-dev.flipflop.plus',
     subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/my_project',
     systemDeployer: new PublicKey('CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79'),
-    protocolFeeAccount: new PublicKey("CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79"),
     allowOwnerOffCurveForProtocolFeeAccount: false,
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
     cpSwapProgram: new PublicKey("CPMDWBwJDtYax9qW7AyRuVC19Cc4L4Vcy4n2BHAbHkCW"), // devnet
@@ -64,7 +63,6 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     apiBaseUrl: 'https://api.flipflop.plus',
     subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/proof_of_mint',
     systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'), // Must be the original deployer to fix the system config pda account
-    protocolFeeAccount: new PublicKey("AJW5egb1aDk8Jv8WKURQhnM2z5RAnQrRBFwEz1TBa6Nz"), // mulsig account, pda account, so the allowOwnerOffCurveForProtocolFeeAccount should be true
     allowOwnerOffCurveForProtocolFeeAccount: true,
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
     cpSwapProgram: new PublicKey("CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C"),
