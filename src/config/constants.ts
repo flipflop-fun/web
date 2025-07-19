@@ -73,6 +73,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
   } as NetworkConfig,
 };
 
+export const CHART_API_URL = 'https://chart-api.flipflop.plus/api/v1/ohlc';
 export const METADATA_SEED = "metadata";
 export const MINT_SEED = "fair_mint";
 export const CONFIG_DATA_SEED = "config_data";

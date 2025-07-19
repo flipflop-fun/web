@@ -1,22 +1,25 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { createChart, UTCTimestamp } from 'lightweight-charts';
-import { useLazyQuery } from '@apollo/client';
-import { queryAllTokenMintForChart } from '../../utils/graphql';
-import { formatPrice, processRawData } from '../../utils/format';
+import { formatPrice } from '../../utils/format';
 import { TokenChartsProps } from '../../types/types';
-import { LOCAL_STORAGE_HISTORY_CACHE_EXPIRY, LOCAL_STORAGE_HISTORY_CACHE_PREFIX } from '../../config/constants';
+import { CHART_API_URL, LOCAL_STORAGE_HISTORY_CACHE_EXPIRY, LOCAL_STORAGE_HISTORY_CACHE_PREFIX } from '../../config/constants';
 import { useTranslation } from 'react-i18next';
 
-type TimeFrame = '1min' | '5min' | '15min' | '30min' | '1hour' | '2hour' | '4hour' | 'day';
+type TimeFrame = '5min' | '15min' | '30min' | '1hour' | '4hour' | 'day';
 
 const USE_CACHE = false;
 
+// API period mapping
+const timeFrameApiMap: Record<TimeFrame, string> = {
+  "5min": "5m",
+  "15min": "15m",
+  "30min": "30m",
+  "1hour": "1h",
+  "4hour": "4h",
+  "day": "1d"
+};
+
 const timeFrameDatas = {
-  "1min": {
-    label: "1 Minutes",
-    bars: 240,
-    minutes: 1,
-  },
   "5min": {
     label: "5 Minutes",
     bars: 144,
@@ -37,11 +40,6 @@ const timeFrameDatas = {
     bars: 24,
     minutes: 60,
   },
-  "2hour": {
-    label: "2 Hours",
-    bars: 48,
-    minutes: 120,
-  },
   "4hour": {
     label: "4 Hours",
     bars: 42,
@@ -54,27 +52,39 @@ const timeFrameDatas = {
   },
 }
 
+interface OHLCData {
+  id: number;
+  mint_id: string;
+  period: string;
+  timestamp: string;
+  open_price: string;
+  high_price: string;
+  low_price: string;
+  close_price: string;
+  volume: string;
+  trade_count: number;
+  updated_at: string;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data: OHLCData[];
+  cached: boolean;
+}
+
 export const TokenCharts: React.FC<TokenChartsProps> = ({
   token,
   height,
 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
-  const [timeFrame, setTimeFrame] = useState<TimeFrame>('5min');
+  const [timeFrame, setTimeFrame] = useState<TimeFrame>('4hour');
   const [isLineChart, setIsLineChart] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const chart = useRef<any>(null);
   const series = useRef<any>(null);
   const volumeSeries = useRef<any>(null);
-  const baseData = useRef<any[]>([]);
-  const timeFrameData = useRef<Record<TimeFrame, any[]>>({
-    '1min': [],
-    '5min': [],
-    '15min': [],
-    '30min': [],
-    '1hour': [],
-    '2hour': [],
-    '4hour': [],
-    'day': []
-  });
+  const chartData = useRef<any[]>([]);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
   const gridColor = 'rgba(70, 130, 180, 0.1)';
@@ -288,15 +298,15 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
     });
   }
 
-  const initializeChart = (chartRef: HTMLDivElement, _isLineChart: boolean, _timeFrame: TimeFrame) => {
+  const initializeChart = (chartRef: HTMLDivElement, _isLineChart: boolean) => {
     chartRef.innerHTML = '';
     createMainChart(chartRef);
     addChart(_isLineChart);
     addHistogramSeries();
     applyOptions();
     subscribeCrosshairMove(_isLineChart);
-    if (timeFrameData.current[_timeFrame].length > 0) {
-      updateChartData(_isLineChart, _timeFrame);
+    if (chartData.current.length > 0) {
+      updateChartData(_isLineChart);
     }
     window.addEventListener('resize', handleResize);
     return () => {
@@ -373,10 +383,10 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
     }
   };
 
-  const updateChartData = (_isLineChart: boolean, _timeFrame: TimeFrame) => {
-    if (!chart.current || !timeFrameData.current[_timeFrame].length || !series.current) return;
+  const updateChartData = (_isLineChart: boolean) => {
+    if (!chart.current || !chartData.current.length || !series.current) return;
 
-    const data = timeFrameData.current[_timeFrame];
+    const data = chartData.current;
     if (_isLineChart) {
       const lineData = data.map(item => ({
         time: item.time as UTCTimestamp,
@@ -395,7 +405,7 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
       })));
     }
 
-    const visibleBars = timeFrameDatas[_timeFrame].bars;
+    const visibleBars = timeFrameDatas[timeFrame].bars;
     const timeScale = chart.current.timeScale();
     const lastIndex = data.length - 1;
 
@@ -406,104 +416,94 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
     });
   }
 
-  const [fetchMintData, { loading, error }] = useLazyQuery(queryAllTokenMintForChart, {
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      if (data?.mintTokenEntities && data.mintTokenEntities.length > 0) {
-        try {
-          setCachedData(token.mint, timeFrame, data.mintTokenEntities);
-          processAndUpdateData(data.mintTokenEntities, timeFrame);
-        } catch (processingError) {
-          console.error('Error processing fetched data:', processingError);
-        }
-      } else {
-        console.warn('No token entities found for mint:', token?.mint);
-      }
-    },
-    onError: (err) => {
-      console.error('GraphQL Query Error:', {
-        errorMessage: err.message,
-        errorDetails: err
-      });
-    }
-  });
+  // Fetch chart data API call
+  const fetchChartData = async (_timeFrame: TimeFrame) => {
+    if (!token?.mint) return;
 
-  const processAndUpdateData = (mintTokenEntities: any[], _timeFrame: TimeFrame) => {
-    if (!token?.feeRate) return;
+    setLoading(true);
+    setError(null);
 
     try {
-      baseData.current = processRawData(mintTokenEntities, parseFloat(token.feeRate));
-      timeFrameData.current['1min'] = baseData.current;
+      // Check cache
+      const cachedData = getCachedData(token.mint, _timeFrame);
+      if (cachedData && USE_CACHE) {
+        processApiData(cachedData);
+        setLoading(false);
+        return;
+      }
 
-      const timeFrames: TimeFrame[] = ['5min', '15min', '30min', '1hour', '2hour', '4hour', 'day'];
-      timeFrames.forEach(tf => {
-        const minutes = timeFrameDatas[tf].minutes;
-        timeFrameData.current[tf] = aggregateCandles(baseData.current, minutes);
+      // Build API URL
+      const apiPeriod = timeFrameApiMap[_timeFrame];
+      const apiUrl = `${CHART_API_URL}/${token.mint}?period=${apiPeriod}&limit=50`;
+      
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'x-api-key': process.env.REACT_APP_CHART_API_KEY || '',
+          'Content-Type': 'application/json'
+        }
       });
 
-      updateChartData(isLineChart, _timeFrame);
-    } catch (err) {
-      console.error('Error processing data:', err);
-    }
-  }
-
-  const aggregateCandles = (data: any[], timeFrameMinutes: number) => {
-    if (!data.length) return [];
-
-    const result = [];
-    let currentCandle: any = null;
-
-    for (const candle of data) {
-      const candleTime = candle.time;
-      const periodTime = candleTime - (candleTime % (timeFrameMinutes * 60));
-
-      if (!currentCandle || currentCandle.time !== periodTime) {
-        if (currentCandle) {
-          result.push(currentCandle);
-        }
-        currentCandle = {
-          time: periodTime,
-          open: candle.open,
-          high: candle.high,
-          low: candle.low,
-          close: candle.close,
-          volume: candle.volume
-        };
-      } else {
-        currentCandle.high = Math.max(currentCandle.high, candle.high);
-        currentCandle.low = Math.min(currentCandle.low, candle.low);
-        currentCandle.close = candle.close;
-        currentCandle.volume += candle.volume;
+      if (!response.ok) {
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`);
       }
-    }
 
-    if (currentCandle) {
-      result.push(currentCandle);
-    }
+      const result: ApiResponse = await response.json();
+      
+      if (!result.success || !result.data || result.data.length === 0) {
+        throw new Error('No data available for this token');
+      }
 
-    return result;
+      // Cache data
+      setCachedData(token.mint, _timeFrame, result.data);
+      
+      // Process data
+      processApiData(result.data);
+      
+    } catch (err) {
+      console.error('Error fetching chart data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch chart data');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const _loadData = (_timeFrame: TimeFrame) => {
+  // Process API response data
+  const processApiData = (apiData: OHLCData[]) => {
     try {
-      const cachedData = getCachedData(token.mint, _timeFrame);
+      // Convert API data to chart format
+      const processedData = apiData
+        .map(item => ({
+          time: parseInt(item.timestamp) as UTCTimestamp,
+          open: parseFloat(item.open_price),
+          high: parseFloat(item.high_price),
+          low: parseFloat(item.low_price),
+          close: parseFloat(item.close_price),
+          volume: parseFloat(item.volume)
+        }))
+        .sort((a, b) => a.time - b.time); // Sort by time
 
-      if (cachedData && USE_CACHE) {
-        processAndUpdateData(cachedData, _timeFrame);
-      } else {
-        fetchMintData({
-          variables: {
-            skip: 0,
-            first: 1000,
-            mint: token.mint
-          }
-        });
-      }
+      // For data monitoring, print OHLC+volume and time in table format
+      // const tableData = processedData.map(item => ({
+      //   Time: new Date(item.time * 1000).toLocaleString('en-US'),
+      //   Open: item.open.toFixed(8),
+      //   High: item.high.toFixed(8),
+      //   Low: item.low.toFixed(8),
+      //   Close: item.close.toFixed(8),
+      //   Volume: item.volume.toLocaleString()
+      // }));
+      
+      // console.log(`\n=== ${timeFrame} Period Data Monitor ===`);
+      // console.table(tableData);
+      // console.log(`Data Count: ${tableData.length}`);
+
+      chartData.current = processedData;
+      updateChartData(isLineChart);
     } catch (err) {
-      console.error('Error loading data:', err);
+      console.error('Error processing API data:', err);
+      setError('Failed to process chart data');
     }
-  }
+  };
 
   const _loadChart = (_timeFrame: TimeFrame) => {
     if (chart.current) {
@@ -511,15 +511,18 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
       chart.current = null;
     }
 
-    if (chartContainerRef?.current) initializeChart(chartContainerRef.current, isLineChart, _timeFrame);
-    else return;
+    if (chartContainerRef?.current) {
+      initializeChart(chartContainerRef.current, isLineChart);
+    }
   }
 
+  // Load data
   useEffect(() => {
     if (!token?.mint) return;
-    _loadData(timeFrame);
-  }, [token?.mint]);
+    fetchChartData(timeFrame);
+  }, [token?.mint, timeFrame]);
 
+  // Handle loading state and chart redraw
   useEffect(() => {
     if (loading) {
       if (chartContainerRef.current) {
@@ -533,7 +536,9 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
     } else if (error) {
       if (chartContainerRef.current) {
         chartContainerRef.current.innerHTML = `
-                    <ErrorBox title={t('common.errorLoadingChartData')} message={error.message} />
+                    <div class="flex items-center justify-center h-[560px]">
+                        <div class="text-error">${error}</div>
+                    </div>
                 `;
       }
       return;
@@ -549,15 +554,18 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
           <div className="flex items-center space-x-2">
             <button
               className="btn btn-sm btn-secondary"
-              onClick={() => _loadData(timeFrame)}
+              onClick={() => fetchChartData(timeFrame)}
+              disabled={loading}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
+              {loading ? 'Loading...' : 'Refresh'}
             </button>
             <button
               className="btn btn-sm btn-secondary"
               onClick={() => setIsLineChart(!isLineChart)}
+              disabled={loading}
             >
               {isLineChart ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -577,9 +585,9 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
               value={timeFrame}
               onChange={(e) => {
                 setTimeFrame(e.target.value as TimeFrame);
-                _loadChart(e.target.value as TimeFrame);
               }}
               className="select select-bordered select-sm w-40 bg-base-300 text-base-content"
+              disabled={loading}
             >
               {Object.entries(timeFrameDatas).map(([key, value]) => (
                 <option key={key} value={key}>
