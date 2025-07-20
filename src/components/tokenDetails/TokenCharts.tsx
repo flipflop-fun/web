@@ -2,12 +2,13 @@ import React, { useRef, useState, useEffect } from 'react';
 import { createChart, UTCTimestamp } from 'lightweight-charts';
 import { formatPrice } from '../../utils/format';
 import { TokenChartsProps } from '../../types/types';
-import { CHART_API_URL, LOCAL_STORAGE_HISTORY_CACHE_EXPIRY, LOCAL_STORAGE_HISTORY_CACHE_PREFIX } from '../../config/constants';
+import { LOCAL_STORAGE_HISTORY_CACHE_EXPIRY, LOCAL_STORAGE_HISTORY_CACHE_PREFIX, NETWORK_CONFIGS } from '../../config/constants';
 import { useTranslation } from 'react-i18next';
 
 type TimeFrame = '5min' | '15min' | '30min' | '1hour' | '4hour' | 'day';
 
 const USE_CACHE = false;
+const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
 // API period mapping
 const timeFrameApiMap: Record<TimeFrame, string> = {
@@ -434,7 +435,7 @@ export const TokenCharts: React.FC<TokenChartsProps> = ({
 
       // Build API URL
       const apiPeriod = timeFrameApiMap[_timeFrame];
-      const apiUrl = `${CHART_API_URL}/${token.mint}?period=${apiPeriod}&limit=50`;
+      const apiUrl = `${NETWORK_CONFIGS[network].chartApiUrl}/${token.mint}?period=${apiPeriod}&limit=50`;
       
       const response = await fetch(apiUrl, {
         method: 'GET',

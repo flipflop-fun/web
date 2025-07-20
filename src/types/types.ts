@@ -673,6 +673,7 @@ export interface NetworkConfig {
   addressLookupTableAddress: PublicKey;
   subgraphUrl: string;
   thegraphApiKey?: string;
+  chartApiUrl: string;
 }
 
 export interface NetworkConfigs {

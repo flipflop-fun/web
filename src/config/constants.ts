@@ -54,6 +54,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     createPoolFeeReceive: new PublicKey("G11FKBRaAkHAKuLCgLM6K6NUc9rTjPAznRCjZifrTQe2"), // find address on devnet
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("EebRqpLtUgjX17pJJNNbd6ngtYa34VGa51oYsibwJRXy"),
+    chartApiUrl: 'https://chart-api-testnet.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
   mainnet_beta: {
     isPaused: true, // launching is paused, should be same as on-chain
@@ -70,10 +71,10 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     createPoolFeeReceive: new PublicKey("DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8"),
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("7DK7pmNkUeeFB3yxt6bJcPCWcG4L3AdCe2WZaBguy9sq"),
+    chartApiUrl: 'https://chart-api.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
 };
 
-export const CHART_API_URL = 'https://chart-api.flipflop.plus/api/v1/ohlc';
 export const METADATA_SEED = "metadata";
 export const MINT_SEED = "fair_mint";
 export const CONFIG_DATA_SEED = "config_data";
@@ -101,7 +102,7 @@ export const COMMENT_MIN_BALANCE = 0.2;
 
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
-export const API_BASE_URI = process.env.REACT_APP_ENV === "development" ? "http://127.0.0.1:8000" : NETWORK_CONFIGS[network].apiBaseUrl; // "https://flipflop-api.vercel.app"; // "api-pearl-two-75.vercel.app";
+export const API_BASE_URI = process.env.REACT_APP_ENV === "development" ? "http://127.0.0.1:8000" : NETWORK_CONFIGS[network].apiBaseUrl;
 export const STORAGE = "irys" as "irys" | "arweave";
 export const UPLOAD_API_URL = STORAGE === "arweave" ? `${API_BASE_URI}/api/arweave` : `${API_BASE_URI}/api/irys`; // PRODUCTION
 export const COPILOTKIT_RUNTIME_URL = `${API_BASE_URI}/api/gpt/copilotkit`;
