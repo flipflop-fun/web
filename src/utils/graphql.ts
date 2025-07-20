@@ -342,6 +342,7 @@ query GetTokenTransactions($mint: String!, $skip: Int!, $first: Int!) {
         skip: $skip
         first: $first
         orderBy: timestamp
+        orderDirection: desc
     ) {
         timestamp
         mintSizeEpoch

@@ -20,7 +20,6 @@ export const RefundModal: FC<RefundModalProps> = ({
   const wallet = useAnchorWallet();
   const [loading, setLoading] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  // const [protocolFeeAccount, setProtocolFeeAccount] = useState<PublicKey>(PublicKey.default);
   const [refundFeeRate, setRefundFeeRate] = useState(0);
   const [refundAccountData, setRefundAccountData] = useState<RefundTokenData>();
   const [tokenBalance, setTokenBalance] = useState(0);
@@ -31,13 +30,12 @@ export const RefundModal: FC<RefundModalProps> = ({
     if (wallet) {
       getSystemConfig(wallet, connection).then((data) => {
         if (data?.success && data.data) {
-          // console.log("protocol fee account", data.data.protocolFeeAccount.toBase58());
-          // setProtocolFeeAccount(data.data.systemConfigData.protocolFeeAccount);
           setRefundFeeRate(data.data.systemConfigData.refundFeeRate);
         }
         else toast.error("RefundModal.useEffect.1: " + data.message as string);
       });
-      getRefundAccountData(wallet, connection, token.tokenData as InitiazlizedTokenData).then((data) => {
+      const mint = new PublicKey(token.mint as string);
+      getRefundAccountData(wallet, connection, mint).then((data) => {
         if (data?.success) setRefundAccountData(data.data);
         else toast.error("RefundModal.useEffect.2: " + data.message as string);
       });

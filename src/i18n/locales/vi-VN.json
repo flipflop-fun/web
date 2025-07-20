@@ -85,8 +85,8 @@
     "somethingIsWrong": "Có gì đó không ổn!",
     "errorLoadingUrcs": "Lỗi khi tải URCs",
     "rehearsalAlert": "Đây là buổi diễn tập trước Mainnet chính thức, tham gia vào quỹ tối thiểu và kiểm tra hoàn tiền!",
-    "launchPausedAlert": "Trong phiên bản Diễn tập, không thể tạo mã thông báo!"
-
+    "launchPausedAlert": "Trong phiên bản Diễn tập, không thể tạo mã thông báo!",
+    "avgPrice": "Giá trung bình"
   },
   "menu": {
     "discover": "Khám phá",

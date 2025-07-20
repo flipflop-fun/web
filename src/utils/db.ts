@@ -106,7 +106,7 @@ export const getCachedData = async (url: string): Promise<ArrayBuffer | null> =>
           
           deleteRequest.onerror = () => {
             db.close();
-            resolve(null); // 即使删除失败也返回 null，避免阻塞
+            resolve(null);
           };
         } else {
           db.close();

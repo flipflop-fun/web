@@ -258,6 +258,7 @@ export type TokenListItem = {
   amount: string;
   tokenData?: InitiazlizedTokenData;
   metadata?: TokenMetadataIPFS | undefined;
+  totalMintFee?: BN;
 }
 
 export type HolderData = {
@@ -663,6 +664,7 @@ export interface NetworkConfig {
   scanUrl: string;
   systemDeployer: PublicKey;
   protocolFeeAccount: PublicKey;
+  allowOwnerOffCurveForProtocolFeeAccount: boolean;
   tokenMetadataProgramId: PublicKey;
   cpSwapProgram: PublicKey;
   cpSwapConfigAddress: PublicKey;
@@ -671,6 +673,7 @@ export interface NetworkConfig {
   addressLookupTableAddress: PublicKey;
   subgraphUrl: string;
   thegraphApiKey?: string;
+  chartApiUrl: string;
 }
 
 export interface NetworkConfigs {

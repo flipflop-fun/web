@@ -47,13 +47,14 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     apiBaseUrl: 'https://api-dev.flipflop.plus',
     subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/my_project',
     systemDeployer: new PublicKey('CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79'),
-    protocolFeeAccount: new PublicKey("CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79"),
+    allowOwnerOffCurveForProtocolFeeAccount: false,
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
     cpSwapProgram: new PublicKey("CPMDWBwJDtYax9qW7AyRuVC19Cc4L4Vcy4n2BHAbHkCW"), // devnet
     cpSwapConfigAddress: new PublicKey("9zSzfkYy6awexsHvmggeH36pfVUdDGyCcwmjT3AQPBj6"), // find address on devnet
     createPoolFeeReceive: new PublicKey("G11FKBRaAkHAKuLCgLM6K6NUc9rTjPAznRCjZifrTQe2"), // find address on devnet
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("EebRqpLtUgjX17pJJNNbd6ngtYa34VGa51oYsibwJRXy"),
+    chartApiUrl: 'https://chart-api-testnet.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
   mainnet_beta: {
     isPaused: true, // launching is paused, should be same as on-chain
@@ -62,14 +63,15 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     scanUrl: 'https://explorer.solana.com',
     apiBaseUrl: 'https://api.flipflop.plus',
     subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/proof_of_mint',
-    systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
-    protocolFeeAccount: new PublicKey("7x75mM5g8wx87bhjxhWKJPSb5mUboPGBWhRWA1AUBXmb"),
+    systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'), // Must be the original deployer to fix the system config pda account
+    allowOwnerOffCurveForProtocolFeeAccount: true,
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
     cpSwapProgram: new PublicKey("CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C"),
     cpSwapConfigAddress: new PublicKey("D4FPEruKEHrG5TenZ2mpDGEfu1iUvTiqBxvpU8HLBvC2"),
     createPoolFeeReceive: new PublicKey("DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8"),
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("7DK7pmNkUeeFB3yxt6bJcPCWcG4L3AdCe2WZaBguy9sq"),
+    chartApiUrl: 'https://chart-api.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
 };
 
@@ -100,7 +102,7 @@ export const COMMENT_MIN_BALANCE = 0.2;
 
 export const PAGE_SIZE_OPTIONS = [5, 10, 20, 50];
 const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
-export const API_BASE_URI = process.env.REACT_APP_ENV === "development" ? "http://127.0.0.1:8000" : NETWORK_CONFIGS[network].apiBaseUrl; // "https://flipflop-api.vercel.app"; // "api-pearl-two-75.vercel.app";
+export const API_BASE_URI = process.env.REACT_APP_ENV === "development" ? "http://127.0.0.1:8000" : NETWORK_CONFIGS[network].apiBaseUrl;
 export const STORAGE = "irys" as "irys" | "arweave";
 export const UPLOAD_API_URL = STORAGE === "arweave" ? `${API_BASE_URI}/api/arweave` : `${API_BASE_URI}/api/irys`; // PRODUCTION
 export const COPILOTKIT_RUNTIME_URL = `${API_BASE_URI}/api/gpt/copilotkit`;
