@@ -6,7 +6,7 @@ import { InitiazlizedTokenData, RefundModalProps, RefundTokenData } from '../../
 import { getRefundAccountData, getSystemConfig, getTokenBalanceByMintAndOwner, refund } from '../../utils/web3';
 import { ToastBox } from '../common/ToastBox';
 import { NETWORK_CONFIGS } from '../../config/constants';
-import { formatPrice } from '../../utils/format';
+import { formatPrice, numberStringToBN } from '../../utils/format';
 import AlertBox from '../common/AlertBox';
 import { ModalTopBar } from '../common/ModalTopBar';
 import { useTranslation } from 'react-i18next';
@@ -143,6 +143,16 @@ export const RefundModal: FC<RefundModalProps> = ({
                   } {token.tokenData?.tokenSymbol}
                 </span>
               </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-base-content/70">{t('common.avgPrice')}</span>
+                <span className="font-medium text-error">
+                  {refundAccountData ?
+                    formatPrice(Number(refundAccountData.totalMintFee) / Number(numberStringToBN(token.amount))) :
+                    '-'
+                  } {token.tokenData?.tokenSymbol}
+                </span>
+              </div>
+
               <div className="flex justify-between items-center text-sm">
                 <span className="text-base-content/70">{t('mint.balanceInWallet')}</span>
                 <span className="font-medium text-error">

@@ -594,7 +594,7 @@ export const refund = async (
   const payerWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const systemConfigData = await program.account.systemConfigData.fetch(systemConfigAccountPda);
   const protocolFeeAccount = systemConfigData.protocolFeeAccount;
-  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
+  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, new PublicKey(token.configAccount), true, TOKEN_PROGRAM_ID);
 
   const refundAccounts = {
