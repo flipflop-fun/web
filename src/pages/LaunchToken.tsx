@@ -14,6 +14,7 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { BN } from '@coral-xyz/anchor';
 import { PageHeader } from '../components/common/PageHeader';
 import { useTranslation } from 'react-i18next';
+import { AdvancedSettings } from '../components/launchToken/AdvancedSettings';
 // import { VanityAddress } from '../components/launchToken/VanityAddress';
 
 export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
@@ -31,6 +32,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
   // const [decimals, setDecimals] = useState(9);
 
   const [showSocial, setShowSocial] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   // const [showVanityAddress, setShowVanityAddress] = useState(false);
   // const [vanityAddress, setVanityAddress] = useState('');
   const [website, setWebsite] = useState('');
@@ -428,7 +430,9 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
               <div className='text-xs'>{t('launch.memeLaunchDescription2')}</div>
             </div>
           </div>
-          {/* <div className="mt-6">
+          {/* Show customeized setting */}
+          {true &&
+          <div className="mt-6">
             <ToggleSwitch
               id="toggleAdvanced"
               label="Advanced Settings(Optional)"
@@ -456,7 +460,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
                 onDisplayInitialTargetMintSizePerEpochChange={setDisplayInitialTargetMintSizePerEpoch}
               />
             )}
-          </div> */}
+          </div>}
           {error && (
             <div className="text-error text-sm mt-1">{error}</div>
           )}
