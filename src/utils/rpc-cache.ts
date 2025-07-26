@@ -223,16 +223,11 @@ export class SafeRPCCache {
   }
 }
 
-// Global cache instance with safe defaults
+// Global cache instance with optimized defaults
 export const rpcCache = new SafeRPCCache({
   accountCacheTtl: 30000,
   balanceCacheTtl: 10000,
   poolDataCacheTtl: 10000,
   metadataCacheTtl: 60000,
-  enableCaching: true // Can be toggled via environment variable
+  enableCaching: true
 });
-
-// Environment variable to disable caching for debugging
-if (process.env.REACT_APP_DISABLE_RPC_CACHE === 'true') {
-  rpcCache.setCachingEnabled(false);
-}
