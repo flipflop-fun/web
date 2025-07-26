@@ -3,6 +3,7 @@ import {
   BlockhashWithExpiryBlockHeight,
   ComputeBudgetProgram,
   Connection,
+  LAMPORTS_PER_SOL,
   PublicKey,
   SystemProgram,
   Transaction,
@@ -717,6 +718,31 @@ export const mintToken = async (
   if (referrerMain.toBase58() === wallet.publicKey.toBase58()) return {
     success: false,
     message: 'You cannot be your own referrer'
+  }
+
+  // Check wallet balance before minting
+  try {
+    const balance = await connection.getBalance(wallet.publicKey);
+    const requiredFee = Number(token.feeRate);
+    
+    if (balance < requiredFee) {
+      const balanceInSol = (balance / LAMPORTS_PER_SOL).toFixed(4);
+      const requiredFeeInSol = (requiredFee / LAMPORTS_PER_SOL).toFixed(4);
+      return {
+        success: false,
+        message: 'insufficient_balance',
+        data: {
+          currentBalance: balanceInSol,
+          requiredFee: requiredFeeInSol
+        }
+      };
+    }
+  } catch (error) {
+    console.error('Error checking wallet balance:', error);
+    return {
+      success: false,
+      message: 'balance_check_error'
+    };
   }
 
   const program = getProgram(wallet, connection);
@@ -1610,6 +1636,17 @@ export const getMintDiscount = async (
   };
 };
 
+interface Creator {
+  address: PublicKey;
+  verified: boolean;
+  share?: number;
+}
+
+interface Collection {
+  key: PublicKey;
+  verified: boolean;
+}
+
 async function getLegacyTokenMetadataAccountData(connection: Connection, metadataAccountPda: PublicKey): Promise<ResponseData> {
   try {
     const metadataAccountInfo = await connection.getAccountInfo(metadataAccountPda);
@@ -1654,7 +1691,7 @@ async function getLegacyTokenMetadataAccountData(connection: Connection, metadat
     const hasCreators = data[currentPos];
     currentPos += 1;
 
-    let creators = [];
+    let creators: Creator[] = [];
     if (hasCreators) {
       const creatorsLength = data.readUInt32LE(currentPos);
       currentPos += 4;
@@ -1665,20 +1702,20 @@ async function getLegacyTokenMetadataAccountData(connection: Connection, metadat
         currentPos += 1;
         const share = data[currentPos];
         currentPos += 1;
-        creators.push({ address: creatorAddress, verified, share });
+        creators.push({ address: creatorAddress, verified, share } as Creator as never);
       }
     }
 
     // Parse collection
     const hasCollection = data[currentPos];
     currentPos += 1;
-    let collection = null;
+    let collection = {};
     if (hasCollection) {
       const collectionKey = new PublicKey(data.slice(currentPos, currentPos + 32));
       currentPos += 32;
       const verified = data[currentPos] === 1;
       currentPos += 1;
-      collection = { key: collectionKey, verified };
+      collection = { key: collectionKey, verified } as Collection;
     }
 
     // Finally, parse isMutable
@@ -1694,15 +1731,15 @@ async function getLegacyTokenMetadataAccountData(connection: Connection, metadat
         symbol,
         uri,
         sellerFeeBasisPoints,
-        creators: creators.map(c => ({
+        creators: (creators as any[]).map((c: Creator) => ({
           address: c.address,
           verified: c.verified,
           share: c.share
         })),
       },
       collection: collection ? {
-        key: collection.key.toBase58(),
-        verified: collection.verified
+        key: (collection as Collection).key.toBase58(),
+        verified: (collection as Collection).verified
       } : null,
     } as MetadataAccouontData;
 

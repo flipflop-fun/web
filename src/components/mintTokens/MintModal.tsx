@@ -160,9 +160,25 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
         setLoading(false);
         // close();
       } else {
-        if (result.message !== "Error: ") toast.error("MintModal: " + result.message as string, {
-          id: toastId,
-        });
+        if (result.message === "insufficient_balance") {
+          const currentBalance = result.data?.currentBalance || "0";
+          const requiredFee = result.data?.requiredFee || "0";
+          toast.error(
+            <div>
+              <div>{t('common.insufficientBalance')}</div>
+              <div className="text-sm opacity-80">
+                {t('common.current')}: {currentBalance} SOL, {t('common.min')}: {requiredFee} SOL
+              </div>
+            </div>,
+            {
+              id: toastId,
+            }
+          );
+        } else {
+          if (result.message !== "Error: ") toast.error("MintModal: " + result.message as string, {
+            id: toastId,
+          });
+        }
         setLoading(false);
       }
     } catch (error: any) {
