@@ -345,6 +345,28 @@ export const isImageFile = (file: File): boolean => {
   return allowedTypes.includes(file.type);
 };
 
+export const parseAnchorError = (logs: string[]): string => {
+  if (!logs || logs.length === 0) return 'Transaction failed';
+  
+  // Look for specific error patterns in logs
+  for (const log of logs) {
+    if (log.includes('Program log: Error:')) {
+      return log.split('Program log: Error:')[1].trim();
+    }
+    if (log.includes('Program failed to complete')) {
+      return 'Program execution failed';
+    }
+    if (log.includes('insufficient funds')) {
+      return 'Insufficient funds for transaction';
+    }
+    if (log.includes('Account does not exist')) {
+      return 'Required account does not exist';
+    }
+  }
+  
+  return logs[logs.length - 1] || 'Transaction failed';
+};
+
 export const compressImage = (file: File, maxSize: number = 1048576): Promise<File> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
