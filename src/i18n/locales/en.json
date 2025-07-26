@@ -560,7 +560,12 @@
     "registrationSuccessful": "Registration successful!",
     "registrationFailed": "Registration failed: ",
     "registrationFailedGeneric": "Registration failed. Please try again.",
-    "authProviderError": "useAuth must be used within an AuthProvider"
+    "authProviderError": "useAuth must be used within an AuthProvider",
+    "loginSuccessful": "Login successful!",
+    "userRejected": "User rejected the signature request",
+    "walletNotConnected": "Wallet not connected",
+    "unknownError": "Unknown error occurred",
+    "refreshFollowingFailed": "Failed to refresh following list"
   },
   "theme": {
     "themeProviderError": "useTheme must be used within a ThemeProvider"

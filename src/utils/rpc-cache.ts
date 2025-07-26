@@ -50,20 +50,17 @@ export class SafeRPCCache {
     const ttl = maxAge || this.config.accountCacheTtl;
 
     if (cached && Date.now() - cached.timestamp < ttl) {
-      console.debug(`[RPC Cache] Cache hit for account ${key}`);
       return cached.data;
     }
 
     try {
       const account = await connection.getAccountInfo(publicKey);
       this.accountCache.set(key, { data: account, timestamp: Date.now() });
-      console.debug(`[RPC Cache] Cache miss for account ${key}, fetched from RPC`);
       return account;
     } catch (error) {
-      console.error(`[RPC Cache] Error fetching account ${key}:`, error);
+      console.error(`Error fetching account ${key}:`, error);
       // Return cached data if available and not too old (extended TTL)
       if (cached && Date.now() - cached.timestamp < ttl * 3) {
-        console.warn(`[RPC Cache] Returning stale data for ${key} due to error`);
         return cached.data;
       }
       throw error;

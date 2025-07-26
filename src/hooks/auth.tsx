@@ -43,9 +43,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     signatureBase58: string;
     message: string;
   } | null>(null);
-  const initialLoginAttemptedRef = useRef(false); // Use this as signal to prevent multiple login attempts
-  const handledLoginRef = useRef(false); // Use this as signal to prevent multiple login attempts
-  const isLoggingIn = useRef(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const initialLoginAttemptedRef = useRef(false);
+  const handledLoginRef = useRef(false);
   const { t } = useTranslation();
 
   // Define callback functions first
@@ -55,17 +55,19 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         const result = await getFollowing(token);
         if (!result.success) {
           if (result.message === "Invalid token") {
-            if (!isLoggingIn.current) handleLogin();
+            if (!isLoggingIn) handleLogin();
+          } else {
+            toast.error(result.message as string);
           }
-          else toast.error(result.message as string);
           return;
         }
         setFollowing(result.data);
       } catch (error) {
         console.error('Failed to fetch following:', error);
+        toast.error(t('auth.refreshFollowingFailed'));
       }
     }
-  }, [connected, signMessage, token]);
+  }, [connected, signMessage, token, t, isLoggingIn]);
 
   const logout = useCallback(() => {
     setToken(null);
@@ -76,35 +78,49 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   }, [disconnect]);
 
   const handleLogin = useCallback(async () => {
-    if (isLoggingIn.current || isUsernameModalOpen || pendingRegistration || !signMessage) {
+    if (isLoggingIn || isUsernameModalOpen || pendingRegistration || !signMessage || !pubKey) {
       return;
     }
-    isLoggingIn.current = true;
+    setIsLoggingIn(true);
 
     try {
       const encodedMessage = new TextEncoder().encode(WALLET_SIGN_MESSAGE);
-      const signatureBase58 = bs58.encode(await signMessage(encodedMessage));
+      const signature = await signMessage(encodedMessage);
+      const signatureBase58 = bs58.encode(signature);
 
-      const publicKey = (pubKey as PublicKey).toString();
+      const publicKey = pubKey.toString();
       const result = await login(publicKey, signatureBase58, WALLET_SIGN_MESSAGE);
+      
       if (result.success) {
-        const token = result.data.token;
-        console.log("token: ", token)
+        const { token } = result.data;
         setToken(token);
         setWalletAddress(publicKey);
         localStorage.setItem('flipflop_token', token);
         await refreshFollowing();
+        toast.success(t('auth.loginSuccessful'));
       } else {
         setPendingRegistration({ publicKey, signatureBase58, message: WALLET_SIGN_MESSAGE });
         setIsUsernameModalOpen(true);
       }
     } catch (error: any) {
-      alert(t('auth.loginFailed') + error.message);
-      await connect();
+      console.error('Login error:', error);
+      
+      if (error.message?.includes('User rejected')) {
+        toast.error(t('auth.userRejected'));
+      } else if (error.message?.includes('Wallet not connected')) {
+        toast.error(t('auth.walletNotConnected'));
+        try {
+          await connect();
+        } catch (connectError) {
+          console.error('Connection error:', connectError);
+        }
+      } else {
+        toast.error(t('auth.loginFailed') + (error.message || t('auth.unknownError')));
+      }
     } finally {
-      isLoggingIn.current = false;
+      setIsLoggingIn(false);
     }
-  }, [connect, isUsernameModalOpen, pendingRegistration, pubKey, refreshFollowing, signMessage]);
+  }, [connect, isUsernameModalOpen, pendingRegistration, pubKey, refreshFollowing, signMessage, t, isLoggingIn]);
 
   // Handle username submission from modal
   const handleUsernameSubmit = async (username: string) => {
@@ -145,22 +161,22 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
           handleLogin();
         }
       } else {
-        if (!isLoggingIn.current && !isUsernameModalOpen && !pendingRegistration && !handledLoginRef.current) {
+        if (!isLoggingIn && !isUsernameModalOpen && !pendingRegistration && !handledLoginRef.current) {
           handledLoginRef.current = true;
           handleLogin();
         }
       }
     }
-  }, [pubKey, signMessage, connected, refreshFollowing, logout, handleLogin, isUsernameModalOpen, pendingRegistration]);
+  }, [pubKey, signMessage, connected, refreshFollowing, logout, handleLogin, isUsernameModalOpen, pendingRegistration, isLoggingIn]);
 
   useEffect(() => {
-    if(signMessage && connected && pubKey && !isLoggingIn.current) {
+    if(signMessage && connected && pubKey && !isLoggingIn) {
       if (!initialLoginAttemptedRef.current) {
         initialLoginAttemptedRef.current = true;
         tryLoadLocalToken();
       }
     }
-  }, [signMessage, connected, pubKey, tryLoadLocalToken, wallet]);
+  }, [signMessage, connected, pubKey, tryLoadLocalToken, isLoggingIn]);
 
   return (
     <AuthContext.Provider
@@ -168,7 +184,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         token,
         walletAddress,
         following,
-        isLoggingIn: isLoggingIn.current,
+        isLoggingIn: isLoggingIn,
         isUsernameModalOpen,
         handleLogin,
         logout,

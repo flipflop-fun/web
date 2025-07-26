@@ -3,6 +3,32 @@ import { USER_API_URL } from '../config/constants';
 import { Activity, OrderedUser, User, Comment, OrderedToken, UserAPIResponse } from '../types/types';
 import { compressImage, isImageFile } from './format';
 
+// API request retry utility
+const retryRequest = async (
+  requestFn: () => Promise<any>,
+  maxRetries = 3,
+  delay = 1000
+): Promise<any> => {
+  let lastError;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await requestFn();
+    } catch (error) {
+      lastError = error;
+      
+      if (attempt === maxRetries) {
+        throw error;
+      }
+      
+      // Exponential backoff
+      await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, attempt)));
+    }
+  }
+  
+  throw lastError;
+};
+
 export const loadFAQs = async (token: string): Promise<UserAPIResponse> => {
   try {
     const response = await axios.get(`${USER_API_URL}/faqs`, {
@@ -27,12 +53,22 @@ export const loadFAQs = async (token: string): Promise<UserAPIResponse> => {
 }
 
 export const login = async (walletAddress: string, signature: string, message: string): Promise<UserAPIResponse> => {
-  const response = await axios.post(`${USER_API_URL}/login`, {
-    wallet_address: walletAddress,
-    signature,
-    message,
-  });
-  return response.data;
+  try {
+    const response = await retryRequest(async () => {
+      return await axios.post(`${USER_API_URL}/login`, {
+        wallet_address: walletAddress,
+        signature,
+        message,
+      });
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('Login API error:', error);
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Login failed',
+    };
+  }
 };
 
 export const register = async (
@@ -42,14 +78,24 @@ export const register = async (
   signature: string,
   message: string
 ): Promise<UserAPIResponse> => {
-  const response = await axios.post(`${USER_API_URL}/register`, {
-    wallet_address: walletAddress,
-    username,
-    roles,
-    signature,
-    message,
-  });
-  return response.data;
+  try {
+    const response = await retryRequest(async () => {
+      return await axios.post(`${USER_API_URL}/register`, {
+        wallet_address: walletAddress,
+        username,
+        roles,
+        signature,
+        message,
+      });
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('Register API error:', error);
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Registration failed',
+    };
+  }
 };
 
 export const followUser = async (token: string, followeeId: number): Promise<UserAPIResponse> => {

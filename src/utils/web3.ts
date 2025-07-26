@@ -9,6 +9,8 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js';
+
+import { rpcCache } from './rpc-cache';
 import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
 import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK_CONFIGS } from '../config/constants';
 import { InitializeTokenConfig, InitiazlizedTokenData, MetadataAccouontData, RemainingAccount, ResponseData, TokenMetadata, TokenMetadataIPFS } from '../types/types';
@@ -75,7 +77,7 @@ export const initializeToken = async (
       [Buffer.from(MINT_SEED), Buffer.from(metadata.name), Buffer.from(metadata.symbol.toLowerCase())],
       program.programId
     );
-    const mintAccountInfo = await connection.getAccountInfo(mintPda);
+    const mintAccountInfo = await rpcCache.getAccountInfo(connection, mintPda);
     if (mintAccountInfo) {
       // throw new Error('Token already exists');
       return {
@@ -89,7 +91,7 @@ export const initializeToken = async (
       program.programId
     );
 
-    const configAccountInfo = await connection.getAccountInfo(configPda);
+    const configAccountInfo = await rpcCache.getAccountInfo(connection, configPda);
     if (configAccountInfo) {
       // throw new Error('Config account already exists');
       return {
@@ -101,7 +103,7 @@ export const initializeToken = async (
       [Buffer.from(METADATA_SEED), NETWORK_CONFIGS[network].tokenMetadataProgramId.toBuffer(), mintPda.toBuffer()],
       NETWORK_CONFIGS[network].tokenMetadataProgramId,
     );
-    const metadataAccountInfo = await connection.getAccountInfo(metadataAccountPda);
+    const metadataAccountInfo = await rpcCache.getAccountInfo(connection, metadataAccountPda);
     if (metadataAccountInfo) {
       return {
         success: false,
@@ -142,8 +144,8 @@ export const initializeToken = async (
     const result = await processTransaction(tx, connection, wallet, "Create token successfully", { mintAddress: mintPda.toString() });
     
     // 交易完成后清除缓存，确保后续查询获得最新状态
-    const { TransactionCacheManager } = await import('./transaction-cache-manager');
-    TransactionCacheManager.clearTokenCache(mintPda);
+    // 移除缓存管理器引用
+    console.log('Token created, clearing cache for mint:', mintPda.toString());
     
     // 确保返回格式正确，包含mint地址
     return {
@@ -203,16 +205,14 @@ export const getBalance = async (
 };
 
 export const getTokenBalance = async (ata: PublicKey, connection: Connection): Promise<number | null> => {
-  const account = await connection.getTokenAccountBalance(ata);
-  return account.value.uiAmount;
+  return await rpcCache.getTokenBalance(connection, ata);
 }
 
 export const getTokenBalanceByMintAndOwner = async (mint: PublicKey, owner: PublicKey, connection: Connection, allowOwnerOffCurve: boolean = false, programId: PublicKey = TOKEN_PROGRAM_ID): Promise<number | null> => {
   const ata = await getAssociatedTokenAddress(mint, owner, allowOwnerOffCurve, programId);
-  const ataInfo = await connection.getAccountInfo(ata);
+  const ataInfo = await rpcCache.getAccountInfo(connection, ata);
   if (!ataInfo) return 0;
-  const account = await connection.getTokenAccountBalance(ata);
-  return account.value.uiAmount;
+  return await rpcCache.getTokenBalance(connection, ata);
 }
 
 export const reactiveReferrerCode = async (
@@ -248,7 +248,7 @@ export const reactiveReferrerCode = async (
   );
 
   // check if the code account initialized
-  const codeAccountInfo = await connection.getAccountInfo(codeAccountPda);
+  const codeAccountInfo = await rpcCache.getAccountInfo(connection, codeAccountPda);
   if (codeAccountInfo) {
     // if codeAccountInfo exists, it means the code has already been used.
     // The system will not allow you to use the same code again or generate a new URC code.
@@ -280,7 +280,7 @@ export const reactiveReferrerCode = async (
     false,
     TOKEN_PROGRAM_ID
   )
-  const referrerAtaInfo = await connection.getAccountInfo(referrerAta);
+  const referrerAtaInfo = await rpcCache.getAccountInfo(connection, referrerAta);
   const instructionCreateReferrerAta = createAssociatedTokenAccountInstruction(
     wallet.publicKey,
     referrerAta,
@@ -327,8 +327,8 @@ export const reactiveReferrerCode = async (
     const result = await processTransaction(transaction, connection, wallet, "Reactiviate referrer code successfully", { referralAccount: referralAccountPda.toBase58(), mint: mint.toBase58() });
     
     // 清除推荐码相关缓存
-    const { TransactionCacheManager } = await import('./transaction-cache-manager');
-    TransactionCacheManager.clearReferralCache(mint, wallet.publicKey);
+    // 移除缓存管理器引用
+    console.log('Referrer code set, clearing cache for mint:', mint.toString());
     
     // 确保返回格式正确
     return {
@@ -383,7 +383,7 @@ export const setReferrerCode = async (
     ],
     program.programId,
   );
-  const codeAccountInfo = await connection.getAccountInfo(codeAccountPda);
+  const codeAccountInfo = await rpcCache.getAccountInfo(connection, codeAccountPda);
   if (codeAccountInfo) {
     const codeAccountData = await program.account.codeAccountData.fetch(codeAccountPda);
     const referralAccountPda = codeAccountData.referralAccount;
@@ -417,7 +417,7 @@ export const setReferrerCode = async (
     TOKEN_PROGRAM_ID,
   )
 
-  const referrerAtaInfo = await connection.getAccountInfo(referrerAta);
+  const referrerAtaInfo = await rpcCache.getAccountInfo(connection, referrerAta);
 
   const instructionCreateReferrerAta = createAssociatedTokenAccountInstruction(
     wallet.publicKey,
@@ -463,8 +463,8 @@ export const setReferrerCode = async (
     const result = await processTransaction(transaction, connection, wallet, "Set referrer code successfully", { referralAccount: referralAccountPda.toBase58() });
     
     // 清除推荐码相关缓存
-    const { TransactionCacheManager } = await import('./transaction-cache-manager');
-    TransactionCacheManager.clearReferralCache(mint, wallet.publicKey);
+    // 移除缓存管理器引用
+    console.log('Referrer code set, clearing cache for mint:', mint.toString());
     
     // 确保返回格式正确，包含推荐码相关信息
     return {
@@ -722,7 +722,7 @@ export const mintToken = async (
   const program = getProgram(wallet, connection);
 
   // Check referrer account
-  const referralAccountInfo = await connection.getAccountInfo(referralAccountPda);
+  const referralAccountInfo = await rpcCache.getAccountInfo(connection, referralAccountPda);
   if (!referralAccountInfo) {
     return {
       success: false,
@@ -754,7 +754,7 @@ export const mintToken = async (
   // TODO: check if referrer code is exceed max usage
 
   const destinationAta = await getAssociatedTokenAddress(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
-  const destinationAtaInfo = await connection.getAccountInfo(destinationAta);
+  const destinationAtaInfo = await rpcCache.getAccountInfo(connection, destinationAta);
   const [refundAccountPda] = PublicKey.findProgramAddressSync(
     [Buffer.from(REFUND_SEEDS), new PublicKey(token.mint).toBuffer(), wallet.publicKey.toBuffer()],
     program.programId,
@@ -769,7 +769,7 @@ export const mintToken = async (
   const protocolFeeAccount = systemConfigData.protocolFeeAccount;
   const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
   const destinationWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
-  const destinationWsolInfo = await connection.getAccountInfo(destinationWsolAta);
+  const destinationWsolInfo = await rpcCache.getAccountInfo(connection, destinationWsolAta);
   const mintTokenVaultAta = await getAssociatedTokenAddress(new PublicKey(token.mint), new PublicKey(token.mint), true, TOKEN_PROGRAM_ID);
 
   let token0Mint = new PublicKey(token.mint);
@@ -829,7 +829,7 @@ export const mintToken = async (
     .remainingAccounts(remainingAccounts)
     .instruction();
     
-  // 使用VersionedTransaction解决交易大小问题，同时进行优化
+  // Use VersionedTransaction to solve transaction size issues and optimize
   const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[network].addressLookupTableAddress);
   if (!accountInfo) {
     return {
@@ -843,10 +843,10 @@ export const mintToken = async (
     state: AddressLookupTableAccount.deserialize(accountInfo.data),
   });
 
-  // 精简指令列表，减少交易大小
+  // Streamline instruction list to reduce transaction size
   const instructions = [instructionSetComputerUnitLimit, instructionSetComputeUnitPrice];
   
-  // 只在确实需要时添加创建账户指令
+  // Only add account creation instructions when actually needed
   if (destinationAtaInfo === null) instructions.push(instructionCreateTokenAta);
   if (destinationWsolInfo === null) instructions.push(instructionCreateWSOLAta);
   instructions.push(ix);
@@ -1834,10 +1834,10 @@ export async function proxyCreatePool(
     systemProgram: SystemProgram.programId,
   };
 
-  // 添加计算预算指令，帮助钱包估算费用
+  // Add compute budget instruction to help wallet estimate fees
   const instructionSetComputerUnitLimit = ComputeBudgetProgram.setComputeUnitLimit({ units: 500000 });
   const instructionSetComputeUnitPrice = ComputeBudgetProgram.setComputeUnitPrice({ 
-    microLamports: 10000 // 合理的优先费用，帮助钱包显示准确费用
+    microLamports: 10000 // Reasonable priority fee to help wallet display accurate fees
   });
   const instructionCreateWSOLAta = createAssociatedTokenAccountInstruction(wallet.publicKey, destinationWsolAta, wallet.publicKey, NATIVE_MINT, TOKEN_PROGRAM_ID);
   const instructionCreateTokenAta = createAssociatedTokenAccountInstruction(wallet.publicKey, destinationAta, wallet.publicKey, new PublicKey(token.mint), TOKEN_PROGRAM_ID);
@@ -1849,8 +1849,8 @@ export async function proxyCreatePool(
     .remainingAccounts(remainingAccounts)
     .instruction();
 
-  // 使用VersionedTransaction解决交易大小问题
-  const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[network].addressLookupTableAddress);
+  // Use VersionedTransaction to solve transaction size issues
+  const accountInfo = await rpcCache.getAccountInfo(connection, NETWORK_CONFIGS[network].addressLookupTableAddress);
   if (!accountInfo) {
     return {
       success: false,
@@ -1863,7 +1863,7 @@ export async function proxyCreatePool(
     state: AddressLookupTableAccount.deserialize(accountInfo.data),
   });
 
-  // 精简指令列表
+  // Streamline instruction list
   const instructions = [instructionSetComputerUnitLimit, instructionSetComputeUnitPrice];
   if (destinationAtaInfo === null) instructions.push(instructionCreateTokenAta);
   if (destinationWsolInfo === null) instructions.push(instructionCreateWSOLAta);

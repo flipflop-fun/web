@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
+
 import {
   ConnectionProvider,
   useAnchorWallet,
@@ -196,7 +197,7 @@ function App() {
         onWalletNotFound: createDefaultWalletNotFoundHandler(),
       }),
     ],
-    [],
+    [network],
   );
 
   // if (NETWORK_CONFIGS[network].isPaused) {

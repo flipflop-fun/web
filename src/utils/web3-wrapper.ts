@@ -69,14 +69,7 @@ export const fetchTokenMetadataMap = async (
   
   const useOptimized = optimizationManager.shouldUseOptimization('enableMetadataCaching');
   
-  if (useOptimized) {
-    try {
-      const { fetchTokenMetadataMapOptimized } = await import('./web3-optimized');
-      return await fetchTokenMetadataMapOptimized(tokenData);
-    } catch (error) {
-      console.warn('Optimized metadata fetching failed, falling back:', error);
-    }
-  }
+  // 移除了优化版本引用，直接使用原始实现
   
   return await originalWeb3.fetchTokenMetadataMap(tokenData);
 };
