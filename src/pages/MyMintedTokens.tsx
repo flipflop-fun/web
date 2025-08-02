@@ -5,8 +5,8 @@ import { queryMyTokenList, queryTokensByMints } from '../utils/graphql';
 import { InitiazlizedTokenData, MyAccountProps, TokenListItem, TokenMetadataIPFS } from '../types/types';
 import { AddressDisplay } from '../components/common/AddressDisplay';
 import { TokenImage } from '../components/mintTokens/TokenImage';
-import { fetchMetadata, getRefundAccountData } from '../utils/web3';
-import { BN_LAMPORTS_PER_SOL, BN_ZERO, filterTokenListItem, filterTokens, formatPrice, numberStringToBN } from '../utils/format';
+import { fetchMetadata } from '../utils/web3';
+import { BN_LAMPORTS_PER_SOL, BN_ZERO, filterTokenListItem, filterTokens, numberStringToBN } from '../utils/format';
 import { useNavigate } from 'react-router-dom';
 import { ReferralCodeModal } from '../components/myAccount/ReferralCodeModal';
 import { RefundModal } from '../components/myAccount/RefundModal';
@@ -16,7 +16,7 @@ import { useDeviceType } from '../hooks/device';
 import { MyMintedTokenCard } from '../components/myAccount/MyMintedTokenCard';
 import { PageHeader } from '../components/common/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { PublicKey } from '@solana/web3.js';
+// import { PublicKey } from '@solana/web3.js';
 
 export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   const { connection } = useConnection();
@@ -86,25 +86,28 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
       const mints = tokensAfterFilter.map((token: TokenListItem) => token.mint);
       setSearchMints(mints);
       setTotalCount(Math.max(totalCount, (currentPage - 1) * pageSize + (mints.length ?? 0)));
-      const processTokens = async () => {
-        const processedTokens = await Promise.all(
-          tokensAfterFilter.map(async (token: TokenListItem) => {
-            const refundData = await getRefundAccountData(wallet, connection, new PublicKey(token.mint));
-            if (refundData.success && refundData.data) {
-              return {
-                ...token,
-                totalMintFee: refundData.data.totalMintFee
-              };
-            }
-            return {
-              ...token,
-              totalMintFee: null
-            };
-          })
-        );
-        setTokenList(processedTokens as TokenListItem[]);
-      };
-      processTokens();
+      setTokenList(tokensAfterFilter);
+
+      // TODO: cancel fetching totalMintFee from RPC
+      // const processTokens = async () => {
+      //   const processedTokens = await Promise.all(
+      //     tokensAfterFilter.map(async (token: TokenListItem) => {
+      //       const refundData = await getRefundAccountData(wallet, connection, new PublicKey(token.mint));
+      //       if (refundData.success && refundData.data) {
+      //         return {
+      //           ...token,
+      //           totalMintFee: refundData.data.totalMintFee
+      //         };
+      //       }
+      //       return {
+      //         ...token,
+      //         totalMintFee: null
+      //       };
+      //     })
+      //   );
+      //   setTokenList(processedTokens as TokenListItem[]);
+      // };
+      // processTokens();
     }
   }, [currentPage, myTokensData, pageSize, totalCount]);
 
@@ -194,7 +197,7 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
                   <th className=" text-left">{t('launch.tokenName')}/{t('launch.tokenSymbol')}</th>
                   <th className=" text-left">{t('tokenInfo.tokenAddress')}</th>
                   <th className=" text-right">{t('common.milestone')}</th>
-                  <th className=" text-right">{t('common.avgPrice')}</th>
+                  {/* <th className=" text-right">{t('common.avgPrice')}</th> */}
                   <th className=" text-right">{t('mint.minted')}</th>
                   <th className=" text-center">{t('common.actions')}</th>
                 </tr>
@@ -225,9 +228,9 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
                       <td className=" text-right">
                         {token.tokenData?.currentEra || '1'}
                       </td>
-                      <td className=' text-right'>
+                      {/* <td className=' text-right'>
                         {formatPrice(Number(token.totalMintFee)/Number(numberStringToBN(token.amount)))} SOL
-                      </td>
+                      </td> */}
                       <td className=" text-right">
                         {(numberStringToBN(token.amount).div(BN_LAMPORTS_PER_SOL)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       </td>

@@ -10,9 +10,9 @@ export const DEFAULT_PARAMS = {
         epochesPerEra: '250',
         targetSecondsPerEpoch: '2000',
         reduceRatio: '50',
-        initialMintSize: '10000000000000',
+        initialMintSize: '25000000000000',
         initialTargetMintSizePerEpoch: '200000000000000',
-        feeRate: '200000000',
+        feeRate: '250000000',
         liquidityTokensRatio: '20',
     },
     "meme": { // config for mainnet 
@@ -20,9 +20,9 @@ export const DEFAULT_PARAMS = {
         epochesPerEra: '250',
         targetSecondsPerEpoch: '2000',
         reduceRatio: '75',
-        initialMintSize: '10000000000000',
+        initialMintSize: '100000000000000',
         initialTargetMintSizePerEpoch: '1000000000000000',
-        feeRate: '10000000',
+        feeRate: '50000000',
         liquidityTokensRatio: '20',
     },
     // "meme": { // config for dev

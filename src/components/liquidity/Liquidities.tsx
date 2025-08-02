@@ -65,7 +65,6 @@ export const Liquidities: FC<LiquiditiesProps> = ({
         toast.error(t('common.pleaseEnterValidAmount'));
         return;
       }
-
       const result = await proxyAddLiquidity(
         wallet,
         connection,
@@ -73,7 +72,6 @@ export const Liquidities: FC<LiquiditiesProps> = ({
         new BN(amount * 1e9), // Token amount
         new BN(amount * currentPrice * 1e9), // SOL amount
       );
-
       if (result.success) {
         toast.success(
           <ToastBox

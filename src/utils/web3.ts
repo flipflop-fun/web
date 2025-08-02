@@ -594,7 +594,7 @@ export const refund = async (
   const payerWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
   const systemConfigData = await program.account.systemConfigData.fetch(systemConfigAccountPda);
   const protocolFeeAccount = systemConfigData.protocolFeeAccount;
-  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, NETWORK_CONFIGS[network].protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
+  const protocolWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, protocolFeeAccount, NETWORK_CONFIGS[network].allowOwnerOffCurveForProtocolFeeAccount, TOKEN_PROGRAM_ID);
   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, new PublicKey(token.configAccount), true, TOKEN_PROGRAM_ID);
 
   const refundAccounts = {
@@ -734,7 +734,8 @@ export const mintToken = async (
     [token0Mint, token1Mint] = [token1Mint, token0Mint];
   }
   const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[network].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[network].cpSwapProgram);
-
+  console.log("poolAddress", poolAddress.toBase58());
+  
   const mintAccounts = {
     mint: new PublicKey(token.mint),
     destination: destinationAta,
@@ -1813,7 +1814,6 @@ export async function proxyAddLiquidity(
 
   let token1 = NATIVE_MINT;
   let token1Program = TOKEN_PROGRAM_ID;
-
   // let pair = `${tokenData.tokenSymbol}/SOL`;
 
   if (compareMints(token0, token1) > 0) {
@@ -1831,9 +1831,7 @@ export async function proxyAddLiquidity(
       message: 'Pool has not been created yet',
     }
   }
-
   const depositAmount = await calculateDepositAmounts(program, token0, token1, desiredToken0Amount, desiredToken1Amount)
-
   // Add liquidity
   const ixs = await poolDepositInstructions(
     program,

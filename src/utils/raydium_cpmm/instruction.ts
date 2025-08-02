@@ -81,9 +81,9 @@ export async function calculateDepositAmounts(
   if (!poolInfo.poolAddress || !poolInfo.cpSwapPoolState) throw new Error("Pool not found");
 
   // LP token
-  const lpSupply = new BN(poolInfo.cpSwapPoolState.lpAmount as number * LAMPORTS_PER_SOL);
-  const token0Reserve = new BN(poolInfo.cpSwapPoolState.token0Amount as number * LAMPORTS_PER_SOL);
-  const token1Reserve = new BN(poolInfo.cpSwapPoolState.token1Amount as number * LAMPORTS_PER_SOL);
+  const lpSupply = new BN(poolInfo.cpSwapPoolState.lpAmount).mul(new BN(LAMPORTS_PER_SOL));
+  const token0Reserve = new BN(poolInfo.cpSwapPoolState.token0Amount as number).mul(new BN(LAMPORTS_PER_SOL));
+  const token1Reserve = new BN(poolInfo.cpSwapPoolState.token1Amount as number).mul(new BN(LAMPORTS_PER_SOL));
 
   const lpTokenAmount = BN.min(
       desiredToken0Amount.mul(lpSupply).div(token0Reserve),

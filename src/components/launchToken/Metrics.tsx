@@ -123,10 +123,6 @@ export const Metrics: React.FC<MetricsProps> = ({
         </div>
       </div>
       <div>
-        <p className="text-sm text-base-content/70 mb-1">{t('launch.initialLiquidityToTargetMilestone')}</p>
-        <p className="font-medium text-base-content">{calculateMetrics().initialLiquidityToTargetEra} {symbol} ({calculateMetrics().initialLiquidityToTargetEraPercent}%)</p>
-      </div>
-      <div>
         <p className="text-sm text-base-content/70 mb-1">{t('tokenInfo.estimatedIDOPrice')}</p>
         <div className="flex items-center gap-2">
           <p className="font-medium text-base-content">{calculateMetrics().minLaunchPrice} to {calculateMetrics().maxLaunchPrice} SOL/{symbol}</p>
