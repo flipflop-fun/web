@@ -1,6 +1,6 @@
 {
   "name": "flipflop-client",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.11.10",
