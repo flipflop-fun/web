@@ -431,7 +431,7 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
             </div>
           </div>
           {/* Show customeized setting */}
-          {false &&
+          {process.env.REACT_APP_NETWORK === "devnet" &&
           <div className="mt-6">
             <ToggleSwitch
               id="toggleAdvanced"
