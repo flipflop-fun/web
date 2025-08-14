@@ -5,36 +5,48 @@ export const APP_NAME = 'flipflop';
 export const VERSION_DESCRIPTION = 'Rehearsal';
 
 export const DEFAULT_PARAMS = {
-    "standard": { // must be same as program default params
-        targetEras: '1',
-        epochesPerEra: '250',
-        targetSecondsPerEpoch: '2000',
-        reduceRatio: '50',
-        initialMintSize: '25000000000000',
-        initialTargetMintSizePerEpoch: '200000000000000',
-        feeRate: '250000000',
-        liquidityTokensRatio: '20',
-    },
-    "meme": { // config for mainnet 
-        targetEras: '1',
-        epochesPerEra: '250',
-        targetSecondsPerEpoch: '2000',
-        reduceRatio: '75',
-        initialMintSize: '100000000000000',
-        initialTargetMintSizePerEpoch: '1000000000000000',
-        feeRate: '50000000',
-        liquidityTokensRatio: '20',
-    },
-    // "meme": { // config for dev
+    // "standard": { // must be same as program default params
     //     targetEras: '1',
-    //     epochesPerEra: '2',
-    //     targetSecondsPerEpoch: '60',
-    //     reduceRatio: '75',
-    //     initialMintSize: '1000000000000',
-    //     initialTargetMintSizePerEpoch: '10000000000000',
-    //     feeRate: '10000000',
+    //     epochesPerEra: '250',
+    //     targetSecondsPerEpoch: '2000',
+    //     reduceRatio: '50',
+    //     initialMintSize: '25000000000000',
+    //     initialTargetMintSizePerEpoch: '200000000000000',
+    //     feeRate: '250000000',
     //     liquidityTokensRatio: '20',
     // },
+    // "meme": { // config for mainnet 
+    //     targetEras: '1',
+    //     epochesPerEra: '250',
+    //     targetSecondsPerEpoch: '2000',
+    //     reduceRatio: '75',
+    //     initialMintSize: '100000000000000',
+    //     initialTargetMintSizePerEpoch: '1000000000000000',
+    //     feeRate: '50000000',
+    //     liquidityTokensRatio: '20',
+    // },
+  standard: {
+    // must be same as program default params
+    targetEras: '1',
+    epochesPerEra: '250',
+    targetSecondsPerEpoch: '2000',
+    reduceRatio: '50',
+    initialMintSize: '20000000000000',
+    initialTargetMintSizePerEpoch: '200000000000000',
+    feeRate: '200000000',
+    liquidityTokensRatio: '20',
+  },
+  meme: {
+    // config for mainnet, 100 - 557 SOL
+    targetEras: '1',
+    epochesPerEra: '250',
+    targetSecondsPerEpoch: '2000',
+    reduceRatio: '75',
+    initialMintSize: '100000000000000',
+    initialTargetMintSizePerEpoch: '1000000000000000',
+    feeRate: '40000000',
+    liquidityTokensRatio: '20',
+  },
 } as Record<string, TokenParams>;
 
 // Solana program config
@@ -45,8 +57,8 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
     apiBaseUrl: 'https://api-dev.flipflop.plus',
-    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/my_project',
-    systemDeployer: new PublicKey('CXzddeiDgbTTxNnd1apeUGE7E1UAdvBoysf7c271AA79'),
+    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/flipflop-pom',
+    systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
     allowOwnerOffCurveForProtocolFeeAccount: false,
     tokenMetadataProgramId: new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"),
     cpSwapProgram: new PublicKey("CPMDWBwJDtYax9qW7AyRuVC19Cc4L4Vcy4n2BHAbHkCW"), // devnet
@@ -54,6 +66,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     createPoolFeeReceive: new PublicKey("G11FKBRaAkHAKuLCgLM6K6NUc9rTjPAznRCjZifrTQe2"), // find address on devnet
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("EebRqpLtUgjX17pJJNNbd6ngtYa34VGa51oYsibwJRXy"),
+    launchRuleAccount: new PublicKey("G9KkZg3MQen877QPmNwvTFzfm9gY7fzQEdhbrHbpCXQj"),
     chartApiUrl: 'https://chart-api-testnet.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
   mainnet_beta: {
@@ -71,6 +84,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     createPoolFeeReceive: new PublicKey("DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8"),
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("7DK7pmNkUeeFB3yxt6bJcPCWcG4L3AdCe2WZaBguy9sq"),
+    launchRuleAccount: new PublicKey("G9KkZg3MQen877QPmNwvTFzfm9gY7fzQEdhbrHbpCXQj"), // ######
     chartApiUrl: 'https://chart-api.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
 };

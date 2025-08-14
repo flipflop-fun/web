@@ -130,15 +130,17 @@ export const initializeToken = async (
       wsolVault: wsolVaultAta,
       systemConfigAccount: systemConfigAccountPda,
       protocolFeeAccount: protocolFeeAccount,
+      launchRuleAccount: NETWORK_CONFIGS[network].launchRuleAccount,
       tokenMetadataProgram: NETWORK_CONFIGS[network].tokenMetadataProgramId,
     }
 
+    const ix0 = ComputeBudgetProgram.setComputeUnitLimit({ units: 500000 });
     const instructionInitializeToken = await program.methods
       .initializeToken(metadata, config as any)
       .accounts(contextInitializeTokenAccounts)
       .instruction();
 
-    const tx = new Transaction().add(instructionInitializeToken);
+    const tx = new Transaction().add(ix0).add(instructionInitializeToken);
     return await processTransaction(tx, connection, wallet, "Create token successfully", { mintAddress: mintPda.toString() });
   } catch (error: any) {
     if (error.message.includes('Transaction simulation failed: This transaction has already been processed')) {
@@ -1699,100 +1701,100 @@ export const burnTokensFromMintTokenVault = async (
   }
 }
 
-export async function proxyCreatePool(
-  wallet: AnchorWallet | undefined,
-  connection: Connection,
-  token: InitiazlizedTokenData,
-): Promise<ResponseData> {
-  if (!wallet) return {
-    success: false,
-    message: 'Please connect wallet (web3.proxyCreatePool)'
-  }
-  const program = getProgram(wallet, connection);
-  const destinationAta = await getAssociatedTokenAddress(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
+// export async function proxyCreatePool(
+//   wallet: AnchorWallet | undefined,
+//   connection: Connection,
+//   token: InitiazlizedTokenData,
+// ): Promise<ResponseData> {
+//   if (!wallet) return {
+//     success: false,
+//     message: 'Please connect wallet (web3.proxyCreatePool)'
+//   }
+//   const program = getProgram(wallet, connection);
+//   const destinationAta = await getAssociatedTokenAddress(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
 
-  const destinationAtaInfo = await connection.getAccountInfo(destinationAta);
-  // const [refundAccountPda] = PublicKey.findProgramAddressSync(
-  //   [Buffer.from(REFUND_SEEDS), new PublicKey(token.mint).toBuffer(), wallet.publicKey.toBuffer()],
-  //   program.programId,
-  // );
-  const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
-    [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
-    program.programId,
-  );
+//   const destinationAtaInfo = await connection.getAccountInfo(destinationAta);
+//   // const [refundAccountPda] = PublicKey.findProgramAddressSync(
+//   //   [Buffer.from(REFUND_SEEDS), new PublicKey(token.mint).toBuffer(), wallet.publicKey.toBuffer()],
+//   //   program.programId,
+//   // );
+//   const [systemConfigAccountPda] = PublicKey.findProgramAddressSync(
+//     [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
+//     program.programId,
+//   );
 
-  const configAccountPda = new PublicKey(token.configAccount);
-  const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configAccountPda, true, TOKEN_PROGRAM_ID);
-  const creatorWsolVault = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
-  const creatorTokenVault = getAssociatedTokenAddressSync(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
-  const destinationWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
-  const destinationWsolInfo = await connection.getAccountInfo(destinationWsolAta);
+//   const configAccountPda = new PublicKey(token.configAccount);
+//   const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configAccountPda, true, TOKEN_PROGRAM_ID);
+//   const creatorWsolVault = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
+//   const creatorTokenVault = getAssociatedTokenAddressSync(new PublicKey(token.mint), wallet.publicKey, false, TOKEN_PROGRAM_ID);
+//   const destinationWsolAta = getAssociatedTokenAddressSync(NATIVE_MINT, wallet.publicKey, false, TOKEN_PROGRAM_ID);
+//   const destinationWsolInfo = await connection.getAccountInfo(destinationWsolAta);
 
-  let token0Mint = new PublicKey(token.mint);
-  let token1Mint = NATIVE_MINT;
-  if (compareMints(token0Mint, token1Mint) > 0) {
-    [token0Mint, token1Mint] = [token1Mint, token0Mint];
-  }
-  const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[network].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[network].cpSwapProgram);
+//   let token0Mint = new PublicKey(token.mint);
+//   let token1Mint = NATIVE_MINT;
+//   if (compareMints(token0Mint, token1Mint) > 0) {
+//     [token0Mint, token1Mint] = [token1Mint, token0Mint];
+//   }
+//   const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[network].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[network].cpSwapProgram);
 
-  const contextProxyInitialize = {
-    creator: wallet.publicKey,
-    creatorTokenVault: creatorTokenVault,
-    creatorWsolVault: creatorWsolVault,
-    mint: new PublicKey(token.mint),
-    configAccount: configAccountPda,
-    tokenVault: new PublicKey(token.tokenVault),
-    systemConfigAccount: systemConfigAccountPda,
-    wsolVault: wsolVaultAta,
-    wsolMint: NATIVE_MINT,
-    poolState: poolAddress,
-    ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
-    cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
-    token0Mint: token0Mint,
-    token1Mint: token1Mint,
-    tokenProgram: TOKEN_PROGRAM_ID,
-    systemProgram: SystemProgram.programId,
-  };
+//   const contextProxyInitialize = {
+//     creator: wallet.publicKey,
+//     creatorTokenVault: creatorTokenVault,
+//     creatorWsolVault: creatorWsolVault,
+//     mint: new PublicKey(token.mint),
+//     configAccount: configAccountPda,
+//     tokenVault: new PublicKey(token.tokenVault),
+//     systemConfigAccount: systemConfigAccountPda,
+//     wsolVault: wsolVaultAta,
+//     wsolMint: NATIVE_MINT,
+//     poolState: poolAddress,
+//     ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
+//     cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
+//     token0Mint: token0Mint,
+//     token1Mint: token1Mint,
+//     tokenProgram: TOKEN_PROGRAM_ID,
+//     systemProgram: SystemProgram.programId,
+//   };
 
-  const instructionSetComputerUnitLimit = ComputeBudgetProgram.setComputeUnitLimit({ units: 500000 }); // or use --compute-unit-limit 400000 to run solana-test-validator
-  const instructionCreateWSOLAta = createAssociatedTokenAccountInstruction(wallet.publicKey, destinationWsolAta, wallet.publicKey, NATIVE_MINT, TOKEN_PROGRAM_ID);
-  const instructionCreateTokenAta = createAssociatedTokenAccountInstruction(wallet.publicKey, destinationAta, wallet.publicKey, new PublicKey(token.mint), TOKEN_PROGRAM_ID);
-  const remainingAccounts = getRemainingAccountsForMintTokens(new PublicKey(token.mint), wallet.publicKey);
+//   const instructionSetComputerUnitLimit = ComputeBudgetProgram.setComputeUnitLimit({ units: 500000 }); // or use --compute-unit-limit 400000 to run solana-test-validator
+//   const instructionCreateWSOLAta = createAssociatedTokenAccountInstruction(wallet.publicKey, destinationWsolAta, wallet.publicKey, NATIVE_MINT, TOKEN_PROGRAM_ID);
+//   const instructionCreateTokenAta = createAssociatedTokenAccountInstruction(wallet.publicKey, destinationAta, wallet.publicKey, new PublicKey(token.mint), TOKEN_PROGRAM_ID);
+//   const remainingAccounts = getRemainingAccountsForMintTokens(new PublicKey(token.mint), wallet.publicKey);
 
-  const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[network].addressLookupTableAddress);
-  const lookupTable = new AddressLookupTableAccount({
-    key: NETWORK_CONFIGS[network].addressLookupTableAddress,
-    state: AddressLookupTableAccount.deserialize(accountInfo!.data),
-  });
+//   const accountInfo = await connection.getAccountInfo(NETWORK_CONFIGS[network].addressLookupTableAddress);
+//   const lookupTable = new AddressLookupTableAccount({
+//     key: NETWORK_CONFIGS[network].addressLookupTableAddress,
+//     state: AddressLookupTableAccount.deserialize(accountInfo!.data),
+//   });
 
-  const ix = await program.methods
-    .proxyCreatePool(token.tokenName, token.tokenSymbol)
-    .accounts(contextProxyInitialize)
-    .remainingAccounts(remainingAccounts)
-    .instruction();
-  const confirmLevel = "confirmed";
-  const latestBlockhash = await connection.getLatestBlockhash(confirmLevel);
-  const instructions = [instructionSetComputerUnitLimit];
-  if (destinationAtaInfo === null) instructions.push(instructionCreateTokenAta);
-  if (destinationWsolInfo === null) instructions.push(instructionCreateWSOLAta);
-  instructions.push(ix);
-  const versionedTx = new VersionedTransaction(
-    new TransactionMessage({
-      payerKey: wallet.publicKey,
-      recentBlockhash: latestBlockhash.blockhash,
-      instructions,
-    }).compileToV0Message([lookupTable])
-  );
+//   const ix = await program.methods
+//     .proxyCreatePool(token.tokenName, token.tokenSymbol)
+//     .accounts(contextProxyInitialize)
+//     .remainingAccounts(remainingAccounts)
+//     .instruction();
+//   const confirmLevel = "confirmed";
+//   const latestBlockhash = await connection.getLatestBlockhash(confirmLevel);
+//   const instructions = [instructionSetComputerUnitLimit];
+//   if (destinationAtaInfo === null) instructions.push(instructionCreateTokenAta);
+//   if (destinationWsolInfo === null) instructions.push(instructionCreateWSOLAta);
+//   instructions.push(ix);
+//   const versionedTx = new VersionedTransaction(
+//     new TransactionMessage({
+//       payerKey: wallet.publicKey,
+//       recentBlockhash: latestBlockhash.blockhash,
+//       instructions,
+//     }).compileToV0Message([lookupTable])
+//   );
 
-  try {
-    return processVersionedTransaction(versionedTx, connection, wallet, latestBlockhash, confirmLevel);
-  } catch (error) {
-    return {
-      success: false,
-      message: `Create pool failed: ${error}`,
-    }
-  }
-}
+//   try {
+//     return processVersionedTransaction(versionedTx, connection, wallet, latestBlockhash, confirmLevel);
+//   } catch (error) {
+//     return {
+//       success: false,
+//       message: `Create pool failed: ${error}`,
+//     }
+//   }
+// }
 
 export async function proxyAddLiquidity(
   wallet: AnchorWallet | undefined,
