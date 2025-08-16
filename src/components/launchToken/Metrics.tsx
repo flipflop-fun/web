@@ -17,7 +17,9 @@ export const Metrics: React.FC<MetricsProps> = ({
 }) => {
   const { t } = useTranslation();
   const epochesPerEraNum = parseFloat(epochesPerEra) || 0;
-  const initialTargetMintSizePerEpochNum = parseFloat(initialTargetMintSizePerEpoch) || 0;
+  const liquidityTokensRatioNum = parseFloat(liquidityTokensRatio) || 0;
+  const initialTargetMintSizePerEpochNum = parseFloat(initialTargetMintSizePerEpoch) || 0; // only for minter
+  const initialTargetMintSizePerEpochWithVaultNum = initialTargetMintSizePerEpochNum / (1 - liquidityTokensRatioNum / 100); // minter and vault
   const reduceRatioNum = parseFloat(reduceRatio) || 0;
   const targetErasNum = parseFloat(targetEras) || 0;
   const targetSecondsPerEpochNum = parseFloat(targetSecondsPerEpoch) || 0;
@@ -27,7 +29,7 @@ export const Metrics: React.FC<MetricsProps> = ({
   const calculateMetrics = () => {
 
     // Calculate max supply
-    const maxSupply = epochesPerEraNum * initialTargetMintSizePerEpochNum / (1 - reduceRatioNum / 100);
+    const maxSupply = epochesPerEraNum * initialTargetMintSizePerEpochWithVaultNum / (1 - reduceRatioNum / 100);
 
     // Calculate estimated days
     const estimatedDays = (targetErasNum * epochesPerEraNum * targetSecondsPerEpochNum) / 86400;
@@ -48,7 +50,6 @@ export const Metrics: React.FC<MetricsProps> = ({
     const isFeeTooHigh = maxTotalFee > 1000;
 
     // Calculate Initial liquidity to target milestone
-    const liquidityTokensRatioNum = parseFloat(liquidityTokensRatio) || 0;
     const initialLiquidityToTargetEra = epochesPerEraNum * initialTargetMintSizePerEpochNum * liquidityTokensRatioNum / 100 
       * (1 - Math.pow(reduceRatioNum / 100, targetErasNum)) 
       / ((1 - reduceRatioNum / 100) * (1 - liquidityTokensRatioNum / 100));

@@ -315,7 +315,7 @@ export const drawShareImage = async (token: InitiazlizedTokenData, metadata: Tok
   // Information area
   const infoY = 790;
   // Max supply
-  const maxSupply = calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio);
+  const maxSupply = calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio);
   drawPixelRect(ctx, 40, infoY, 170, 60, '#ffffff');
   ctx.font = '16px RetroPixel';
   ctx.fillText('Max supply', 50, infoY + 20);
@@ -323,7 +323,7 @@ export const drawShareImage = async (token: InitiazlizedTokenData, metadata: Tok
   ctx.fillText(formatLargeNumber(maxSupply), 50, infoY + 45);
 
   // Target milestone supply
-  const targetMilestoneSupply = calculateTotalSupplyToTargetEras(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.targetEras);
+  const targetMilestoneSupply = calculateTotalSupplyToTargetEras(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.targetEras, token.liquidityTokensRatio);
   drawPixelRect(ctx, 215, infoY, 170, 60, '#ffffff');
   ctx.font = '16px RetroPixel';
   ctx.fillText('Target MS supply', 225, infoY + 20);

@@ -33,7 +33,8 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
       token.epochesPerEra,
       token.initialTargetMintSizePerEpoch,
       token.reduceRatio,
-      token.targetEras
+      token.targetEras,
+      token.liquidityTokensRatio,
     );
   }, [token.targetEras, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.epochesPerEra]);
 
@@ -141,7 +142,7 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
           />
           <DataBlock
             label={t('tokenInfo.maxSupply')}
-            value={calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
+            value={calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
             tooltip={t('tooltip.maxSupply')}
           />
           <DataBlock

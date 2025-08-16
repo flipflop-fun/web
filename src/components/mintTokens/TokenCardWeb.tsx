@@ -36,7 +36,8 @@ export const TokenCardWeb: React.FC<TokenCardWebProps> = ({ token }) => {
     const maxSupply = calculateMaxSupply(
       token.epochesPerEra,
       token.initialTargetMintSizePerEpoch,
-      token.reduceRatio
+      token.reduceRatio,
+      token.liquidityTokensRatio,
     );
     return percentToTargetEras * Number(maxSupply);
   }, [token.targetEras, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.epochesPerEra]);

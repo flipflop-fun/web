@@ -53,30 +53,43 @@ export const getTimeRemaining = (startTimestamp: string) => {
   return `Start in ${formatSeconds(diff)}`;
 };
 
-export const calculateMaxSupply = (epochesPerEra: string, initialTargetMintSizePerEpoch: string, reduceRatio: string): number => {
+export const mintSizeForVault = (mintSizeForMinter: number, liquidityTokensRatio: number): number => {
+  return mintSizeForMinter * liquidityTokensRatio / (1 - liquidityTokensRatio);
+}
+
+export const calculateMaxSupply = (epochesPerEra: string, initialTargetMintSizePerEpoch: string, reduceRatio: string, liquidityTokensRatio: string): number => {
   const epochesPerEraNum = parseFloat(epochesPerEra) || 0;
+  const liquidityTokensRatioNum = (parseFloat(liquidityTokensRatio) / 100) || 0.2;
   const initialTargetMintSizePerEpochNum = numberStringToBN(initialTargetMintSizePerEpoch).div(BN_LAMPORTS_PER_SOL).toNumber();
+  const initialTargetMintSizePerEpochWithVaultNum = mintSizeForVault(initialTargetMintSizePerEpochNum, liquidityTokensRatioNum);
   const reduceRatioNum = parseFloat(reduceRatio) / 100 || 0;
 
   if (epochesPerEraNum <= 0 || initialTargetMintSizePerEpochNum <= 0 || reduceRatioNum <= 0) {
     return 0;
   }
 
-  return epochesPerEraNum * initialTargetMintSizePerEpochNum / (1 - reduceRatioNum);
+  return epochesPerEraNum * initialTargetMintSizePerEpochWithVaultNum / (1 - reduceRatioNum);
 };
 
 export const getMintSpeed = (targetSecondsPerEpoch: string, initialTargetMintSizePerEpoch: string, initialMintSize: string) => {
   return Number(targetSecondsPerEpoch) / Number(initialTargetMintSizePerEpoch) * Number(initialMintSize);
 }
 export const getMintedSupply = (supply: string, liquidityTokensRatio: string) => {
-  return numberStringToBN(supply).sub(numberStringToBN(supply).mul(numberStringToBN(liquidityTokensRatio)).div(BN_HUNDRED)).div(BN_LAMPORTS_PER_SOL).toNumber();
+  // the params: supply is including vault amount, return the amount only for minter
+  // return numberStringToBN(supply).sub(numberStringToBN(supply).mul(numberStringToBN(liquidityTokensRatio)).div(BN_HUNDRED)).div(BN_LAMPORTS_PER_SOL).toNumber();
+  const totalSupply = numberStringToBN(supply);
+  const liquidityRatio = numberStringToBN(liquidityTokensRatio);
+  const vaultAmount = totalSupply.mul(liquidityRatio).div(BN_HUNDRED);
+  const mintedSupplyInLamports = totalSupply.sub(vaultAmount);
+  return mintedSupplyInLamports.div(BN_LAMPORTS_PER_SOL).toNumber();
 }
 
 export const calculateTotalSupplyToTargetEras = (
   epochesPerEra: string,
   initialTargetMintSizePerEpoch: string,
   reduceRatio: string,
-  targetEras: string
+  targetEras: string,
+  liquidityTokensRatio: string
 ): number => {
   const reduceRatioNum = parseFloat(reduceRatio) / 100 || 0;
   const targetErasNum = parseFloat(targetEras) || 0;
@@ -85,7 +98,7 @@ export const calculateTotalSupplyToTargetEras = (
     return 0;
   }
 
-  const maxSupply = calculateMaxSupply(epochesPerEra, initialTargetMintSizePerEpoch, reduceRatio);
+  const maxSupply = calculateMaxSupply(epochesPerEra, initialTargetMintSizePerEpoch, reduceRatio, liquidityTokensRatio);
   const percentToTargetEras = 1 - Math.pow(reduceRatioNum, targetErasNum);
   const totalsupplyToTargetEras = percentToTargetEras * maxSupply;
   return totalsupplyToTargetEras;
