@@ -5,46 +5,26 @@ export const APP_NAME = 'flipflop';
 export const VERSION_DESCRIPTION = 'Rehearsal';
 
 export const DEFAULT_PARAMS = {
-    // "standard": { // must be same as program default params
-    //     targetEras: '1',
-    //     epochesPerEra: '250',
-    //     targetSecondsPerEpoch: '2000',
-    //     reduceRatio: '50',
-    //     initialMintSize: '25000000000000',
-    //     initialTargetMintSizePerEpoch: '200000000000000',
-    //     feeRate: '250000000',
-    //     liquidityTokensRatio: '20',
-    // },
-    // "meme": { // config for mainnet 
-    //     targetEras: '1',
-    //     epochesPerEra: '250',
-    //     targetSecondsPerEpoch: '2000',
-    //     reduceRatio: '75',
-    //     initialMintSize: '100000000000000',
-    //     initialTargetMintSizePerEpoch: '1000000000000000',
-    //     feeRate: '50000000',
-    //     liquidityTokensRatio: '20',
-    // },
   standard: {
     // must be same as program default params
     targetEras: '1',
-    epochesPerEra: '250',
+    epochesPerEra: '200',
     targetSecondsPerEpoch: '2000',
     reduceRatio: '50',
     initialMintSize: '20000000000000',
     initialTargetMintSizePerEpoch: '200000000000000',
-    feeRate: '200000000',
+    feeRate: '250000000',
     liquidityTokensRatio: '20',
   },
   meme: {
     // config for mainnet, 100 - 557 SOL
     targetEras: '1',
-    epochesPerEra: '250',
+    epochesPerEra: '200',
     targetSecondsPerEpoch: '2000',
     reduceRatio: '75',
     initialMintSize: '100000000000000',
     initialTargetMintSizePerEpoch: '1000000000000000',
-    feeRate: '40000000',
+    feeRate: '50000000',
     liquidityTokensRatio: '20',
   },
 } as Record<string, TokenParams>;
