@@ -61,7 +61,7 @@ export const calculateMaxSupply = (epochesPerEra: string, initialTargetMintSizeP
   const epochesPerEraNum = parseFloat(epochesPerEra) || 0;
   const liquidityTokensRatioNum = (parseFloat(liquidityTokensRatio) / 100) || 0.2;
   const initialTargetMintSizePerEpochNum = numberStringToBN(initialTargetMintSizePerEpoch).div(BN_LAMPORTS_PER_SOL).toNumber();
-  const initialTargetMintSizePerEpochWithVaultNum = mintSizeForVault(initialTargetMintSizePerEpochNum, liquidityTokensRatioNum);
+  const initialTargetMintSizePerEpochWithVaultNum = initialTargetMintSizePerEpochNum + mintSizeForVault(initialTargetMintSizePerEpochNum, liquidityTokensRatioNum);
   const reduceRatioNum = parseFloat(reduceRatio) / 100 || 0;
 
   if (epochesPerEraNum <= 0 || initialTargetMintSizePerEpochNum <= 0 || reduceRatioNum <= 0) {
@@ -97,7 +97,6 @@ export const calculateTotalSupplyToTargetEras = (
   if (reduceRatioNum <= 0 || targetErasNum <= 0) {
     return 0;
   }
-
   const maxSupply = calculateMaxSupply(epochesPerEra, initialTargetMintSizePerEpoch, reduceRatio, liquidityTokensRatio);
   const percentToTargetEras = 1 - Math.pow(reduceRatioNum, targetErasNum);
   const totalsupplyToTargetEras = percentToTargetEras * maxSupply;
@@ -251,11 +250,8 @@ export function getFeeValue(
   const SCALE = BN_MILLION; // new BN(1000000);
 
   // Calculate balance ratio with scale
-  console.log("referrerAtaBalance:", referrerAtaBalance.toString());
-  console.log("totalSupply:", totalSupply.toString());
   const balanceRatioScaled = totalSupply.gt(new BN(0)) ? referrerAtaBalance.mul(SCALE).div(totalSupply) : new BN(0);
   const balanceRatio = balanceRatioScaled.toNumber() / SCALE.toNumber();
-  console.log("balance_ratio:", balanceRatio);
 
   // Determine discount rate and convert to scaled BN
   let discountRateScaled: BN;
@@ -272,8 +268,7 @@ export function getFeeValue(
   } else {
     discountRateScaled = new BN(0);
   }
-  const discountRate = discountRateScaled.toNumber() / SCALE.toNumber();
-  console.log("discount_rate:", discountRate);
+  // const discountRate = discountRateScaled.toNumber() / SCALE.toNumber();
 
   // Convert difficultyCoefficient to scaled BN
   const difficultyScaled = new BN(Math.floor(difficultyCoefficient * SCALE.toNumber()));
@@ -284,10 +279,10 @@ export function getFeeValue(
   const scaledMultiplier = one.add(discountByDifficulty).sub(discountRateScaled);
   const fee = feeRate.mul(scaledMultiplier).div(SCALE);
 
-  console.log(
-    "fee:",
-    `${1} + ${discountRate} / ${difficultyCoefficient} - ${discountRate} = ${fee.toString()}`
-  );
+  // console.log(
+  //   "fee:",
+  //   `${1} + ${discountRate} / ${difficultyCoefficient} - ${discountRate} = ${fee.toString()}`
+  // );
 
   // Calculate code sharer reward: 0.2 * feeRate * discountRate * (1 - 1/difficultyCoefficient)
   const rewardBase = new BN(200000); // 0.2 * SCALE
