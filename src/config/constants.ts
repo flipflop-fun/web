@@ -64,7 +64,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     createPoolFeeReceive: new PublicKey("DNXgeM9EiiaAbaWvwjHj9fQQLAX5ZsfHyvmYUNRAdNC8"),
     memoProgram: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
     addressLookupTableAddress: new PublicKey("7DK7pmNkUeeFB3yxt6bJcPCWcG4L3AdCe2WZaBguy9sq"),
-    launchRuleAccount: new PublicKey("G9KkZg3MQen877QPmNwvTFzfm9gY7fzQEdhbrHbpCXQj"), // ######
+    launchRuleAccount: new PublicKey("G9KkZg3MQen877QPmNwvTFzfm9gY7fzQEdhbrHbpCXQj"),
     chartApiUrl: 'https://chart-api.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
 };
