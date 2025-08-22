@@ -2,7 +2,7 @@ import { PublicKey } from '@solana/web3.js';
 import { TokenParams, NetworkConfig, NetworkConfigs } from '../types/types';
 
 export const APP_NAME = 'flipflop';
-export const VERSION_DESCRIPTION = 'Rehearsal';
+// export const VERSION_DESCRIPTION = 'Mainnet';
 
 export const DEFAULT_PARAMS = {
   standard: {

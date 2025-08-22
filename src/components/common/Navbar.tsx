@@ -7,7 +7,7 @@ import { useDeviceType } from '../../hooks/device';
 import { LanguageSelector } from './LanguageSelector';
 import { useTranslation } from 'react-i18next';
 import { Language } from '../../types/types';
-import { VERSION_DESCRIPTION } from '../../config/constants';
+// import { VERSION_DESCRIPTION } from '../../config/constants';
 
 export const Navbar: React.FC<NavbarProps> = ({
   title = "Logo",
@@ -17,8 +17,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { isMobile, isDesktop } = useDeviceType();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [showWarning, setShowWarning] = useState(VERSION_DESCRIPTION === "Rehearsal");
-  const { t } = useTranslation();
+  // const [showWarning, setShowWarning] = useState(VERSION_DESCRIPTION === "Rehearsal");
+  // const { t } = useTranslation();
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -75,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 bg-base-300 shadow-md border-b-2 border-primary-content transition-transform duration-300 ${!isVisible ? '-translate-y-full' : 'translate-y-0'}`}>
       {/* Warning banner */}
-      {showWarning && (
+      {/* {showWarning && (
         <div className="bg-warning text-red-600 px-4 py-4 text-center text-bg font-bold relative">
           <div className="flex items-center justify-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -92,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </svg>
           </button>
         </div>
-      )}
+      )} */}
       
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">

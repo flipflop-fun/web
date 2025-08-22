@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaChevronDown, FaChevronUp, FaDiscord } from 'react-icons/fa';
 import { MenuItem, SidebarProps } from '../../types/types';
-import { LOCAL_STORAGE_KEY_EXPANDED, VERSION_DESCRIPTION } from '../../config/constants';
+import { LOCAL_STORAGE_KEY_EXPANDED } from '../../config/constants';
 import { FaTwitter, FaTelegram, FaGithub, FaMedium } from 'react-icons/fa';
 import { socialLinks } from '../../config/social';
 import { useDeviceType } from '../../hooks/device';
@@ -127,7 +127,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Social icons */}
       <div className="absolute bottom-0 py-4 px-3 bg-base-300">
-        {!isMobile && <div className='mb-3'>{packageJson.version} {VERSION_DESCRIPTION}</div>}
+        {!isMobile && <div className='mb-3'>{packageJson.version}</div>}
         {socialIcons.map((social, index) => (
           <a 
             key={index}
