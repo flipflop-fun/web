@@ -174,6 +174,7 @@ export type AddressDisplayProps = {
 export type DiscoverProps = {
   expanded: boolean;
   hasDelegatedTokens: boolean;
+  graduatedToken: boolean;
 };
 
 export type TokenDetailProps = {

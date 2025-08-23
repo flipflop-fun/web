@@ -59,21 +59,23 @@ export const mintSizeForVault = (mintSizeForMinter: number, liquidityTokensRatio
 
 export const calculateMaxSupply = (epochesPerEra: string, initialTargetMintSizePerEpoch: string, reduceRatio: string, liquidityTokensRatio: string): number => {
   const epochesPerEraNum = parseFloat(epochesPerEra) || 0;
-  const liquidityTokensRatioNum = (parseFloat(liquidityTokensRatio) / 100) || 0.2;
+  // const liquidityTokensRatioNum = (parseFloat(liquidityTokensRatio) / 100) || 0.2;
   const initialTargetMintSizePerEpochNum = numberStringToBN(initialTargetMintSizePerEpoch).div(BN_LAMPORTS_PER_SOL).toNumber();
-  const initialTargetMintSizePerEpochWithVaultNum = initialTargetMintSizePerEpochNum + mintSizeForVault(initialTargetMintSizePerEpochNum, liquidityTokensRatioNum);
+  // const initialTargetMintSizePerEpochWithVaultNum = initialTargetMintSizePerEpochNum + mintSizeForVault(initialTargetMintSizePerEpochNum, liquidityTokensRatioNum);
+  // console.log("initialTargetMintSizePerEpochWithVaultNum", initialTargetMintSizePerEpochWithVaultNum)
   const reduceRatioNum = parseFloat(reduceRatio) / 100 || 0;
 
   if (epochesPerEraNum <= 0 || initialTargetMintSizePerEpochNum <= 0 || reduceRatioNum <= 0) {
     return 0;
   }
 
-  return epochesPerEraNum * initialTargetMintSizePerEpochWithVaultNum / (1 - reduceRatioNum);
+  return epochesPerEraNum * initialTargetMintSizePerEpochNum / (1 - reduceRatioNum);
 };
 
 export const getMintSpeed = (targetSecondsPerEpoch: string, initialTargetMintSizePerEpoch: string, initialMintSize: string) => {
   return Number(targetSecondsPerEpoch) / Number(initialTargetMintSizePerEpoch) * Number(initialMintSize);
 }
+
 export const getMintedSupply = (supply: string, liquidityTokensRatio: string) => {
   // the params: supply is including vault amount, return the amount only for minter
   // return numberStringToBN(supply).sub(numberStringToBN(supply).mul(numberStringToBN(liquidityTokensRatio)).div(BN_HUNDRED)).div(BN_LAMPORTS_PER_SOL).toNumber();

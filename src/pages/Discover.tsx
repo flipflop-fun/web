@@ -1,6 +1,6 @@
 import React, { useState, KeyboardEvent, useEffect, useMemo } from 'react';
 import { useQuery, useLazyQuery } from '@apollo/client';
-import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent } from '../utils/graphql';
+import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent, queryInitializeTokenEventGraduated, queryHotInitializeTokenEventGraduated } from '../utils/graphql';
 import { InitiazlizedTokenData, DiscoverProps } from '../types/types';
 import { FaSearch } from 'react-icons/fa';
 import { ErrorBox } from '../components/common/ErrorBox';
@@ -15,7 +15,8 @@ import { useTranslation } from 'react-i18next';
 
 export const Discover: React.FC<DiscoverProps> = ({
   expanded,
-  hasDelegatedTokens
+  hasDelegatedTokens,
+  graduatedToken,
 }) => {
   const [searchInput, setSearchInput] = useState('');
   // const [isSearchMode, setIsSearchMode] = useState(false);
@@ -38,16 +39,18 @@ export const Discover: React.FC<DiscoverProps> = ({
     localStorage.setItem('search_history', JSON.stringify(newHistory));
   };
 
-  const { loading: initialLoading, error: initialError, data: latestData } = useQuery(queryInitializeTokenEvent, {
+  const { loading: initialLoading, error: initialError, data: latestData } = useQuery(graduatedToken ? queryInitializeTokenEventGraduated : queryInitializeTokenEvent, {
     variables: {
       orderBy: 'timestamp',
+      targetEras: 1,
     },
     fetchPolicy: 'network-only',
   });
 
-  const { loading: hotLoading, error: hotError, data: hotData } = useQuery(queryHotInitializeTokenEvent, {
+  const { loading: hotLoading, error: hotError, data: hotData } = useQuery(graduatedToken ? queryHotInitializeTokenEventGraduated : queryHotInitializeTokenEvent, {
     variables: {
       orderBy: 'difficultyCoefficientEpoch',
+      targetEras: 1,
     },
     fetchPolicy: 'network-only',
   });
@@ -135,7 +138,7 @@ export const Discover: React.FC<DiscoverProps> = ({
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
       {/* Search Bar */}
-      <PageHeader title={t('discover.title')} bgImage='/bg/group1/1.jpg' />
+      <PageHeader title={graduatedToken ? t('discover.graduatedToken') : t('discover.title')} bgImage='/bg/group1/1.jpg' />
       <div className="md:max-w-6xl mx-auto mb-3 md:mb-12">
         <div className="flex flex-wrap gap-2 mb-4">
           <button 

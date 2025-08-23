@@ -1,9 +1,14 @@
 import { gql } from '@apollo/client';
 
 export const queryInitializeTokenEvent = gql`
-query GetInitializedTokenEvents($orderBy: String!) {
+query GetInitializedTokenEvents($orderBy: String!, $targetEras: Int!) {
     initializeTokenEventEntities(
-        where: { status: 1 }
+        where: {
+            and: [
+                { status: 1 },
+                { currentEra_lte: $targetEras }
+            ]
+        }
         first: 50
         orderBy: $orderBy
         orderDirection: desc
@@ -51,9 +56,114 @@ query GetInitializedTokenEvents($orderBy: String!) {
 }`;
 
 export const queryHotInitializeTokenEvent = gql`
-query QueryHotInitializeTokenEvent($orderBy: String!) {
+query QueryHotInitializeTokenEvent($orderBy: String!, $targetEras: Int!) {
     initializeTokenEventEntities(
-        where: { status: 1 }
+        where: { and: [{ status: 1 }, { currentEra_lte: $targetEras }] }
+        first: 100 
+        orderBy: $orderBy
+        orderDirection: desc
+    ) {
+        id
+        currentEra
+        targetEras
+        txId
+        admin
+        tokenId
+        mint
+        configAccount
+        metadataAccount
+        tokenVault
+        timestamp
+        tokenName
+        tokenSymbol
+        tokenUri
+        supply
+        currentEpoch
+        elapsedSecondsEpoch
+        startTimestampEpoch
+        lastDifficultyCoefficientEpoch
+        difficultyCoefficientEpoch
+        mintSizeEpoch
+        quantityMintedEpoch
+        targetMintSizeEpoch
+        totalMintFee
+        totalReferrerFee
+        totalTokens
+        epochesPerEra
+        targetSecondsPerEpoch
+        reduceRatio
+        initialMintSize
+        initialTargetMintSizePerEpoch
+        feeRate
+        liquidityTokensRatio
+        startTimestamp
+        status
+        metadataTimestamp
+        valueManager
+        wsolVault
+        graduateEpoch
+    }
+}`;
+
+export const queryInitializeTokenEventGraduated = gql`
+query GetInitializedTokenEvents($orderBy: String!, $targetEras: Int!) {
+    initializeTokenEventEntities(
+        where: {
+            and: [
+                { status: 1 },
+                { currentEra_gt: $targetEras }
+            ]
+        }
+        first: 50
+        orderBy: $orderBy
+        orderDirection: desc
+    ) {
+        id
+        txId
+        admin
+        tokenId
+        mint
+        configAccount
+        metadataAccount
+        tokenVault
+        timestamp
+        tokenName
+        tokenSymbol
+        tokenUri
+        supply
+        currentEra
+        currentEpoch
+        elapsedSecondsEpoch
+        startTimestampEpoch
+        lastDifficultyCoefficientEpoch
+        difficultyCoefficientEpoch
+        mintSizeEpoch
+        quantityMintedEpoch
+        targetMintSizeEpoch
+        totalMintFee
+        totalReferrerFee
+        totalTokens
+        targetEras
+        epochesPerEra
+        targetSecondsPerEpoch
+        reduceRatio
+        initialMintSize
+        initialTargetMintSizePerEpoch
+        feeRate
+        liquidityTokensRatio
+        startTimestamp
+        status
+        metadataTimestamp
+        valueManager
+        wsolVault
+        graduateEpoch
+    }
+}`;
+
+export const queryHotInitializeTokenEventGraduated = gql`
+query QueryHotInitializeTokenEvent($orderBy: String!, $targetEras: Int!) {
+    initializeTokenEventEntities(
+        where: { and: [{ status: 1 }, { currentEra_gt: $targetEras }] }
         first: 100 
         orderBy: $orderBy
         orderDirection: desc

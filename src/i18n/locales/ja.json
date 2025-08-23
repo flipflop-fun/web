@@ -107,7 +107,8 @@
     "socialActivities": "ソーシャルアクティビティ",
     "socialExplore": "ソーシャル探索",
     "socialProfile": "私のプロフィール",
-    "askAI": "AIに質問"
+    "askAI": "AIに質問",
+    "graduated": "卒業済み"
   },
   "buttons": {
     "connect": "ウォレットを接続",
@@ -117,6 +118,7 @@
   },
   "discover": {
     "title": "発見",
+    "graduatedToken": "卒業済みトークン",
     "search": "検索",
     "searchPlaceholder": "トークンのシンボル、名前、またはアドレスを入力して検索...",
     "latestTokens": "最新トークン",

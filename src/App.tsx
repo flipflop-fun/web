@@ -139,8 +139,9 @@ const AppContent = () => {
 
         <div className="flex-1 p-4 md:p-8 pb-20">
           <Routes>
-            <Route path="/" element={<Discover expanded={expanded} hasDelegatedTokens={hasDelegatedTokens} />} />
-            <Route path="/discover" element={<Discover expanded={expanded} hasDelegatedTokens={hasDelegatedTokens} />} />
+            <Route path="/" element={<Discover expanded={expanded} hasDelegatedTokens={hasDelegatedTokens} graduatedToken={false} />} />
+            <Route path="/discover" element={<Discover expanded={expanded} hasDelegatedTokens={hasDelegatedTokens} graduatedToken={false} />} />
+            <Route path="/graduated" element={<Discover expanded={expanded} hasDelegatedTokens={hasDelegatedTokens} graduatedToken={true} />} />
             <Route path="/launch-token" element={<LaunchTokenForm expanded={expanded} />} />
             <Route path="/my-minted-tokens" element={<MyMintedTokens expanded={expanded} />} />
             <Route path="/my-deployments" element={<MyDeployments expanded={expanded} />} />

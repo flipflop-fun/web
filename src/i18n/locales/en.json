@@ -107,7 +107,8 @@
     "socialActivities": "Social Activities",
     "socialExplore": "Social Explore",
     "socialProfile": "My Profile",
-    "askAI": "Ask AI"
+    "askAI": "Ask AI",
+    "graduated": "Graduated"
   },
   "buttons": {
     "connect": "Connect Wallet",
@@ -117,6 +118,7 @@
   },
   "discover": {
     "title": "Discover",
+    "graduatedToken": "Graduated Tokens",
     "search": "Search",
     "searchPlaceholder": "Enter token symbol, name, or address to search...",
     "latestTokens": "Latest Tokens",

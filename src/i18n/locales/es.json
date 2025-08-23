@@ -107,7 +107,8 @@
     "socialActivities": "Actividades sociales",
     "socialExplore": "Explorar social",
     "socialProfile": "Mi perfil",
-    "askAI": "Preguntar a la IA"
+    "askAI": "Preguntar a la IA",
+    "graduated": "Graduado"
   },
   "buttons": {
     "connect": "Conectar billetera",
@@ -117,6 +118,7 @@
   },
   "discover": {
     "title": "Descubrir",
+    "graduatedToken": "Tokens Graduados",
     "search": "Buscar",
     "searchPlaceholder": "Introduce el símbolo, nombre o dirección del token para buscar...",
     "latestTokens": "Últimos tokens",

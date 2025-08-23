@@ -107,7 +107,8 @@
     "socialActivities": "社交活動",
     "socialExplore": "社交探索",
     "socialProfile": "我的",
-    "askAI": "詢問AI"
+    "askAI": "詢問AI",
+    "graduated": "已畢業"
   },
   "buttons": {
     "connect": "連接錢包",
@@ -117,6 +118,7 @@
   },
   "discover": {
     "title": "發現",
+    "graduatedToken": "已畢業代幣",
     "search": "搜索",
     "searchPlaceholder": "輸入代幣符號、名稱或地址搜索...",
     "latestTokens": "最新代幣",
@@ -221,7 +223,7 @@
     "closeMintAttention": "你即將關閉 {{name}} ({{symbol}}) 的鑄造功能。關閉後你將收到一些 SOL 作為賬戶退款，此操作不可撤銷！",
     "average": "鑄造平均間隔",
     "closeMintConfirmation": "確認關閉該代幣",
-    "refundConfirmation": "我知曉���該操作不可撤銷，確認該操作",
+    "refundConfirmation": "我知曉該操作不可撤銷，確認該操作",
     "totalPaid": "總支付",
     "bonusToReferrer": "推薦人所得",
     "refundFee": "退款費率",

@@ -107,7 +107,8 @@
     "socialActivities": "社交活动",
     "socialExplore": "社交探索",
     "socialProfile": "我的个人资料",
-    "askAI": "询问AI"
+    "askAI": "询问AI",
+    "graduated": "已毕业"
   },
   "buttons": {
     "connect": "连接钱包",
@@ -117,6 +118,7 @@
   },
   "discover": {
     "title": "发现",
+    "graduatedToken": "已毕业代币",
     "search": "搜索",
     "searchPlaceholder": "输入代币符号、名称或地址进行搜索...",
     "latestTokens": "最新代币",

@@ -107,7 +107,8 @@
     "socialActivities": "Hoạt động xã hội",
     "socialExplore": "Khám phá xã hội",
     "socialProfile": "Hồ sơ của tôi",
-    "askAI": "Hỏi AI"
+    "askAI": "Hỏi AI",
+    "graduated": "Đã tốt nghiệp"
   },
   "buttons": {
     "connect": "Kết nối ví",
@@ -117,6 +118,7 @@
   },
   "discover": {
     "title": "Khám phá",
+    "graduatedToken": "Token Đã Tốt Nghiệp",
     "search": "Tìm kiếm",
     "searchPlaceholder": "Nhập biểu tượng, tên hoặc địa chỉ token để tìm kiếm...",
     "latestTokens": "Token mới nhất",

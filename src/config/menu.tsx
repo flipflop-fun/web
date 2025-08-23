@@ -28,7 +28,14 @@ export const menuItems = (expended: boolean, hasDelegatedTokens: boolean, t: any
     label: t?.('menu.discover') || 'Discover', // Mint or mine tokens
     visible: true,
     icon: <svg className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"> <path d="M13 2h-2v4h2V2Zm2 6H9v2H7v4h2v4h6v-4h2v-4h-2V8Zm0 2v4h-2v2h-2v-2H9v-4h6ZM9 20h6v2H9v-2Zm14-9v2h-4v-2h4ZM5 13v-2H1v2h4Zm12-7h2v2h-2V6Zm2 0h2V4h-2v2ZM5 6h2v2H5V6Zm0 0V4H3v2h2Z" /> </svg>,
-    component: <Discover expanded={expended} hasDelegatedTokens={hasDelegatedTokens} />
+    component: <Discover expanded={expended} hasDelegatedTokens={hasDelegatedTokens} graduatedToken={false} />
+  },
+  {
+    id: 'graduated',
+    label: t?.('menu.graduated') || 'Graduated', // Mint or mine tokens
+    visible: true,
+    icon: <svg className='w-5 h-5' xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/> </svg>,
+    component: <Discover expanded={expended} hasDelegatedTokens={hasDelegatedTokens} graduatedToken={true} />
   },
   {
     id: 'launch-token',
