@@ -9,10 +9,12 @@ import { NETWORK_CONFIGS } from "../../config/constants"
 import { InitiazlizedTokenData } from "../../types/types"
 import { useDeviceType } from "../../hooks/device"
 import { useTranslation } from "react-i18next"
+import { Liquidity } from "../../types/types"
+import { NATIVE_MINT } from "@solana/spl-token"
 
 export type LiquiditiesProps = {
   onDone: () => void;
-  liquiditiesData: any;
+  liquiditiesData: Liquidity[];
   tokenData: InitiazlizedTokenData;
   currentPrice: number;
   tokenVaultBalance: number;
@@ -292,19 +294,23 @@ export const Liquidities: FC<LiquiditiesProps> = ({
                 <tr>
                   <th>{t('tokenInfo.transactionId')}</th>
                   {/* <th>Action</th> */}
-                  {!isMobile && <th>Amount0</th>}
-                  {!isMobile && <th>Amount1</th>}
+                  {!isMobile && <th>Token</th>}
+                  {!isMobile && <th>SOL</th>}
                   <th>{t('vm.lpAmount')}</th>
                   {!isMobile && <th>{t('common.time')}</th>}
                 </tr>
               </thead>
               <tbody>
-                {liquiditiesData.map((liquidity: any) => (
+                {liquiditiesData.map((liquidity: Liquidity) => (
                   <tr key={liquidity.id} className={liquidity.action === 'withdraw' ? 'text-error' : 'text-[#009866]'}>
                     <td><AddressDisplay address={liquidity.txId} type='tx' /></td>
                     {/* <td>{liquidity.action === 'withdraw' ? 'Remove' : 'Add'}</td> */}
-                    {!isMobile && <td>{(liquidity.token0Amount / 1e9).toFixed(4)} {liquidity.tokenSymbol}</td>}
-                    {!isMobile && <td>{(liquidity.token1Amount / 1e9).toFixed(4)} SOL</td>}
+                    {!isMobile && (liquidity.token0Mint === liquidity.tokenMint ? 
+                      <td>{(liquidity.token0Amount / 1e9).toFixed(4)} {liquidity.tokenSymbol}</td> : 
+                      <td>{(liquidity.token1Amount / 1e9).toFixed(4)} {liquidity.tokenSymbol}</td>)}
+                    {!isMobile && (liquidity.token1Mint === NATIVE_MINT.toBase58() ? 
+                      <td>{(liquidity.token1Amount / 1e9).toFixed(4)} SOL</td> : 
+                      <td>{(liquidity.token0Amount / 1e9).toFixed(4)} SOL</td>)}
                     <td>{(liquidity.lpAmount / 1e9).toFixed(4)}</td>
                     {!isMobile && <td>{new Date(parseInt(liquidity.blockTimestamp) * 1000).toLocaleString()}</td>}
                   </tr>

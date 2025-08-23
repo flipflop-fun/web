@@ -177,18 +177,18 @@ export const getReferrerCodeHash = (
   };
 }
 
-export const getBalance = async (
-  connection: Connection,
-  publicKey: string
-): Promise<number> => {
-  try {
-    const balance = await connection.getBalance(new PublicKey(publicKey));
-    return balance / 1e9; // Convert lamports to SOL
-  } catch (error) {
-    console.error('Error getting balance:', error);
-    throw error;
-  }
-};
+// export const getBalance = async (
+//   connection: Connection,
+//   publicKey: PublicKey
+// ): Promise<number> => {
+//   try {
+//     const balance = await connection.getBalance(publicKey);
+//     return balance / 1e9; // Convert lamports to SOL
+//   } catch (error) {
+//     console.error('Error getting balance:', error);
+//     throw error;
+//   }
+// };
 
 export const getTokenBalance = async (ata: PublicKey, connection: Connection): Promise<number | null> => {
   const account = await connection.getTokenAccountBalance(ata);

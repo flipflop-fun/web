@@ -48,6 +48,8 @@
     "addressGenerated": "地址已生成",
     "start": "开始",
     "end": "结束",
+    "termsOfService": "用户使用条款",
+    "agreeToTerms": "我已阅读并同意用户使用条款",
     "wrongAmount": "数量错误",
     "insufficientBalance": "余额不足",
     "pleaseEnterValidAmount": "请输入有效数量",
@@ -183,6 +185,7 @@
     "metadata": "代币元数据",
     "metadataJson": "原始元数据JSON",
     "authorities": "代币权限",
+    "burnLp": "销毁LP代币",
     "view": "查看",
     "noDeployments": "未找到已部署代币信息",
     "noDelegated": "未找到已管理代币信息",
@@ -239,7 +242,8 @@
     "actualPay": "实际支付",
     "noRefundDataAvailable": "无退款数据可用",
     "noTokensAvailableForRefund": "无代币可用于退款",
-    "refundSuccessful": "退款成功"
+    "refundSuccessful": "退款成功",
+    "insufficientBalance": "Solana余额不足以进行铸造，请检查您的钱包并确保至少有{{min}} SOL。"
   },
   "vm": {
     "manageMarketValue": "代币市值管理",

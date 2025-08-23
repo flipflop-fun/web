@@ -48,6 +48,8 @@
     "addressGenerated": "アドレスが生成されました",
     "start": "開始",
     "end": "終了",
+    "termsOfService": "利用規約",
+    "agreeToTerms": "利用規約を読み、同意します",
     "wrongAmount": "誤った数量",
     "insufficientBalance": "残高不足",
     "pleaseEnterValidAmount": "有効な数量を入力してください",
@@ -183,6 +185,7 @@
     "metadata": "トークンメタデータ",
     "metadataJson": "生メタデータJSON",
     "authorities": "トークン権限",
+    "burnLp": "LPトークンをバーン",
     "view": "表示",
     "noDeployments": "展開されたトークン情報が見つかりません",
     "noDelegated": "管理されたトークン情報が見つかりません",
@@ -239,7 +242,8 @@
     "actualPay": "実際の支払い",
     "noRefundDataAvailable": "払い戻しデータがありません",
     "noTokensAvailableForRefund": "払い戻し可能なトークンがありません",
-    "refundSuccessful": "払い戻しに成功しました"
+    "refundSuccessful": "払い戻しに成功しました",
+    "insufficientBalance": "ミントするにはSolanaの残高が不足しています。ウォレットを確認し、少なくとも{{min}} SOLがあることを確認してください。"
   },
   "vm": {
     "manageMarketValue": "トークン時価総額管理",

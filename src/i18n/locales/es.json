@@ -48,6 +48,8 @@
     "addressGenerated": "Dirección generada",
     "start": "Inicio",
     "end": "Fin",
+    "termsOfService": "Términos de Servicio",
+    "agreeToTerms": "He leído y acepto los Términos de Servicio",
     "wrongAmount": "Cantidad incorrecta",
     "insufficientBalance": "Saldo insuficiente",
     "pleaseEnterValidAmount": "Por favor, introduce una cantidad válida",
@@ -182,7 +184,8 @@
     "logo": "Logotipo",
     "metadata": "Metadatos del token",
     "metadataJson": "JSON de metadatos sin procesar",
-    "authorities": "Autoridades del token",
+    "authorities": "Autoridades del Token",
+    "burnLp": "Quemar tokens LP",
     "view": "Ver",
     "noDeployments": "No se encontró información de tokens implementados",
     "noDelegated": "No se encontró información de tokens gestionados",
@@ -239,7 +242,8 @@
     "actualPay": "Pago real",
     "noRefundDataAvailable": "No hay datos de reembolso disponibles",
     "noTokensAvailableForRefund": "No hay tokens disponibles para reembolso",
-    "refundSuccessful": "Reembolso exitoso"
+    "refundSuccessful": "Reembolso exitoso",
+    "insufficientBalance": "El saldo de Solana no es suficiente para acuñar, verifica tu billetera y asegúrate de que tenga al menos {{min}} SOL."
   },
   "vm": {
     "manageMarketValue": "Gestión de capitalización de mercado del token",

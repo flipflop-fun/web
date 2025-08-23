@@ -171,6 +171,16 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
                         >
                           {t('tokenInfo.authorities')}
                         </button>
+                        {Number(token.currentEra) > Number(token.targetEras) && (
+                          <button
+                            className="btn btn-sm btn-warning"
+                            onClick={() => {
+                              navigate(`/burn-lp/${token.mint}`);
+                            }}
+                          >
+                            {t('tokenInfo.burnLp')}
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

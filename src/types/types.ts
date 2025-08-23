@@ -681,3 +681,20 @@ export interface NetworkConfigs {
   devnet: NetworkConfig;
   mainnet_beta: NetworkConfig; 
 }
+
+export interface Liquidity {
+  id: number;
+  txId: string;
+  tokenMint: string;
+  tokenName: string;
+  tokenSymbol: string;
+  action: string;
+  token0Mint: string;
+  token1Mint: string;
+  token0Amount: number;
+  token1Amount: number;
+  poolState: number;
+  lpMint: string;
+  lpAmount: number;
+  blockTimestamp: string;
+}

@@ -242,12 +242,14 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
                           >
                             {t('mint.mintMore')}
                           </button>
-                          <button
-                            className="btn btn-sm btn-error"
-                            onClick={() => handleRefund(token)}
-                          >
-                            {t('mint.refund')}
-                          </button>
+                          {Number(token.tokenData?.currentEra) <= Number(token.tokenData?.targetEras) && (
+                            <button
+                              className="btn btn-sm btn-error"
+                              onClick={() => handleRefund(token)}
+                            >
+                              {t('mint.refund')}
+                            </button>
+                          )}
                           <button
                             className="btn btn-sm btn-accent"
                             onClick={() => {

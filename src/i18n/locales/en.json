@@ -48,6 +48,8 @@
     "addressGenerated": "Address Generated",
     "start": "Start",
     "end": "End",
+    "termsOfService": "Terms of Service",
+    "agreeToTerms": "I have read and agree to the Terms of Service",
     "wrongAmount": "Wrong amount",
     "insufficientBalance": "Insufficient balance",
     "pleaseEnterValidAmount": "Please enter a valid amount",
@@ -161,7 +163,7 @@
     "progressToTargetSupply": "Progress to Target Supply",
     "progressToCurrentCheckpoint": "Progress to Current Checkpoint",
     "mintCost": "Mint Cost",
-    "tokenHolders": "Token Holders",
+    "tokenHolders": "Token Minters List",
     "recentMint": "Recent Mints",
     "recentRefund": "Recent Refunds",
     "minter": "Minter",
@@ -183,6 +185,7 @@
     "metadata": "Token Metadata",
     "metadataJson": "Raw Metadata JSON",
     "authorities": "Token Authorities",
+    "burnLp": "Burn LP Tokens",
     "view": "View",
     "noDeployments": "No deployed token information found",
     "noDelegated": "No managed token information found",
@@ -239,7 +242,8 @@
     "actualPay": "Actual pay",
     "noRefundDataAvailable": "No refund data available",
     "noTokensAvailableForRefund": "No tokens available for refund",
-    "refundSuccessful": "Refund successful"
+    "refundSuccessful": "Refund successful",
+    "insufficientBalance": "Solana balance is not enough for minting, check your wallet and make sure it has {{min}} SOL at least."
   },
   "vm": {
     "manageMarketValue": "Token Market Cap Management",

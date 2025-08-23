@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { InitiazlizedTokenData, PoolData } from '../types/types';
+import { InitiazlizedTokenData, Liquidity, PoolData } from '../types/types';
 import { useLazyQuery } from '@apollo/client';
 import { queryBurnLp, queryLiquidities, queryTokensByMints, queryTrades } from '../utils/graphql';
 import { Trades } from '../components/liquidity/Trades';
@@ -13,10 +13,12 @@ import { useTranslation } from 'react-i18next';
 
 type ManageLiquidityProps = {
   expanded: boolean;
+  operator: 'vm' | 'issuer';
 }
 
 export function ManageLiquidity({
   expanded,
+  operator,
 }: ManageLiquidityProps
 ) {
   const [mintAddress, setMintAddress] = useState('');
@@ -24,7 +26,7 @@ export function ManageLiquidity({
   const [poolData, setPoolData] = useState<PoolData | null>(null);
   const [currentPrice, setCurrentPrice] = useState(0);
   const [tradesData, setTradesData] = useState([]);
-  const [liquiditiesData, setLiquiditiesData] = useState([]);
+  const [liquiditiesData, setLiquiditiesData] = useState<Liquidity[]>([]);
   const [lpBurnData, setLpBurnData] = useState([]);
   const [activeTab, setActiveTab] = useState('trades');
   const [tokenVaultBalance, setTokenVaultBalance] = useState(0);
@@ -65,8 +67,8 @@ export function ManageLiquidity({
 
   const [getLiquiditiesData, { loading: queryLiquiditiesLoading }] = useLazyQuery(queryLiquidities, {
     onCompleted: (data) => {
-      const _liquiditiesData = data.proxyLiquidityEventEntities as [];
-      console.log("liquidities", _liquiditiesData);
+      const _liquiditiesData = data.proxyLiquidityEventEntities as Liquidity[];
+      // console.log("liquidities", _liquiditiesData);
       setLiquiditiesData([..._liquiditiesData]);
     },
     onError: (error) => {
@@ -199,27 +201,28 @@ export function ManageLiquidity({
             <div className="bg-base-200 md:p-6 p-3 rounded-lg md:text-md text-sm">
               <div className="grid gap-8">
                 <div className="tabs tabs-boxed">
+                  {operator === 'vm' &&
                   <div
                     className={`tab px-0 h-12 ${activeTab === 'trades' ? 'bg-gray-700 text-white' : ''}`}
                     onClick={() => setActiveTab('trades')}
                   >
                     <div className='font-bold'>[Trade]</div>
-                  </div>
-                  <div
+                  </div>}
+                  {operator === 'vm' && <div
                     className={`tab px-0 h-12 ${activeTab === 'liquidity' ? 'bg-gray-700 text-white' : ''}`}
                     onClick={() => setActiveTab('liquidity')}
                   >
                     <div className='font-bold'>[Liquidity]</div>
-                  </div>
-                  <div
-                    className={`tab px-0 h-12 ${activeTab === 'burn' ? 'bg-gray-700 text-white' : ''}`}
-                    onClick={() => setActiveTab('burn')}
-                  >
-                    <div className='font-bold'>[Burn]</div>
-                  </div>
+                  </div>}
+                  {operator === 'issuer' &&
+                    <button 
+                      className='btn btn-primary'
+                      onClick={() => setActiveTab('burn')}
+                    >{t('tokenInfo.burnLp')}</button>
+                  }
                 </div>
 
-                {activeTab === 'trades' && (
+                {activeTab === 'trades' && operator === 'vm' && (
                   <Trades
                     tradesData={tradesData}
                     tokenData={tokenData as InitiazlizedTokenData}
@@ -231,7 +234,7 @@ export function ManageLiquidity({
                     poolSOLBalance={poolSOLBalance}
                   />
                 )}
-                {activeTab === 'liquidity' && (
+                {activeTab === 'liquidity' && operator === 'vm' && (
                   <Liquidities
                     tokenData={tokenData as InitiazlizedTokenData}
                     liquiditiesData={liquiditiesData}
@@ -245,7 +248,7 @@ export function ManageLiquidity({
                     totalLpToken={totalLpToken}
                   />
                 )}
-                {activeTab === 'burn' && (
+                {activeTab === 'burn' && operator === 'issuer' && (
                   <LpBurns
                     tokenData={tokenData as InitiazlizedTokenData}
                     lpBurnData={lpBurnData}

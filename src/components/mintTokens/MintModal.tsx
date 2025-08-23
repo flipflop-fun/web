@@ -127,6 +127,13 @@ const MintModal: FC<MintModalProps> = ({ isOpen, onClose, token, referrerCode })
       return;
     }
 
+    // Check the balance of Solana
+    const solBalance = await connection.getBalance(wallet.publicKey);
+    if (solBalance < parseInt(token.feeRate)) {
+      toast.error(t('mint.insufficientBalance', {min: parseInt(token.feeRate) / 1e9}));
+      return;
+    }
+
     try {
       setLoading(true);
       const toastId = toast.loading('Minting token...', {

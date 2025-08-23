@@ -48,6 +48,8 @@
     "addressGenerated": "地址已生成",
     "start": "開始",
     "end": "結束",
+    "termsOfService": "用戶使用條款",
+    "agreeToTerms": "我已閱讀並同意用戶使用條款",
     "wrongAmount": "錯誤的數量",
     "insufficientBalance": "餘額不足",
     "pleaseEnterValidAmount": "請輸入有效數量",
@@ -183,6 +185,7 @@
     "metadata": "代幣元數據",
     "metadataJson": "元數據原始JSON",
     "authorities": "代幣權限",
+    "burnLp": "銷毀LP代幣",
     "view": "查看",
     "noDeployments": "找不到已部署的代幣信息",
     "noDelegated": "找不到管理的代幣",
@@ -218,7 +221,7 @@
     "closeMintAttention": "你即將關閉 {{name}} ({{symbol}}) 的鑄造功能。關閉後你將收到一些 SOL 作為賬戶退款，此操作不可撤銷！",
     "average": "鑄造平均間隔",
     "closeMintConfirmation": "確認關閉該代幣",
-    "refundConfirmation": "我知曉該操作不可撤銷，確認該操作",
+    "refundConfirmation": "我知曉���該操作不可撤銷，確認該操作",
     "totalPaid": "總支付",
     "bonusToReferrer": "推薦人所得",
     "refundFee": "退款費率",
@@ -239,7 +242,8 @@
     "actualPay": "實際支付",
     "noRefundDataAvailable": "無退款數據可用",
     "noTokensAvailableForRefund": "無可退款代幣",
-    "refundSuccessful": "退款成功"
+    "refundSuccessful": "退款成功",
+    "insufficientBalance": "Solana餘額不足以進行鑄造，請檢查您的錢包並確保至少有{{min}} SOL。"
   },
   "vm": {
     "manageMarketValue": "代幣市值管理",

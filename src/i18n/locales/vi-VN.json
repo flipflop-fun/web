@@ -48,6 +48,8 @@
     "addressGenerated": "Địa chỉ đã được tạo",
     "start": "Bắt đầu",
     "end": "Kết thúc",
+    "termsOfService": "Điều khoản Dịch vụ",
+    "agreeToTerms": "Tôi đã đọc và đồng ý với Điều khoản Dịch vụ",
     "wrongAmount": "Số lượng không đúng",
     "insufficientBalance": "Số dư không đủ",
     "pleaseEnterValidAmount": "Vui lòng nhập số lượng hợp lệ",
@@ -182,7 +184,8 @@
     "logo": "Logo",
     "metadata": "Siêu dữ liệu token",
     "metadataJson": "JSON siêu dữ liệu thô",
-    "authorities": "Quyền hạn token",
+    "authorities": "Quyền hạn Token",
+    "burnLp": "Đốt token LP",
     "view": "Xem",
     "noDeployments": "Không tìm thấy thông tin token đã triển khai",
     "noDelegated": "Không tìm thấy thông tin token được quản lý",
@@ -239,7 +242,8 @@
     "actualPay": "Thanh toán thực tế",
     "noRefundDataAvailable": "Không có dữ liệu hoàn tiền",
     "noTokensAvailableForRefund": "Không có token nào để hoàn tiền",
-    "refundSuccessful": "Hoàn tiền thành công"
+    "refundSuccessful": "Hoàn tiền thành công",
+    "insufficientBalance": "Số dư Solana không đủ để đúc, hãy kiểm tra ví của bạn và đảm bảo có ít nhất {{min}} SOL."
   },
   "vm": {
     "manageMarketValue": "Quản lý vốn hóa thị trường Token",

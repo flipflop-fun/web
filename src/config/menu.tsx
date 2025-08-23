@@ -100,7 +100,7 @@ export const menuItems = (expended: boolean, hasDelegatedTokens: boolean, t: any
         label: t?.('menu.manageLiquidity') || 'Manage Liquidity',
         visible: true,
         icon: <MdAddBox className="w-5 h-5" />,
-        component: <ManageLiquidity expanded={expended} />
+        component: <ManageLiquidity expanded={expended} operator='issuer' />
       },
       {
         id: 'trading-bot',

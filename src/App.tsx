@@ -147,8 +147,9 @@ const AppContent = () => {
             <Route path="/my-delegated-tokens" element={<DelegatedTokens expanded={expanded} />} />
             <Route path="/create-liquidity-pool" element={<CreateLiquidityPool expanded={expanded} />} />
             <Route path="/create-liquidity-pool/:mint" element={<CreateLiquidityPool expanded={expanded} />} />
-            <Route path="/manage-liquidity/:mint" element={<ManageLiquidity expanded={expanded} />} />
-            <Route path="/manage-liquidity" element={<ManageLiquidity expanded={expanded} />} />
+            <Route path="/manage-liquidity/:mint" element={<ManageLiquidity expanded={expanded} operator='vm' />} />
+            <Route path="/manage-liquidity" element={<ManageLiquidity expanded={expanded} operator='vm' />} />
+            <Route path="/burn-lp/:mint" element={<ManageLiquidity expanded={expanded} operator='issuer' />} />
             <Route path="/trading-bot" element={<TradingBot expanded={expanded} />} />
             <Route path="/trading-bot/:mint" element={<TradingBot expanded={expanded} />} />
             <Route path="/check-urc" element={<CheckURC expanded={expanded} />} />

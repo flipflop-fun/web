@@ -86,6 +86,11 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
       {showDetails && (
         <div className="space-y-2 pt-2">
           <DataBlock
+            label={t('tokenInfo.initialMintSize')}
+            value={(Number(token.initialMintSize) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2}) + " " + (metadata?.symbol || "SOL") + "/" + t('common.mint')}
+            tooltip={t('tooltip.mintFee')}
+          />
+          <DataBlock
             label={t('tokenInfo.currentMintSize')}
             value={`${(numberStringToBN(token.mintSizeEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })} ${metadata?.symbol}`}
             tooltip={t('tooltip.currentMintSize')}
