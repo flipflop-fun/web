@@ -194,6 +194,7 @@ export function ManageLiquidity({
               setTotalLpToken={setTotalLpToken}
               isDexOpen={isDexOpen}
               setIsDexOpen={setIsDexOpen}
+              operator={operator}
             />
           )}
 

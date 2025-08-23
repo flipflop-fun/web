@@ -33,6 +33,7 @@ type PoolInformationProps = {
   setTotalLpToken: (data: number) => void;
   isDexOpen: boolean;
   setIsDexOpen: (data: boolean) => void;
+  operator: string;
 }
 
 export const PoolInformation: FC<PoolInformationProps> = ({
@@ -55,6 +56,7 @@ export const PoolInformation: FC<PoolInformationProps> = ({
   setTotalLpToken,
   isDexOpen,
   setIsDexOpen,
+  operator,
 }) => {
   const [poolAddress, setPoolAddress] = useState('');
   const [openTime, setOpenTime] = useState(0);
@@ -167,6 +169,7 @@ export const PoolInformation: FC<PoolInformationProps> = ({
             <span>{t('vm.systemVaultToken')}:</span>
             <span>{formatPrice(mintTokenVaultBalance, 3)} {tokenData?.tokenSymbol}</span>
           </div>
+          {operator === 'issuer' &&
           <div className="flex justify-between">
             <span></span>
             <span>
@@ -177,7 +180,7 @@ export const PoolInformation: FC<PoolInformationProps> = ({
                 {t('vm.burnUnAllocatedTokens')}
               </button>
             </span>
-          </div>
+          </div>}
         </div>}
       {poolAddress === "" && 
       <div>
