@@ -37,8 +37,9 @@ export const TokenCardSimple: React.FC<TokenCardWebProps> = ({ token, number, ty
   }, [token.targetEras, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.epochesPerEra]);
 
   const mintedSupply = useMemo(() => {
-    return Number(token.supply) * (1 - Number(token.liquidityTokensRatio) / 100) / LAMPORTS_PER_SOL;
-  }, [token.supply, token.liquidityTokensRatio]);
+    // Including vault amount
+    return Number(token.supply) / LAMPORTS_PER_SOL;
+  }, [token.supply]);
 
   const progressPercentage = useMemo(() => {
     return (mintedSupply * 100) / totalSupplyToTargetEras;

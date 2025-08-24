@@ -2,7 +2,7 @@ import { FC, useMemo } from "react";
 import { InitiazlizedTokenData, TokenMetadataIPFS } from "../../types/types";
 import { DataBlock } from "./TokenInfo";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, calculateMaxSupply, calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintedSupply, getMintSpeed, numberStringToBN } from "../../utils/format";
+import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, calculateMaxSupply, calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintSpeed, numberStringToBN } from "../../utils/format";
 import { AddressDisplay } from "../common/AddressDisplay";
 import { useTranslation } from "react-i18next";
 
@@ -18,8 +18,9 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
 }) => {
   const { t } = useTranslation();
   const mintedSupply = useMemo(() => {
-    return getMintedSupply(token.supply, token.liquidityTokensRatio);
-  }, [token.supply, token.liquidityTokensRatio]);
+    // Including vault amount
+    return Number(token.supply) / LAMPORTS_PER_SOL;
+  }, [token.supply]);
 
   const mintSpeed = useMemo(() => {
     return getMintSpeed(token.targetSecondsPerEpoch, token.initialTargetMintSizePerEpoch, token.initialMintSize);
