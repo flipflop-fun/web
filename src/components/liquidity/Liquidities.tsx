@@ -115,7 +115,6 @@ export const Liquidities: FC<LiquiditiesProps> = ({
     try {
       const removeLiquidityAmount0BN = new BN(new Decimal(removeLiquidityAmount).mul(new Decimal(10**9)).toFixed(0)) as BN
       const removeLiquidityAmount1BN = new BN(new Decimal(removeLiquidityAmount1).mul(new Decimal(10**9)).toFixed(0)) as BN;
-      console.log("######", removeLiquidityAmount0BN.toString(), removeLiquidityAmount1BN.toString())
       const result = await proxyRemoveLiquidity(
         wallet,
         connection,

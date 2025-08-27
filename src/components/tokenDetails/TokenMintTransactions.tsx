@@ -4,7 +4,7 @@ import { queryTokenMintTransactions } from '../../utils/graphql';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { MintTransactionData, TokenMintTransactionsProps } from '../../types/types';
 import { Pagination } from '../common/Pagination';
-import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, numberStringToBN } from '../../utils/format';
+import { safeLamportBNToUiNumber } from '../../utils/format';
 import { PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { useDeviceType } from '../../hooks/device';
@@ -114,7 +114,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
                 <td className="">{new Date(Number(tx.timestamp) * 1000).toLocaleString()}</td>
                 {!isMobile && <>
                   <td className="">{tx.currentEra} ({tx.currentEpoch})</td>
-                  <td className="">{(numberStringToBN(tx.mintSizeEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })} {token.tokenSymbol}</td>
+                  <td className="">{safeLamportBNToUiNumber(tx.mintSizeEpoch, 2).toLocaleString(undefined, { maximumFractionDigits: 2 })} {token.tokenSymbol}</td>
                 </>}
               </tr>
             )) : Array.from({ length: pageSize }, (_, index) => (

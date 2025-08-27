@@ -2,7 +2,7 @@ import { FC, useMemo } from "react";
 import { InitiazlizedTokenData, TokenMetadataIPFS } from "../../types/types";
 import { DataBlock } from "./TokenInfo";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, calculateMaxSupply, calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintSpeed, numberStringToBN } from "../../utils/format";
+import { calculateMaxSupply, calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintSpeed, safeLamportBNToUiNumber } from "../../utils/format";
 import { AddressDisplay } from "../common/AddressDisplay";
 import { useTranslation } from "react-i18next";
 
@@ -69,7 +69,7 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
         />
         <DataBlock
           label={t('tokenInfo.currentMintSize')}
-          value={(numberStringToBN(token.mintSizeEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
+          value={(safeLamportBNToUiNumber(token.mintSizeEpoch, 2)).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
           tooltip={t('tooltip.currentMintSize')}
         />
         <DataBlock
@@ -202,7 +202,7 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           <div className="mt-8">
             <h3 className="text-xl mb-4 text-base-content">{t('tokenInfo.progressToCurrentCheckpoint')}</h3>
             <div className="text-sm font-medium mb-1 text-base-content">
-              {(numberStringToBN(token.quantityMintedEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })} / {(numberStringToBN(token.targetMintSizeEpoch).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })} ({progressPercentageOfEpoch.toFixed(2)}%)
+              {safeLamportBNToUiNumber(token.quantityMintedEpoch, 2).toLocaleString(undefined, { maximumFractionDigits: 2 })} / {safeLamportBNToUiNumber(token.targetMintSizeEpoch, 2).toLocaleString(undefined, { maximumFractionDigits: 2 })} ({progressPercentageOfEpoch.toFixed(2)}%)
             </div>
             <progress
               className="pixel-progress w-full"

@@ -81,9 +81,9 @@ export const getMintedSupply = (supply: string, liquidityTokensRatio: string) =>
   // the params: supply is including vault amount, return the amount only for minter
   const totalSupply = numberStringToBN(supply);
   const liquidityRatio = numberStringToBN(liquidityTokensRatio);
-  const vaultAmount = totalSupply.mul(liquidityRatio).div(BN_HUNDRED);
-  const mintedSupplyInLamports = totalSupply.sub(vaultAmount);
-  return safeLamportBNToUiNumber(new BN(mintedSupplyInLamports));
+  const vaultAmount = totalSupply.mul(liquidityRatio).div(BN_HUNDRED) as BN;
+  const mintedSupplyInLamports = totalSupply.sub(vaultAmount) as BN;
+  return safeLamportBNToUiNumber(mintedSupplyInLamports);
 }
 
 export const calculateTotalSupplyToTargetEras = (
@@ -146,11 +146,14 @@ export const numberStringToBN = (decimalStr: string): BN => {
   return new BN(decimalStr.replace(/[,\s]/g, '').split('.')[0] || '0');
 };
 
-export const safeLamportBNToUiNumber = (bn: BN): number => {
+export const safeLamportBNToUiNumber = (bn: BN | string, decimals: number = 2): number => {
+  if (typeof bn === 'string') {
+    bn = new BN(bn);
+  }
   if (bn.div(BN_LAMPORTS_PER_SOL).toNumber() === 0) {
-    return bn.toNumber() / 1000000000;
+    return Math.floor(bn.toNumber() / 1000000000 * 10**decimals) / 10**decimals;
   } else if (bn.div(BN_LAMPORTS_PER_SOL).lt(new BN(Number.MAX_SAFE_INTEGER))) {
-    return bn.div(BN_LAMPORTS_PER_SOL).toNumber();
+    return bn.mul(new BN(10).pow(new BN(decimals))).div(BN_LAMPORTS_PER_SOL).toNumber() / 10**decimals;
   } else {
     throw new Error('BN value is too large to convert to number');
   }

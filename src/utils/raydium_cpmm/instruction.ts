@@ -4,7 +4,6 @@ import {
   PublicKey,
   SystemProgram,
   ComputeBudgetProgram,
-  LAMPORTS_PER_SOL,
   TransactionInstruction,
 } from "@solana/web3.js";
 import {
@@ -26,6 +25,7 @@ import { CpmmPoolInfoLayout } from "@raydium-io/raydium-sdk-v2";
 import { getTokenBalance } from "../web3";
 import { CONFIG_DATA_SEED, MINT_SEED, NETWORK_CONFIGS } from "../../config/constants";
 import { CpSwapPoolStateData } from "../../types/types";
+import { safeLamportBNToUiNumber } from "../format";
 const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
 
 export async function getPoolData (
@@ -723,10 +723,8 @@ export async function poolBurnLpTokensInstructions(
   );
 
   const lpTokenBalance = await getTokenBalance(ownerLpToken, program.provider.connection) as number;
-  console.log("lp token balance before burn", lpTokenBalance);
-  console.log("You want to burn", lpAmount.toNumber() / LAMPORTS_PER_SOL);
-  if (lpAmount.toNumber() / LAMPORTS_PER_SOL > lpTokenBalance) {
-    throw new Error(`Insufficient LP token balance. Required: ${lpAmount.toNumber() / LAMPORTS_PER_SOL}, Available: ${lpTokenBalance}`);
+  if (safeLamportBNToUiNumber(lpAmount) > lpTokenBalance) {
+    throw new Error(`Insufficient LP token balance. Required: ${safeLamportBNToUiNumber(lpAmount)}, Available: ${lpTokenBalance}`);
   }
 
   try {

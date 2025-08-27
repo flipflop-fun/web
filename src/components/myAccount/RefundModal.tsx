@@ -138,7 +138,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="text-base-content/70">{t('mint.totalTokensMinted')}</span>
                 <span className="font-medium text-error">
                   {refundAccountData ?
-                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalTokens), 3) :
+                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalTokens, 3), 3) :
                     '-'
                   } {token.tokenData?.tokenSymbol}
                 </span>
@@ -163,7 +163,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="text-base-content/70">{t('mint.tokensBurnedFromVault')}</span>
                 <span className="font-medium text-error">
                   {refundAccountData ?
-                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalTokens) / (1 - liquidityRatio) * liquidityRatio, 3) :
+                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalTokens, 3) / (1 - liquidityRatio) * liquidityRatio, 3) :
                     '-'
                   } {token.tokenData?.tokenSymbol}
                 </span>
@@ -184,7 +184,7 @@ export const RefundModal: FC<RefundModalProps> = ({
               </div>
             </div>
 
-            {refundAccountData && tokenBalance === safeLamportBNToUiNumber(refundAccountData?.totalTokens) ? (
+            {refundAccountData && tokenBalance === safeLamportBNToUiNumber(refundAccountData.totalTokens) ? (
               <div className="flex flex-col gap-2">
                 {/* <AlertBox
                   title={t('common.attention')}
