@@ -1834,6 +1834,7 @@ export async function proxyAddLiquidity(
     }
   }
   const depositAmount = await calculateDepositAmounts(program, token0, token1, desiredToken0Amount, desiredToken1Amount)
+
   // Add liquidity
   const ixs = await poolDepositInstructions(
     program,

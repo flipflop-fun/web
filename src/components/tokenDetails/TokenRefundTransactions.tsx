@@ -4,11 +4,12 @@ import { queryTokenRefundTransactions } from '../../utils/graphql';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { RefundTransactionData, TokenRefundTransactionsProps } from '../../types/types';
 import { Pagination } from '../common/Pagination';
-import { BN_LAMPORTS_PER_SOL, numberStringToBN } from '../../utils/format';
+import { safeLamportBNToUiNumber } from '../../utils/format';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { useTranslation } from 'react-i18next';
+import { BN } from '@coral-xyz/anchor';
 
 export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -108,7 +109,7 @@ export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = (
                 <td className=""><AddressDisplay address={tx.txId} type="tx" /></td>
                 <td className="">{new Date(Number(tx.timestamp) * 1000).toLocaleString()}</td>
                 <td className="">{Number(tx.refundAmountIncludingFee) / LAMPORTS_PER_SOL}</td>
-                <td className="">{numberStringToBN(tx.burnAmountFromUser).div(BN_LAMPORTS_PER_SOL).toNumber().toLocaleString()} + {numberStringToBN(tx.burnAmountFromVault).div(BN_LAMPORTS_PER_SOL).toNumber().toLocaleString()}</td>
+                <td className="">{safeLamportBNToUiNumber(new BN(tx.burnAmountFromUser)).toLocaleString()} + {safeLamportBNToUiNumber(new BN(tx.burnAmountFromVault)).toLocaleString()}</td>
               </tr>
             )) : Array.from({ length: pageSize }, (_, index) => (
               <tr key={`placeholder-${index}`} className="opacity-50">

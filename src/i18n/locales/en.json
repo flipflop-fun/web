@@ -376,7 +376,7 @@
     "tokenParams": "Key Parameters",
     "updateMetadataAttention": "Upgrading token metadata costs 0.1 SOL",
     "updateMetadataConfirmation": "I agree to pay 0.1 SOL to upgrade token metadata",
-    "updateMetadata": "Upgrade Token Metadata",
+    "updateMetadata": "Updata Token Metadata",
     "updateAuthorities": "Update Token Authorities",
     "medateUpdatable": "Token Metadata Update",
     "mutable": "Mutable",

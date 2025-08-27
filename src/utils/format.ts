@@ -62,7 +62,7 @@ export const calculateMaxSupply = (epochesPerEra: string, initialTargetMintSizeP
   // Note: initialTargetMintSizePerEpoch is NOT including vault amount, because in substreams mapping, the initialTargetMintSizePerEpoch is from initConfigData
   // But initialTargetMintSizePerEpoch on chain is including vault amount. 
   const liquidityTokensRatioNum = (parseFloat(liquidityTokensRatio) / 100) || 0.2;
-  const initialTargetMintSizePerEpochNum = numberStringToBN(initialTargetMintSizePerEpoch).div(BN_LAMPORTS_PER_SOL).toNumber();
+  const initialTargetMintSizePerEpochNum = safeLamportBNToUiNumber(new BN(initialTargetMintSizePerEpoch));
   const initialTargetMintSizePerEpochWithVaultNum = initialTargetMintSizePerEpochNum + mintSizeForVault(initialTargetMintSizePerEpochNum, liquidityTokensRatioNum);
   const reduceRatioNum = parseFloat(reduceRatio) / 100 || 0;
 
@@ -79,12 +79,11 @@ export const getMintSpeed = (targetSecondsPerEpoch: string, initialTargetMintSiz
 
 export const getMintedSupply = (supply: string, liquidityTokensRatio: string) => {
   // the params: supply is including vault amount, return the amount only for minter
-  // return numberStringToBN(supply).sub(numberStringToBN(supply).mul(numberStringToBN(liquidityTokensRatio)).div(BN_HUNDRED)).div(BN_LAMPORTS_PER_SOL).toNumber();
   const totalSupply = numberStringToBN(supply);
   const liquidityRatio = numberStringToBN(liquidityTokensRatio);
   const vaultAmount = totalSupply.mul(liquidityRatio).div(BN_HUNDRED);
   const mintedSupplyInLamports = totalSupply.sub(vaultAmount);
-  return mintedSupplyInLamports.div(BN_LAMPORTS_PER_SOL).toNumber();
+  return safeLamportBNToUiNumber(new BN(mintedSupplyInLamports));
 }
 
 export const calculateTotalSupplyToTargetEras = (
@@ -129,11 +128,11 @@ export const calculateMinTotalFee = (
   epochesPerEra: string,
   initialMintSize: string
 ): number => {
-  const initialTargetMintSizePerEpochNum = numberStringToBN(initialTargetMintSizePerEpoch).div(BN_LAMPORTS_PER_SOL).toNumber();
+  const initialTargetMintSizePerEpochNum = safeLamportBNToUiNumber(new BN(initialTargetMintSizePerEpoch));
   const feeRateNum = parseFloat(feeRate) || 0;
   const targetErasNum = parseFloat(targetEras) || 0;
   const epochesPerEraNum = parseFloat(epochesPerEra) || 0;
-  const initialMintSizeNum = numberStringToBN(initialMintSize).div(BN_LAMPORTS_PER_SOL).toNumber();
+  const initialMintSizeNum = safeLamportBNToUiNumber(new BN(initialMintSize));
 
   if (initialTargetMintSizePerEpochNum <= 0 || feeRateNum <= 0 || targetErasNum <= 0 ||
     epochesPerEraNum <= 0 || initialMintSizeNum <= 0) {
@@ -146,6 +145,16 @@ export const calculateMinTotalFee = (
 export const numberStringToBN = (decimalStr: string): BN => {
   return new BN(decimalStr.replace(/[,\s]/g, '').split('.')[0] || '0');
 };
+
+export const safeLamportBNToUiNumber = (bn: BN): number => {
+  if (bn.div(BN_LAMPORTS_PER_SOL).toNumber() === 0) {
+    return bn.toNumber() / 1000000000;
+  } else if (bn.div(BN_LAMPORTS_PER_SOL).lt(new BN(Number.MAX_SAFE_INTEGER))) {
+    return bn.div(BN_LAMPORTS_PER_SOL).toNumber();
+  } else {
+    throw new Error('BN value is too large to convert to number');
+  }
+}
 
 export const formatPrice = (price: number, digitalsAfterZero: number = 5): string => {
   if (price === 0) return '0';

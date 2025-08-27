@@ -4,10 +4,11 @@ import { HolderData, TokenHoldersProps } from '../../types/types';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { Pagination } from '../common/Pagination';
 import { queryHolders } from '../../utils/graphql';
-import { BN_HUNDRED, BN_LAMPORTS_PER_SOL, BN_ZERO, numberStringToBN } from '../../utils/format';
+import { BN_HUNDRED, BN_ZERO, numberStringToBN, safeLamportBNToUiNumber } from '../../utils/format';
 import { PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { useTranslation } from 'react-i18next';
+import { BN } from '@coral-xyz/anchor';
 
 export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -85,8 +86,8 @@ export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
             {data?.holdersEntities
               .filter((holder: HolderData) => numberStringToBN(holder.amount).gt(BN_ZERO))
               .map((holder: HolderData, index: number) => {
-                const totalSupply = numberStringToBN(token.supply).div(BN_LAMPORTS_PER_SOL).toNumber();
-                const balance = numberStringToBN(holder.amount).mul(BN_HUNDRED).div(BN_LAMPORTS_PER_SOL).toNumber() / 100;
+                const totalSupply = safeLamportBNToUiNumber(new BN(token.supply).mul(BN_HUNDRED)) / 100;
+                const balance = safeLamportBNToUiNumber(new BN(holder.amount).mul(BN_HUNDRED)) / 100;
                 const percentage = balance / totalSupply / 100;
                 return (
                   <tr key={holder.owner + index}>

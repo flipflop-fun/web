@@ -8,7 +8,7 @@ import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import toast from "react-hot-toast";
 import AlertBox from "../common/AlertBox";
 import { DexStatusBar } from "./DexStatusBar";
-import { formatPrice } from "../../utils/format";
+import { formatPrice, safeLamportBNToUiNumber } from "../../utils/format";
 import { BurnSystemVaultTokensModal } from "./BurnSystemVaultTokensModal";
 import { U32_MAX } from "../../config/constants";
 import { useTranslation } from "react-i18next";
@@ -68,7 +68,7 @@ export const PoolInformation: FC<PoolInformationProps> = ({
 
   useEffect(() => {
     if (!connection || !wallet || !tokenData) return;
-    console.log("load pool information...")
+    // console.log("load pool information...")
     getTokenBalance(new PublicKey(tokenData.tokenVault), connection).then(balance => {
       setTokenVaultBalance(balance as number);
     });
@@ -82,8 +82,8 @@ export const PoolInformation: FC<PoolInformationProps> = ({
         const poolData = res.data as PoolData;
         setOpenTime(poolData.cpSwapPoolState.openTime);
         setPoolData(poolData);
-        const _poolTokenBalance = poolData.cpSwapPoolState.token0Amount as number;
-        const _poolSOLBalance = poolData.cpSwapPoolState.token1Amount as number;
+        const _poolTokenBalance = safeLamportBNToUiNumber(poolData.cpSwapPoolState.token0Amount);
+        const _poolSOLBalance = safeLamportBNToUiNumber(poolData.cpSwapPoolState.token1Amount);
         if (poolData.mintIsToken0) {
           setPoolTokenBalance(_poolTokenBalance)
           setPoolSOLBalance(_poolSOLBalance)
@@ -94,8 +94,8 @@ export const PoolInformation: FC<PoolInformationProps> = ({
           setCurrentPrice(_poolTokenBalance > 0 ? _poolTokenBalance / _poolSOLBalance : 0);
         }
         // console.log("pool address", poolData.poolAddress);
-        setPoolAddress(poolData.poolAddress)
-        setTotalLpToken(poolData.cpSwapPoolState.lpAmount)
+        setPoolAddress(poolData.poolAddress);
+        setTotalLpToken(safeLamportBNToUiNumber(poolData.cpSwapPoolState.lpAmount));
         getTokenBalanceByMintAndOwner(new PublicKey(poolData.cpSwapPoolState.lpMint as string), new PublicKey(tokenData.configAccount), connection, true, TOKEN_PROGRAM_ID).then(balance => {
           setVaultLpTokenBalance(balance as number);
         })

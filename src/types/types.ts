@@ -535,9 +535,9 @@ export type CpSwapPoolStateData = {
   token1Mint: string;
   token1Program: string;
   status: number;
-  lpAmount: number;
-  token0Amount: number | null;
-  token1Amount: number | null;
+  lpAmount: BN;
+  token0Amount: BN;
+  token1Amount: BN;
 }
 
 export type RemainingAccount = {

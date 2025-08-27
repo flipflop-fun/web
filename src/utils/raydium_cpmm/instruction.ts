@@ -62,9 +62,9 @@ export async function getPoolData (
     token1Mint: poolState.mintB.toBase58(),
     token1Program: poolState.mintProgramB.toBase58(),
     status: poolState.status as number,
-    lpAmount: poolState.lpAmount.toNumber() / 10 ** 9,
-    token0Amount: await getTokenBalance(poolState.vaultA, program.provider.connection),
-    token1Amount: await getTokenBalance(poolState.vaultB, program.provider.connection),
+    lpAmount: poolState.lpAmount,
+    token0Amount: new BN((await program.provider.connection.getTokenAccountBalance(poolState.vaultA)).value.amount),
+    token1Amount: new BN((await program.provider.connection.getTokenAccountBalance(poolState.vaultB)).value.amount),
   };  
   return { poolAddress: poolAddress.toBase58(), cpSwapPoolState };
 }
@@ -81,21 +81,17 @@ export async function calculateDepositAmounts(
   if (!poolInfo.poolAddress || !poolInfo.cpSwapPoolState) throw new Error("Pool not found");
 
   // LP token
-  const lpSupply = new BN(poolInfo.cpSwapPoolState.lpAmount).mul(new BN(LAMPORTS_PER_SOL));
-  const token0Reserve = new BN(poolInfo.cpSwapPoolState.token0Amount as number).mul(new BN(LAMPORTS_PER_SOL));
-  const token1Reserve = new BN(poolInfo.cpSwapPoolState.token1Amount as number).mul(new BN(LAMPORTS_PER_SOL));
-
+  const lpSupply = poolInfo.cpSwapPoolState.lpAmount;
+  const token0Reserve = poolInfo.cpSwapPoolState.token0Amount;
+  const token1Reserve = poolInfo.cpSwapPoolState.token1Amount;
   const lpTokenAmount = BN.min(
       desiredToken0Amount.mul(lpSupply).div(token0Reserve),
       desiredToken1Amount.mul(lpSupply).div(token1Reserve)
   );
-
   const actualToken0Amount = lpTokenAmount.mul(token0Reserve).div(lpSupply);
   const actualToken1Amount = lpTokenAmount.mul(token1Reserve).div(lpSupply);
-
   const maxToken0Amount = actualToken0Amount.mul(new BN(100 + slippageTolerance * 100)).div(new BN(100));
   const maxToken1Amount = actualToken1Amount.mul(new BN(100 + slippageTolerance * 100)).div(new BN(100));
-
   return {
       lpTokenAmount,
       maxToken0Amount,

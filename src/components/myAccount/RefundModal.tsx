@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
-import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
+import { PublicKey } from '@solana/web3.js';
 import toast from 'react-hot-toast';
 import { InitiazlizedTokenData, RefundModalProps, RefundTokenData } from '../../types/types';
 import { getRefundAccountData, getSystemConfig, getTokenBalanceByMintAndOwner, refund } from '../../utils/web3';
 import { ToastBox } from '../common/ToastBox';
 import { NETWORK_CONFIGS } from '../../config/constants';
-import { formatPrice, numberStringToBN } from '../../utils/format';
+import { formatPrice, numberStringToBN, safeLamportBNToUiNumber } from '../../utils/format';
 import AlertBox from '../common/AlertBox';
 import { ModalTopBar } from '../common/ModalTopBar';
 import { useTranslation } from 'react-i18next';
@@ -111,7 +111,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="text-base-content/70">{t('mint.totalPaid')}</span>
                 <span className="font-medium">
                   {refundAccountData ?
-                    formatPrice(refundAccountData.totalMintFee.toNumber() / LAMPORTS_PER_SOL, 3) :
+                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalMintFee), 3) :
                     '-'
                   } SOL
                 </span>
@@ -120,7 +120,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="text-base-content/70">- {t('mint.bonusToReferrer')}</span>
                 <span className="font-medium">
                   {refundAccountData ?
-                    formatPrice(refundAccountData.totalReferrerFee.toNumber() / LAMPORTS_PER_SOL, 3) :
+                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalReferrerFee), 3) :
                     '-'
                   } SOL
                 </span>
@@ -129,7 +129,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="text-base-content/70">- {t('mint.refundFee')} ({refundFeeRate * 100}%)</span>
                 <span className="font-medium">
                   {refundAccountData ?
-                    formatPrice((refundAccountData.totalMintFee.toNumber() * refundFeeRate) / LAMPORTS_PER_SOL, 3) :
+                    formatPrice((safeLamportBNToUiNumber(refundAccountData.totalMintFee) * refundFeeRate), 3) :
                     '-'
                   } SOL
                 </span>
@@ -138,7 +138,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="text-base-content/70">{t('mint.totalTokensMinted')}</span>
                 <span className="font-medium text-error">
                   {refundAccountData ?
-                    formatPrice(refundAccountData.totalTokens.toNumber() / LAMPORTS_PER_SOL, 3) :
+                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalTokens), 3) :
                     '-'
                   } {token.tokenData?.tokenSymbol}
                 </span>
@@ -163,7 +163,7 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="text-base-content/70">{t('mint.tokensBurnedFromVault')}</span>
                 <span className="font-medium text-error">
                   {refundAccountData ?
-                    formatPrice(refundAccountData.totalTokens.toNumber() / LAMPORTS_PER_SOL / (1 - liquidityRatio) * liquidityRatio, 3) :
+                    formatPrice(safeLamportBNToUiNumber(refundAccountData.totalTokens) / (1 - liquidityRatio) * liquidityRatio, 3) :
                     '-'
                   } {token.tokenData?.tokenSymbol}
                 </span>
@@ -173,9 +173,9 @@ export const RefundModal: FC<RefundModalProps> = ({
                 <span className="font-medium text-success">
                   {refundAccountData ?
                     formatPrice(
-                      (refundAccountData.totalMintFee.toNumber() -
-                        refundAccountData.totalReferrerFee.toNumber() -
-                        (refundAccountData.totalMintFee.toNumber() * refundFeeRate)) / LAMPORTS_PER_SOL,
+                      (safeLamportBNToUiNumber(refundAccountData.totalMintFee) -
+                        safeLamportBNToUiNumber(refundAccountData.totalReferrerFee) -
+                        (safeLamportBNToUiNumber(refundAccountData.totalMintFee) * refundFeeRate)),
                       3
                     ) :
                     '-'
@@ -184,7 +184,7 @@ export const RefundModal: FC<RefundModalProps> = ({
               </div>
             </div>
 
-            {refundAccountData && tokenBalance === refundAccountData?.totalTokens.toNumber() / LAMPORTS_PER_SOL ? (
+            {refundAccountData && tokenBalance === safeLamportBNToUiNumber(refundAccountData?.totalTokens) ? (
               <div className="flex flex-col gap-2">
                 {/* <AlertBox
                   title={t('common.attention')}

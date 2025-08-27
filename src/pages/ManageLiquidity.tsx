@@ -56,7 +56,7 @@ export function ManageLiquidity({
   const [getTradesData, { loading: queryTradesLoading }] = useLazyQuery(queryTrades, {
     onCompleted: (data) => {
       const _tradesData = data.proxySwapBaseEventEntities as [];
-      console.log("trades", _tradesData);
+      // console.log("trades", _tradesData);
       setTradesData([..._tradesData]);
     },
     onError: (error) => {
@@ -80,7 +80,7 @@ export function ManageLiquidity({
   const [getLpBurnData, { loading: queryLpBurnLoading }] = useLazyQuery(queryBurnLp, {
     onCompleted: (data) => {
       const _lpBurnData = data.proxyBurnLpTokensEventEntities as [];
-      console.log("lp burn", _lpBurnData);
+      // console.log("lp burn", _lpBurnData);
       setLpBurnData([..._lpBurnData]);
     },
     onError: (error) => {
