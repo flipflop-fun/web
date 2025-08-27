@@ -9,6 +9,7 @@ import { BN } from "@coral-xyz/anchor"
 import { InitiazlizedTokenData } from "../../types/types"
 import { useDeviceType } from "../../hooks/device"
 import { useTranslation } from "react-i18next"
+import Decimal from "decimal.js"
 
 const SLIPPAGE_KEY = 'trade_slippage';
 const DEFAULT_SLIPPAGE = 0.5;
@@ -82,8 +83,10 @@ export const Trades: FC<TradesProps> = ({
       },
     });
     try {
-      const amount = parseFloat(buyAmount);
-      if (isNaN(amount) || amount <= 0) {
+      const amount = new Decimal(buyAmount);
+      const tokenAmount = new BN(amount.mul(new Decimal(10**9)).toFixed(0));
+      const solAmount = new BN(amount.mul(new Decimal(currentPrice)).mul(new Decimal(10**9)).toFixed(0));
+      if (amount.isNaN()) {
         toast.error('Please enter a valid amount');
         return;
       }
@@ -92,8 +95,8 @@ export const Trades: FC<TradesProps> = ({
         wallet,
         connection,
         tokenData,
-        new BN(amount * 1e9 * currentPrice), // SOL amount
-        new BN(amount * 1e9), // Token amount
+        solAmount, // SOL amount
+        tokenAmount, // Token amount
         new BN(slippageValue * 100), // slippage
       );
 
@@ -132,8 +135,10 @@ export const Trades: FC<TradesProps> = ({
         },
       });
       try {
-        const amount = parseFloat(sellAmount);
-        if (isNaN(amount) || amount <= 0) {
+        const amount = new Decimal(sellAmount);
+        const tokenAmount = new BN(amount.mul(new Decimal(10**9)).toFixed(0));
+        const solAmount = new BN(amount.mul(new Decimal(currentPrice)).mul(new Decimal(10**9)).toFixed(0));
+        if (amount.isNaN()) {
           toast.error('Please enter a valid amount');
           return;
         }
@@ -142,8 +147,8 @@ export const Trades: FC<TradesProps> = ({
           wallet,
           connection,
           tokenData,
-          new BN(amount * 1e9), // Token amount
-          new BN(amount * currentPrice * 1e9), // SOL amount
+          tokenAmount, // Token amount
+          solAmount, // SOL amount
           new BN(slippageValue * 100), // slippage
         );
   

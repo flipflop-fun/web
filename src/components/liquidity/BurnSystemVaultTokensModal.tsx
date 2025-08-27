@@ -10,6 +10,7 @@ import { formatPrice } from '../../utils/format';
 import { BN } from '@coral-xyz/anchor';
 import { burnTokensFromMintTokenVault } from '../../utils/web3';
 import { useTranslation } from 'react-i18next';
+import Decimal from 'decimal.js';
 
 type BurnSystemVaultTokensModalProps = {
   isOpen: boolean;
@@ -32,7 +33,7 @@ export const BurnSystemVaultTokensModal: FC<BurnSystemVaultTokensModalProps> = (
   if (!isOpen) return null;
 
   const handleBurn = async () => {
-    const burnAmount = new BN(parseInt(amount)).mul(new BN(10**9));
+    const burnAmount = new BN(new Decimal(amount).mul(new Decimal(10**9)).toFixed(0));
     if (burnAmount.eq(new BN(0))) {
       toast.error(t('common.wrongAmount'));
       return;

@@ -112,9 +112,9 @@ export async function calculateWithdrawAmounts(
   const poolInfo = await getPoolData(program, token0, token1);
   if (!poolInfo.poolAddress || !poolInfo.cpSwapPoolState) throw new Error("Pool not found");
 
-  const lpSupply = new BN(poolInfo.cpSwapPoolState.lpAmount as number * LAMPORTS_PER_SOL);
-  const token0Reserve = new BN(poolInfo.cpSwapPoolState.token0Amount as number * LAMPORTS_PER_SOL);
-  const token1Reserve = new BN(poolInfo.cpSwapPoolState.token1Amount as number * LAMPORTS_PER_SOL);
+  const lpSupply = poolInfo.cpSwapPoolState.lpAmount;
+  const token0Reserve = poolInfo.cpSwapPoolState.token0Amount;
+  const token1Reserve = poolInfo.cpSwapPoolState.token1Amount;
 
   const lpTokenAmount = BN.max(
       desiredToken0Amount.mul(lpSupply).div(token0Reserve),

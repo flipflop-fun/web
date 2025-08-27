@@ -11,6 +11,7 @@ import { useDeviceType } from "../../hooks/device"
 import { useTranslation } from "react-i18next"
 import { Liquidity } from "../../types/types"
 import { NATIVE_MINT } from "@solana/spl-token"
+import Decimal from "decimal.js"
 
 export type LiquiditiesProps = {
   onDone: () => void;
@@ -62,17 +63,19 @@ export const Liquidities: FC<LiquiditiesProps> = ({
       },
     });
     try {
-      const amount = parseFloat(addLiquidityAmount);
-      if (isNaN(amount) || amount <= 0) {
+      const amount = new Decimal(addLiquidityAmount);
+      if (amount.isNaN() || amount.lte(new Decimal(0))) {
         toast.error(t('common.pleaseEnterValidAmount'));
         return;
       }
+      const tokenAmount = new BN(amount.mul(new Decimal(10**9)).toFixed(0));
+      const solAmount = new BN(amount.mul(new Decimal(currentPrice)).mul(new Decimal(10**9)).toFixed(0));
       const result = await proxyAddLiquidity(
         wallet,
         connection,
         tokenData,
-        new BN(amount * 1e9), // Token amount
-        new BN(amount * currentPrice * 1e9), // SOL amount
+        tokenAmount, // Token amount
+        solAmount, // SOL amount
       );
       if (result.success) {
         toast.success(
@@ -110,13 +113,15 @@ export const Liquidities: FC<LiquiditiesProps> = ({
       },
     });
     try {
-      console.log(removeLiquidityAmount, removeLiquidityAmount1)
+      const removeLiquidityAmount0BN = new BN(new Decimal(removeLiquidityAmount).mul(new Decimal(10**9)).toFixed(0)) as BN
+      const removeLiquidityAmount1BN = new BN(new Decimal(removeLiquidityAmount1).mul(new Decimal(10**9)).toFixed(0)) as BN;
+      console.log("######", removeLiquidityAmount0BN.toString(), removeLiquidityAmount1BN.toString())
       const result = await proxyRemoveLiquidity(
         wallet,
         connection,
         tokenData,
-        new BN(parseFloat(removeLiquidityAmount) * 1e9), // Token amount
-        new BN(parseFloat(removeLiquidityAmount1) * 1e9), // SOL amount
+        removeLiquidityAmount0BN, // Token amount
+        removeLiquidityAmount1BN, // SOL amount
       );
 
       if (result.success) {

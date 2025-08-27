@@ -57,7 +57,6 @@ export const CommentBox: React.FC<CommentBoxProps> = ({
     if (!containerRef.current || !hasMore) return;
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
     if (scrollTop + clientHeight >= scrollHeight - 10) {
-      console.log("=== loadMoreComments ===")
       loadMoreComments();
     }
   }, [hasMore, loadMoreComments]);

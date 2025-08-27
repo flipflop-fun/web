@@ -9,6 +9,7 @@ import { ToastBox } from "../common/ToastBox";
 import { NETWORK_CONFIGS } from "../../config/constants";
 import { useDeviceType } from "../../hooks/device";
 import { useTranslation } from "react-i18next";
+import Decimal from "decimal.js";
 
 export type LpBurnsProps = {
   tokenData: InitiazlizedTokenData;
@@ -42,8 +43,8 @@ export const LpBurns: FC<LpBurnsProps> = ({
       },
     });
     try {
-      const amount = parseFloat(burnLpAmount);
-      if (isNaN(amount) || amount <= 0) {
+      const amount = new BN(new Decimal(burnLpAmount).mul(new Decimal(10**9)).toFixed(0));
+      if (isNaN(amount)) {
         toast.error(t('common.pleaseEnterValidAmount'));
         return;
       }
@@ -52,7 +53,7 @@ export const LpBurns: FC<LpBurnsProps> = ({
         wallet,
         connection,
         tokenData,
-        new BN(amount * 1e9),
+        amount,
       );
 
       if (result.success) {
