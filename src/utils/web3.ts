@@ -502,6 +502,13 @@ export const getMyReferrerData = async (
   }
 
   const referrerData = await program.account.tokenReferralData.fetch(referralAccountPda);
+  if (referrerData.codeHash !== codeHash.data) {
+    return {
+      success: false,
+      message: 'The referrer code is not the same as the one in the account'
+    }
+  }
+
   return {
     success: true,
     message: 'Get referrer data success',
