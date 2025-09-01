@@ -9,6 +9,7 @@ import { TokenInfoData } from './TokenInfoData';
 import { TokenInfoDataMobile } from './TokenInfoDataMobile';
 import { useDeviceType } from '../../hooks/device';
 import { useTranslation } from 'react-i18next';
+import { DexLink } from './DexLink';
 
 export const TokenInfo: React.FC<TokenInfoProps> = ({
   token,
@@ -39,12 +40,13 @@ export const TokenInfo: React.FC<TokenInfoProps> = ({
   const hasStarted = !token.startTimestamp || Number(token.startTimestamp) <= Math.floor(Date.now() / 1000);
 
   return (
-    <div className="w-full space-y-0">
+    <div className="w-full">
       <div className='mb-4'>
         {isMobile && !isLoading ?
           <TokenHeroMobile token={token} metadata={metadata as TokenMetadataIPFS} referrerCode={referrerCode} tokenData={tokenData} fetchTokenData={fetchTokenData} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />
           : <TokenHero token={token} metadata={metadata as TokenMetadataIPFS} referrerCode={referrerCode} tokenData={tokenData} fetchTokenData={fetchTokenData} isCommentOpen={isCommentOpen} setIsCommentOpen={setIsCommentOpen} />}
       </div>
+      {parseInt(token.currentEra) > parseInt(token.targetEras) && <div className="mb-4"><DexLink mint={token.mint} /></div>}
       <div className="pixel-box">
         {isMobile && !isLoading ?
           <TokenInfoDataMobile token={token} metadata={metadata as TokenMetadataIPFS} hasStarted={hasStarted} />
