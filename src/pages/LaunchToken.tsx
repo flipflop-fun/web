@@ -188,9 +188,9 @@ export const LaunchTokenForm: FC<LaunchTokenFormProps> = ({ expanded }) => {
         startTimestamp: numberStringToBN(startTimestamp.toString()),
       };
 
-      console.log('initConfigData', Object.fromEntries(
-        Object.entries(initConfigData).map(([key, value]) => [key, value.toString()])
-      ));
+      // console.log('initConfigData', Object.fromEntries(
+      //   Object.entries(initConfigData).map(([key, value]) => [key, value.toString()])
+      // ));
 
       const result = await initializeToken(tokenMetadata, wallet, connection, initConfigData);
 
