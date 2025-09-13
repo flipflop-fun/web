@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
-import { queryTokenRefundTransactions } from '../../utils/graphql';
+import React, { useState } from 'react';
+import { queryTokenRefundTransactions } from '../../utils/graphql2';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { RefundTransactionData, TokenRefundTransactionsProps } from '../../types/types';
 import { Pagination } from '../common/Pagination';
 import { safeLamportBNToUiNumber } from '../../utils/format';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { PAGE_SIZE_OPTIONS } from '../../config/constants';
+import { NETWORK_CONFIGS, PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../../hooks/graphquery';
 
 export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,32 +16,19 @@ export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = (
   const [totalCount, setTotalCount] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const { t } = useTranslation();
-  
-  const { data, loading, error, refetch } = useQuery(queryTokenRefundTransactions, {
-    variables: {
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+
+  const { data, loading, error } = useGraphQuery(subgraphUrl, queryTokenRefundTransactions, {
       mint: token.mint,
-      skip: (currentPage - 1) * pageSize,
+      offset: (currentPage - 1) * pageSize,
       first: pageSize
-    },
-    fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      if (data?.refundEventEntities?.length < pageSize) {
-        setHasMore(false);
-        setTotalCount((currentPage - 1) * pageSize + data.refundEventEntities.length);
-      } else {
-        setHasMore(true);
-        setTotalCount(Math.max(totalCount, currentPage * pageSize + 1));
+    }, {
+      onCompleted: (data) => {
+        setHasMore(data?.allRefundEventEntities?.totalCount >= pageSize)
+        setTotalCount(data?.allRefundEventEntities?.totalCount);
       }
     }
-  });
-
-  useEffect(() => {
-    refetch({
-      mint: token.mint,
-      skip: (currentPage - 1) * pageSize,
-      first: pageSize
-    });
-  }, [currentPage, pageSize, token.mint, refetch]);
+  );
 
   const totalPages = hasMore ? currentPage + 1 : currentPage;
 
@@ -102,7 +89,7 @@ export const TokenRefundTransactions: React.FC<TokenRefundTransactionsProps> = (
             </tr>
           </thead>
           <tbody>
-            {data ? data.refundEventEntities.map((tx: RefundTransactionData) => (
+            {data && data.allRefundEventEntities ? data.allRefundEventEntities.nodes.map((tx: RefundTransactionData) => (
               <tr key={tx.txId}>
                 <td className=""><AddressDisplay address={tx.sender} /></td>
                 <td className=""><AddressDisplay address={tx.txId} type="tx" /></td>

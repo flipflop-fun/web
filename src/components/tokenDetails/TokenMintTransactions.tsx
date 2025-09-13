@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
-import { queryTokenMintTransactions } from '../../utils/graphql';
+import React, { useState } from 'react';
+import { queryTokenMintTransactions } from '../../utils/graphql2';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { MintTransactionData, TokenMintTransactionsProps } from '../../types/types';
 import { Pagination } from '../common/Pagination';
 import { safeLamportBNToUiNumber } from '../../utils/format';
-import { PAGE_SIZE_OPTIONS } from '../../config/constants';
+import { NETWORK_CONFIGS, PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { useDeviceType } from '../../hooks/device';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../../hooks/graphquery';
 
 export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,31 +17,18 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
   const [hasMore, setHasMore] = useState(true);
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
-  const { data, loading, error, refetch } = useQuery(queryTokenMintTransactions, {
-    variables: {
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+  const { data, loading, error } = useGraphQuery(subgraphUrl, queryTokenMintTransactions, {
       mint: token.mint,
-      skip: (currentPage - 1) * pageSize,
+      offset: (currentPage - 1) * pageSize,
       first: pageSize
-    },
-    fetchPolicy: 'network-only',
-    onCompleted: (data) => {
-      if (data?.mintTokenEntities?.length < pageSize) {
-        setHasMore(false);
-        setTotalCount((currentPage - 1) * pageSize + data.mintTokenEntities.length);
-      } else {
-        setHasMore(true);
-        setTotalCount(Math.max(totalCount, currentPage * pageSize + 1));
+    }, {
+      onCompleted: (data) => {
+        setHasMore(data?.allMintTokenEntities?.totalCount >= pageSize)
+        setTotalCount(data?.allMintTokenEntities?.totalCount as number);
       }
     }
-  });
-
-  useEffect(() => {
-    refetch({
-      mint: token.mint,
-      skip: (currentPage - 1) * pageSize,
-      first: pageSize
-    });
-  }, [currentPage, pageSize, token.mint, refetch]);
+  );
 
   const totalPages = hasMore ? currentPage + 1 : currentPage;
 
@@ -107,7 +94,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
             </tr>
           </thead>
           <tbody>
-            {data ? data.mintTokenEntities.map((tx: MintTransactionData) => (
+            {data && data.allMintTokenEntities ? data.allMintTokenEntities?.nodes.map((tx: MintTransactionData) => (
               <tr key={tx.txId}>
                 <td className=""><AddressDisplay address={tx.sender} /></td>
                 <td className=""><AddressDisplay address={tx.txId} type="tx" /></td>

@@ -1,17 +1,18 @@
 import React, { useState, KeyboardEvent, useEffect, useMemo } from 'react';
-import { useQuery, useLazyQuery } from '@apollo/client';
-import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent, queryInitializeTokenEventGraduated, queryHotInitializeTokenEventGraduated } from '../utils/graphql';
+import { useLazyQuery, gql } from '@apollo/client';
+import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent, queryInitializeTokenEventGraduated, queryHotInitializeTokenEventGraduated } from '../utils/graphql2';
 import { InitiazlizedTokenData, DiscoverProps } from '../types/types';
 import { FaSearch } from 'react-icons/fa';
 import { ErrorBox } from '../components/common/ErrorBox';
 import { filterTokens, formatAddress } from '../utils/format';
-import { BADGE_BG_COLORS, BADGE_TEXT_COLORS, SEARCH_CACHE_ITEMS } from '../config/constants';
+import { BADGE_BG_COLORS, BADGE_TEXT_COLORS, NETWORK_CONFIGS, SEARCH_CACHE_ITEMS } from '../config/constants';
 import { TokenCardWeb } from '../components/mintTokens/TokenCardWeb';
 import { PageHeader } from '../components/common/PageHeader';
 import { useDeviceType } from '../hooks/device';
 import { ScrollCards } from '../components/common/ScrollCards';
 import { TokenCardSimple } from '../components/mintTokens/TokenCardSimple';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../hooks/graphquery';
 
 export const Discover: React.FC<DiscoverProps> = ({
   expanded,
@@ -23,7 +24,7 @@ export const Discover: React.FC<DiscoverProps> = ({
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
-  
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
   // Load search history on component mount
   useEffect(() => {
     const history = localStorage.getItem('search_history');
@@ -39,25 +40,29 @@ export const Discover: React.FC<DiscoverProps> = ({
     localStorage.setItem('search_history', JSON.stringify(newHistory));
   };
 
-  const { loading: initialLoading, error: initialError, data: latestData } = useQuery(graduatedToken ? queryInitializeTokenEventGraduated : queryInitializeTokenEvent, {
-    variables: {
-      orderBy: 'timestamp',
+  const { loading: initialLoading, error: initialError, data: latestData } = useGraphQuery(
+    subgraphUrl,
+    graduatedToken ? queryInitializeTokenEventGraduated : queryInitializeTokenEvent, {
+      first: 100,
+      offset: 0,
       targetEras: 1,
     },
-    fetchPolicy: 'network-only',
-  });
+  );
 
-  const { loading: hotLoading, error: hotError, data: hotData } = useQuery(graduatedToken ? queryHotInitializeTokenEventGraduated : queryHotInitializeTokenEvent, {
-    variables: {
-      orderBy: 'difficultyCoefficientEpoch',
+  const { loading: hotLoading, error: hotError, data: hotData } = useGraphQuery(
+    subgraphUrl,
+    graduatedToken ? queryHotInitializeTokenEventGraduated : queryHotInitializeTokenEvent, {
+      first: 100,
+      offset: 0,
       targetEras: 1,
-    },
-    fetchPolicy: 'network-only',
-  });
+    }
+  );
 
   const filteredHotTokens = useMemo(() => {
-    if (!hotData?.initializeTokenEventEntities) return [];
-    const result = filterTokens(hotData.initializeTokenEventEntities as InitiazlizedTokenData[])
+    console.log("###### hotData", hotData)
+    const nodes = hotData?.allInitializeTokenEventEntities?.nodes as InitiazlizedTokenData[] | undefined;
+    if (!nodes) return [];
+    const result = filterTokens(nodes)
       .filter((token: InitiazlizedTokenData) =>
         token.currentEra <= token.targetEras
       )
@@ -69,9 +74,12 @@ export const Discover: React.FC<DiscoverProps> = ({
   }, [hotData]);
 
   // Search tokens by lazy query
-  const [searchTokens, { loading: searchLoading, error: searchError, data: searchData }] = useLazyQuery(queryInitializeTokenEventBySearch, {
-    fetchPolicy: 'network-only' // Ensure each time it fetches the latest data
-  });
+  const [searchTokens, { loading: searchLoading, error: searchError, data: searchData }] = useLazyQuery(
+    gql(queryInitializeTokenEventBySearch),
+    {
+      fetchPolicy: 'network-only' // Ensure each time it fetches the latest data
+    }
+  );
 
   const handleSearch = () => {
     if (searchInput.trim()) {
@@ -79,7 +87,7 @@ export const Discover: React.FC<DiscoverProps> = ({
       saveToHistory(searchInput.trim());
       searchTokens({
         variables: {
-          skip: 0,
+          offset: 0,
           first: 50,
           searchQuery: searchInput.trim()
         }
@@ -99,7 +107,7 @@ export const Discover: React.FC<DiscoverProps> = ({
     saveToHistory(term);
     searchTokens({
       variables: {
-        skip: 0,
+        offset: 0,
         first: 50,
         searchQuery: term
       }
@@ -108,11 +116,11 @@ export const Discover: React.FC<DiscoverProps> = ({
 
   // Get the display data based on search mode
   const displayData = {
-    initializeTokenEventEntities: filterTokens(searchData?.initializeTokenEventEntities || []),
+    initializeTokenEventEntities: filterTokens((searchData?.allInitializeTokenEventEntities?.nodes as InitiazlizedTokenData[]) || []),
   };
 
   const latestDisplayData = {
-    initializeTokenEventEntities: filterTokens(latestData?.initializeTokenEventEntities || []),
+    initializeTokenEventEntities: filterTokens((latestData?.allInitializeTokenEventEntities?.nodes as InitiazlizedTokenData[]) || []),
   };
 
   // Merge errors and loading states
@@ -260,9 +268,7 @@ export const Discover: React.FC<DiscoverProps> = ({
             )}
           </>
         )}
-
       </div>
-
     </div>
   );
 };

@@ -5,8 +5,9 @@
 // complex logic/inequalities go in `filter` with operators like equalTo, lessThan, greaterThan, includesInsensitive, in, etc.
 
 // 1) InitializeTokenEvent — currentEra <= targetEras
+
 export const queryInitializeTokenEvent = `
-  query GetInitializedTokenEvents($targetEras: Int!, $first: Int = 50, $offset: Int = 0) {
+  query GetInitializedTokenEvents($targetEras: BigFloat!, $first: Int = 50, $offset: Int = 0) {
     allInitializeTokenEventEntities(
       filter: {
         and: [
@@ -66,7 +67,7 @@ export const queryInitializeTokenEvent = `
 
 // 2) Hot InitializeTokenEvent — currentEra <= targetEras, first: 100
 export const queryHotInitializeTokenEvent = `
-  query QueryHotInitializeTokenEvent($targetEras: Int!, $first: Int = 100, $offset: Int = 0) {
+  query QueryHotInitializeTokenEvent($targetEras: BigFloat!, $first: Int = 100, $offset: Int = 0) {
     allInitializeTokenEventEntities(
       filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { lessThanOrEqualTo: $targetEras } }] }
       first: $first
@@ -121,7 +122,7 @@ export const queryHotInitializeTokenEvent = `
 
 // 3) InitializeTokenEvent Graduated — currentEra > targetEras
 export const queryInitializeTokenEventGraduated = `
-  query GetInitializedTokenEvents($targetEras: Int!, $first: Int = 50, $offset: Int = 0) {
+  query GetInitializedTokenEvents($targetEras: BigFloat!, $first: Int = 50, $offset: Int = 0) {
     allInitializeTokenEventEntities(
       filter: {
         and: [
@@ -181,7 +182,7 @@ export const queryInitializeTokenEventGraduated = `
 
 // 4) Hot InitializeTokenEvent Graduated — currentEra > targetEras, first 100
 export const queryHotInitializeTokenEventGraduated = `
-  query QueryHotInitializeTokenEvent($targetEras: Int!, $first: Int = 100, $offset: Int = 0) {
+  query QueryHotInitializeTokenEvent($targetEras: BigFloat!, $first: Int = 100, $offset: Int = 0) {
     allInitializeTokenEventEntities(
       filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { greaterThan: $targetEras } }] }
       first: $first

@@ -1,27 +1,28 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
 import { HolderData, TokenHoldersProps } from '../../types/types';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { Pagination } from '../common/Pagination';
-import { queryHolders } from '../../utils/graphql';
+import { queryHolders } from '../../utils/graphql2';
 import { BN_ZERO, numberStringToBN, safeLamportBNToUiNumber } from '../../utils/format';
-import { PAGE_SIZE_OPTIONS } from '../../config/constants';
+import { NETWORK_CONFIGS, PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../../hooks/graphquery';
 
 export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const { t } = useTranslation();
-  const { data, loading, error } = useQuery(queryHolders, {
-    variables: {
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+
+  const { data, loading, error } = useGraphQuery(subgraphUrl, queryHolders, {
       mint: token.mint,
-      skip: (currentPage - 1) * pageSize,
+      offset: (currentPage - 1) * pageSize,
       first: pageSize
-    },
-    onCompleted: (data) => {
-      setTotalCount(Math.max(totalCount, (currentPage - 1) * pageSize + (data.holdersEntities?.length ?? 0)));
+    }, {
+      onCompleted: (data) => {
+        setTotalCount(data.allHoldersEntities?.totalCount as number);
     }
   });
 
@@ -82,7 +83,7 @@ export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
             </tr>
           </thead>
           <tbody>
-            {data?.holdersEntities
+            {data?.allHoldersEntities?.nodes
               .filter((holder: HolderData) => numberStringToBN(holder.amount).gt(BN_ZERO))
               .map((holder: HolderData, index: number) => {
                 const totalSupply = safeLamportBNToUiNumber(token.supply, 2);

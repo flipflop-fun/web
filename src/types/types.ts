@@ -673,6 +673,7 @@ export interface NetworkConfig {
   memoProgram: PublicKey;
   addressLookupTableAddress: PublicKey;
   subgraphUrl: string;
+  subgraphUrl2: string;
   thegraphApiKey?: string;
   launchRuleAccount: PublicKey;
   chartApiUrl: string;
