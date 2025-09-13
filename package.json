@@ -1,6 +1,6 @@
 {
   "name": "flipflop-client",
-  "version": "0.6.9",
+  "version": "0.7.0",
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.11.10",
@@ -63,7 +63,8 @@
     "start": "GENERATE_SOURCEMAP=false craco start",
     "build": "GENERATE_SOURCEMAP=false craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:gql": "node test/test-graphql2.js"
   },
   "eslintConfig": {
     "extends": [
