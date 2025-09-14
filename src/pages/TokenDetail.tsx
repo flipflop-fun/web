@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { queryInitializeTokenEventBySearch } from '../utils/graphql';
+import { queryInitializeTokenEventBySearch } from '../utils/graphql2';
 import { InitiazlizedTokenData, TokenDetailProps, OrderedToken, UserAPIResponse } from '../types/types';
 import { TokenInfo } from '../components/tokenDetails/TokenInfo';
 import { TokenCharts } from '../components/tokenDetails/TokenCharts';
@@ -10,12 +9,13 @@ import { TokenHolders } from '../components/tokenDetails/TokenHolders';
 import { TokenRefundTransactions } from '../components/tokenDetails/TokenRefundTransactions';
 import { ErrorBox } from '../components/common/ErrorBox';
 import { useDeviceType } from '../hooks/device';
-import { SEARCH_CACHE_ITEMS } from '../config/constants';
+import { NETWORK_CONFIGS, SEARCH_CACHE_ITEMS } from '../config/constants';
 import { useState } from 'react';
 import { CommentBox } from '../components/social/CommentBox';
 import { getTokenDataByMint } from '../utils/user';
 import { useAuth } from '../hooks/auth';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../hooks/graphquery';
 
 export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
   const { tokenMintAddress, referrerCode } = useParams();
@@ -24,15 +24,17 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
   const [mint, setMint] = useState<string | null>(null);
   const { token: userToken } = useAuth();
   const { t } = useTranslation();
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
 
-  const { loading, error, data } = useQuery(queryInitializeTokenEventBySearch, {
-    variables: {
-      skip: 0,
+  const { loading, error, data } = useGraphQuery(
+    subgraphUrl,
+    queryInitializeTokenEventBySearch, {
+      offset: 0,
       first: 1,
       searchQuery: tokenMintAddress
     },
-    fetchPolicy: 'network-only'
-  });
+    // fetchPolicy: 'network-only'
+  );
 
   const { isMobile } = useDeviceType();
 
@@ -58,7 +60,7 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
 
   useEffect(() => {
     if (data && userToken) {
-      const _mint = (data?.initializeTokenEventEntities as InitiazlizedTokenData[])[0].mint;
+      const _mint = (data?.allInitializeTokenEventEntities.nodes as InitiazlizedTokenData[])[0].mint;
       setMint(_mint);
       getTokenDataByMint(userToken as string, _mint).then((result: UserAPIResponse) => {
         if (result.success) {
@@ -98,7 +100,7 @@ export const TokenDetail: React.FC<TokenDetailProps> = ({ expanded }) => {
     );
   }
 
-  const token = data?.initializeTokenEventEntities?.[0];
+  const token = data?.allInitializeTokenEventEntities?.nodes[0];
   const hasStarted = !token.startTimestamp || Number(token.startTimestamp) <= Math.floor(Date.now() / 1000);
 
   if (!token) {

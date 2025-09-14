@@ -1,9 +1,8 @@
 {
   "name": "flipflop-client",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.11.10",
     "@copilotkit/react-core": "^1.5.20",
     "@copilotkit/react-ui": "^1.5.20",
     "@copilotkit/runtime": "^1.5.20",

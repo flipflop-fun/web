@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { queryTotalReferrerBonus } from '../../utils/graphql';
+import { queryTotalReferrerBonus } from '../../utils/graphql2';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { formatPrice, formatTimestamp } from '../../utils/format';
 import { Pagination } from '../common/Pagination';
-import { PAGE_SIZE_OPTIONS } from '../../config/constants';
+import { NETWORK_CONFIGS, PAGE_SIZE_OPTIONS } from '../../config/constants';
 import { ErrorBox } from '../common/ErrorBox';
 import { ModalTopBar } from '../common/ModalTopBar';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../../hooks/graphquery';
 
 type ReferralBonusDetailModalProps = {
   isOpen: boolean;
@@ -28,14 +28,16 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const { t } = useTranslation();
-  const { loading, error, data } = useQuery(queryTotalReferrerBonus, {
-    variables: {
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+  const { loading, error, data } = useGraphQuery(
+    subgraphUrl,
+    queryTotalReferrerBonus, {
       mint,
       referrerMain
-    },
-    skip: !isOpen,
-    fetchPolicy: 'network-only',
-  });
+    }, {
+      auto: !isOpen,
+    }
+  );
 
   if (!isOpen) return null;
 
@@ -51,12 +53,12 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
     <ErrorBox title="Error" message={error.message} />
   );
 
-  const paginatedEntities = data.mintTokenEntities.slice(
+  const paginatedEntities = data?.allMintTokenEntities.nodes.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
 
-  const totalPages = Math.ceil(data.mintTokenEntities.length / pageSize);
+  const totalPages = Math.ceil(data?.allMintTokenEntities.totalCount / pageSize);
 
   const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newPageSize = Number(event.target.value);
@@ -78,7 +80,7 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
                   {formatPrice(totalBonus, 3)} SOL
                   </span>
                 </div>
-                <div>{t('urc.referralCount')}: {data.mintTokenEntities.length}</div>
+                <div>{t('urc.referralCount')}: {data?.allMintTokenEntities.totalCount}</div>
               </div>
             </div>
           </div>
@@ -120,7 +122,7 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
               </tr>
             </thead>
             <tbody>
-              {paginatedEntities.map((entity: any, index: number) => (
+              {paginatedEntities && paginatedEntities.map((entity: any, index: number) => (
                 <tr key={index}>
                   <td className=''><AddressDisplay address={entity.txId} type='transaction' /></td>
                   <td className=''><AddressDisplay address={entity.sender} /></td>
@@ -137,7 +139,7 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            totalCount={data.mintTokenEntities.length}
+            totalCount={data?.allMintTokenEntities.totalCount}
             pageSize={pageSize}
             onPageChange={(page) => setCurrentPage(page)}
           />

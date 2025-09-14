@@ -1,6 +1,4 @@
-import { gql } from '@apollo/client';
-
-export const queryInitializeTokenEvent = gql`
+export const queryInitializeTokenEvent = `
 query GetInitializedTokenEvents($orderBy: String!, $targetEras: Int!) {
     initializeTokenEventEntities(
         where: {
@@ -55,7 +53,7 @@ query GetInitializedTokenEvents($orderBy: String!, $targetEras: Int!) {
     }
 }`;
 
-export const queryHotInitializeTokenEvent = gql`
+export const queryHotInitializeTokenEvent = `
 query QueryHotInitializeTokenEvent($orderBy: String!, $targetEras: Int!) {
     initializeTokenEventEntities(
         where: { and: [{ status: 1 }, { currentEra_lte: $targetEras }] }
@@ -105,7 +103,7 @@ query QueryHotInitializeTokenEvent($orderBy: String!, $targetEras: Int!) {
     }
 }`;
 
-export const queryInitializeTokenEventGraduated = gql`
+export const queryInitializeTokenEventGraduated = `
 query GetInitializedTokenEvents($orderBy: String!, $targetEras: Int!) {
     initializeTokenEventEntities(
         where: {
@@ -160,7 +158,7 @@ query GetInitializedTokenEvents($orderBy: String!, $targetEras: Int!) {
     }
 }`;
 
-export const queryHotInitializeTokenEventGraduated = gql`
+export const queryHotInitializeTokenEventGraduated = `
 query QueryHotInitializeTokenEvent($orderBy: String!, $targetEras: Int!) {
     initializeTokenEventEntities(
         where: { and: [{ status: 1 }, { currentEra_gt: $targetEras }] }
@@ -210,7 +208,7 @@ query QueryHotInitializeTokenEvent($orderBy: String!, $targetEras: Int!) {
     }
 }`;
 
-export const queryMyDeployments = gql`
+export const queryMyDeployments = `
 query GetMyDeployments($wallet: String!, $skip: Int!, $first: Int!) {
     initializeTokenEventEntities(
         where: { admin: $wallet, status: 1 }
@@ -261,7 +259,7 @@ query GetMyDeployments($wallet: String!, $skip: Int!, $first: Int!) {
     }
 }`;
 
-export const queryMyDelegatedTokens = gql`
+export const queryMyDelegatedTokens = `
 query GetMyDelegatedTokens($wallet: String!, $skip: Int!, $first: Int!) {
     initializeTokenEventEntities(
         where: { valueManager: $wallet, status: 1 }
@@ -312,7 +310,7 @@ query GetMyDelegatedTokens($wallet: String!, $skip: Int!, $first: Int!) {
     }
 }`;
 
-export const queryInitializeTokenEventBySearch = gql`
+export const queryInitializeTokenEventBySearch = `
 query GetInitializedTokenEvents($skip: Int!, $first: Int!, $searchQuery: String!) {
     initializeTokenEventEntities(
         skip: $skip
@@ -375,7 +373,7 @@ query GetInitializedTokenEvents($skip: Int!, $first: Int!, $searchQuery: String!
     }
 }`;
 
-export const queryInitializeTokenEventByMints = gql`
+export const queryInitializeTokenEventByMints = `
 query GetInitializedTokenEvents($orderBy: String!, $mints: [String!]) {
     initializeTokenEventEntities(
         where: { mint_in: $mints, status: 1 }
@@ -425,7 +423,7 @@ query GetInitializedTokenEvents($orderBy: String!, $mints: [String!]) {
     }
 }`;
 
-export const queryTokenMintTransactions = gql`
+export const queryTokenMintTransactions = `
 query GetTokenTransactions($mint: String!, $skip: Int!, $first: Int!) {
     mintTokenEntities(
         where: { mint: $mint }
@@ -445,7 +443,7 @@ query GetTokenTransactions($mint: String!, $skip: Int!, $first: Int!) {
 }
 `;
 
-export const queryAllTokenMintForChart = gql`
+export const queryAllTokenMintForChart = `
 query GetTokenTransactions($mint: String!, $skip: Int!, $first: Int!) {
     mintTokenEntities(
         where: { mint: $mint }
@@ -460,7 +458,7 @@ query GetTokenTransactions($mint: String!, $skip: Int!, $first: Int!) {
 }
 `;
 
-export const queryTokenRefundTransactions = gql`
+export const queryTokenRefundTransactions = `
 query GetTokenTransactions($mint: String!, $skip: Int!, $first: Int!) {
     refundEventEntities(
         where: { mint: $mint }
@@ -481,7 +479,7 @@ query GetTokenTransactions($mint: String!, $skip: Int!, $first: Int!) {
 }
 `;
 
-export const queryHolders = gql`
+export const queryHolders = `
 query GetHolders($mint: String!, $skip: Int!, $first: Int!) {
     holdersEntities(
         where: { mint: $mint }
@@ -496,7 +494,7 @@ query GetHolders($mint: String!, $skip: Int!, $first: Int!) {
 }
 `;
 
-export const queryMyTokenList = gql`
+export const queryMyTokenList = `
 query GetHolders($owner: String!, $skip: Int!, $first: Int!) {
     holdersEntities(
         where: { owner: $owner }
@@ -511,7 +509,7 @@ query GetHolders($owner: String!, $skip: Int!, $first: Int!) {
 }
 `;
 
-export const queryTokensByMints = gql`
+export const queryTokensByMints = `
 query GetTokensByMints($skip: Int!, $first: Int!, $mints: [String!]) {
     initializeTokenEventEntities(
         skip: $skip
@@ -562,7 +560,7 @@ query GetTokensByMints($skip: Int!, $first: Int!, $mints: [String!]) {
     }
 }`;
 
-export const querySetRefererCodeEntitiesByOwner = gql`
+export const querySetRefererCodeEntitiesByOwner = `
 query GetSetRefererCodeEntity($owner: String!, $skip: Int!, $first: Int!) {
     setRefererCodeEventEntities(
         where: { referrerMain: $owner }
@@ -580,7 +578,7 @@ query GetSetRefererCodeEntity($owner: String!, $skip: Int!, $first: Int!) {
     }
 }`;
 
-export const queryTotalReferrerBonus = gql`
+export const queryTotalReferrerBonus = `
 query GetTotalReferrerBonus($mint: String!, $referrerMain: String!) {
     mintTokenEntities(
         where: {
@@ -604,7 +602,7 @@ query GetTotalReferrerBonus($mint: String!, $referrerMain: String!) {
     }
 }`;
 
-export const queryTotalReferrerBonusSum = gql`
+export const queryTotalReferrerBonusSum = `
 query GetTotalReferrerBonusSum($mints: [String]!, $referrerMain: String!) {
     mintTokenEntities(
         mints: $mints, 
@@ -617,7 +615,7 @@ query GetTotalReferrerBonusSum($mints: [String]!, $referrerMain: String!) {
     }
 }`;
 
-export const queryTrades = gql`
+export const queryTrades = `
 query GetTrades($mint: String!, $skip: Int!, $first: Int!) {
     proxySwapBaseEventEntities(
         skip: $skip
@@ -641,7 +639,7 @@ query GetTrades($mint: String!, $skip: Int!, $first: Int!) {
     }
 }`;
 
-export const queryLiquidities = gql`
+export const queryLiquidities = `
 query GetLiquidities($mint: String!, $skip: Int!, $first: Int!) {
     proxyLiquidityEventEntities(
         skip: $skip
@@ -667,7 +665,7 @@ query GetLiquidities($mint: String!, $skip: Int!, $first: Int!) {
     }
 }`;
 
-export const queryBurnLp = gql`
+export const queryBurnLp = `
 query GetBurnLp($mint: String!, $skip: Int!, $first: Int!) {
     proxyBurnLpTokensEventEntities(
         skip: $skip

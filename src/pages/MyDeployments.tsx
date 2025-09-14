@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { queryMyDeployments } from "../utils/graphql";
+import { queryMyDeployments } from "../utils/graphql2";
 import { ErrorBox } from "../components/common/ErrorBox";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { InitiazlizedTokenData } from "../types/types";
@@ -10,7 +9,7 @@ import { AddressDisplay } from "../components/common/AddressDisplay";
 import { CloseTokenModal } from "../components/tools/CloseTokenModal";
 import { UpdateMetadataModal } from "../components/tools/UpdateMetadataModal";
 import { Pagination } from "../components/common/Pagination";
-import { PAGE_SIZE_OPTIONS } from "../config/constants";
+import { NETWORK_CONFIGS, PAGE_SIZE_OPTIONS } from "../config/constants";
 import { useNavigate } from "react-router-dom";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useDeviceType } from "../hooks/device";
@@ -19,6 +18,7 @@ import { filterTokens } from "../utils/format";
 import { PageHeader } from "../components/common/PageHeader";
 import { UpdateAuthoritiesModal } from "../components/tools/UpdateAuthoritiesModal";
 import { useTranslation } from "react-i18next";
+import { useGraphQuery } from "../hooks/graphquery";
 
 export type MyDeploymentsProps = {
   expanded: boolean;
@@ -39,29 +39,35 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
   const wallet = useAnchorWallet();
   const navigate = useNavigate();
   const { isMobile } = useDeviceType();
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+  const ownerBase58 = wallet?.publicKey?.toBase58();
 
-  const { loading: initialLoading, error: initialError, data: initialData } = useQuery(queryMyDeployments, {
-    variables: {
-      wallet: wallet?.publicKey.toBase58(),
-      skip: (currentPage - 1) * pageSize,
+  const { loading: initialLoading, error: initialError, data: initialData } = useGraphQuery(
+    subgraphUrl,
+    queryMyDeployments, {
+      wallet: ownerBase58 as string,
+      offset: (currentPage - 1) * pageSize,
       first: pageSize,
-    },
-    skip: !wallet,
-    fetchPolicy: 'network-only',
-  });
+    }, {
+      auto: !!ownerBase58,
+    }
+  );
 
   useEffect(() => {
-    const _dataAfterFilter = filterTokens(initialData?.initializeTokenEventEntities);
-    setDataAfterFilter(_dataAfterFilter);
-    setTotalCount(Math.max(totalCount, (currentPage - 1) * pageSize + (_dataAfterFilter?.length ?? 0)));
-    if (_dataAfterFilter) {
-      setLoadingMetadata(true);
-      fetchTokenMetadataMap(_dataAfterFilter).then((updatedMap) => {
-        setLoadingMetadata(false);
-        setTokenMetadataMap(updatedMap);
-      });
+    console.log("data", initialData)
+    if (initialData && initialData.allInitializeTokenEventEntities) {
+      const _dataAfterFilter = filterTokens(initialData?.allInitializeTokenEventEntities.nodes);
+      setDataAfterFilter(_dataAfterFilter);
+      setTotalCount(initialData?.allInitializeTokenEventEntities.totalCount);
+      if (_dataAfterFilter) {
+        setLoadingMetadata(true);
+        fetchTokenMetadataMap(_dataAfterFilter).then((updatedMap) => {
+          setLoadingMetadata(false);
+          setTokenMetadataMap(updatedMap);
+        });
+      }
+      // console.log(_dataAfterFilter[0]);
     }
-    // console.log(_dataAfterFilter[0]);
   }, [currentPage, initialData, pageSize, totalCount]);
 
   const handleClick = (mint: string) => {
@@ -117,7 +123,7 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
                 {dataAfterFilter.map((token: InitiazlizedTokenData) => (
                   <tr key={token.id} className="hover">
                     <td className=" text-center cursor-pointer" onClick={() => handleClick(token.mint)}>
-                      <div className="">
+                      <div className="w-12 h-12">
                         <TokenImage
                           imageUrl={tokenMetadataMap[token.mint]?.tokenMetadata?.image || ''}
                           name={token.tokenName}

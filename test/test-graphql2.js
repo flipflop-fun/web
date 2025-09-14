@@ -63,30 +63,6 @@ async function runQuery(name, query, variables) {
   }
 }
 
-function summarizeData(payload) {
-  if (!payload || typeof payload !== 'object') return 'no data';
-  const keys = Object.keys(payload);
-  if (keys.length === 0) return 'empty object';
-  const rootKey = keys[0];
-  const root = payload[rootKey];
-  let count = undefined;
-  if (root && typeof root === 'object') {
-    if (Array.isArray(root.nodes)) count = root.nodes.length;
-    else if (typeof root.totalCount === 'number') count = root.totalCount;
-  }
-  return { rootKey, count, keys: Object.keys(root || {}) };
-}
-
-function logResult(name, result, opts = {}) {
-  if (opts.skipped) {
-    console.log(`[SKIP] ${name} - ${opts.reason || 'skipped'}`);
-    return;
-  }
-  const status = result.ok ? 'PASS' : 'FAIL';
-  const summary = result.ok ? JSON.stringify(result.summary) : JSON.stringify(result.error);
-  console.log(`[${status}] ${name} (${result.status || 'ERR'}) - ${result.took}ms -> ${summary}`);
-}
-
 (async function main() {
   console.log(`Using endpoint: ${ENDPOINT}`);
   const queries = parseQueries(GRAPHQL2_PATH);
@@ -115,24 +91,24 @@ function logResult(name, result, opts = {}) {
   //   }
   // `;
 
-  const bootstrapQuery = `
-    query Bootstrap($targetEras: BigFloat!, $first: Int!, $offset: Int!) {
-      allInitializeTokenEventEntities(
-        filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { lessThanOrEqualTo: $targetEras } }] }
-        first: $first
-        offset: $offset
-        orderBy: TIMESTAMP_DESC
-      ) {
-        nodes {
-          mint
-          admin
-          valueManager
-          tokenSymbol
-          tokenName
-        }
-      }
-    }
-  `;
+  // const bootstrapQuery = `
+  //   query Bootstrap($targetEras: BigFloat!, $first: Int!, $offset: Int!) {
+  //     allInitializeTokenEventEntities(
+  //       filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { lessThanOrEqualTo: $targetEras } }] }
+  //       first: $first
+  //       offset: $offset
+  //       orderBy: TIMESTAMP_DESC
+  //     ) {
+  //       nodes {
+  //         mint
+  //         admin
+  //         valueManager
+  //         tokenSymbol
+  //         tokenName
+  //       }
+  //     }
+  //   }
+  // `;
 
   // const bootstrapQuery = `
   //   query GetHolders($mint: String!, $offset: Int!, $first: Int!) {
@@ -191,8 +167,97 @@ function logResult(name, result, opts = {}) {
   //   }
   // }
   // `;
-  // const bootstrapVars = {owner: "7Db1TTh4pHr1MuTmaJTpWoQqmkZ7712PEpQZ2DxWddep", first: Math.max(DEFAULT_FIRST, 10), offset: DEFAULT_OFFSET };
-  const bootstrapVars = {targetEras: 1, first: Math.max(DEFAULT_FIRST, 10), offset: DEFAULT_OFFSET };
+
+  // const bootstrapQuery = `
+  //   query GetTotalReferrerBonusSum($mints: [String!]!, $referrerMain: String!) {
+  //   allMintTokenEntities(
+  //     filter: { and: [ { mint: { in: $mints } }, { referrerMain: { equalTo: $referrerMain } } ] }
+  //   ) {
+  //     nodes {
+  //       mint
+  //       referrerFee
+  //     }
+  //     totalCount
+  //   }
+  // }`
+
+  // const bootstrapQuery = `
+  //   query GetTotalReferrerBonusSum($referrerMain: String!) {
+  //   allMintTokenEntities(
+  //     filter: {
+  //       or: [
+  //         { mint: { equalTo: "FpuSjtzgiFKADiyPzW8EiayvmtYdqdQqoNYQS4Uz3PKR" } },
+  //         { mint: { equalTo: "24goW3dRUodwy7zke7qyQWLueMiDAmpC4YBR5FohHMUn" } }
+  //       ]
+  //       referrerMain: { equalTo: $referrerMain }
+  //     }
+  //   ) {
+  //     nodes {
+  //       mint
+  //       referrerFee
+  //     }
+  //     totalCount
+  //   }
+  // }`
+
+  const bootstrapQuery = `
+    query GetMyDeployments($wallet: String!, $offset: Int!, $first: Int!) {
+    allInitializeTokenEventEntities(
+      condition: { admin: $wallet, status: 1 }
+      offset: $offset
+      first: $first
+      orderBy: TIMESTAMP_DESC
+    ) {
+      nodes {
+        id
+        txId
+        admin
+        tokenId
+        mint
+        configAccount
+        metadataAccount
+        tokenVault
+        timestamp
+        tokenName
+        tokenSymbol
+        tokenUri
+        supply
+        currentEra
+        currentEpoch
+        elapsedSecondsEpoch
+        startTimestampEpoch
+        lastDifficultyCoefficientEpoch
+        difficultyCoefficientEpoch
+        mintSizeEpoch
+        quantityMintedEpoch
+        targetMintSizeEpoch
+        totalMintFee
+        totalReferrerFee
+        totalTokens
+        targetEras
+        epochesPerEra
+        targetSecondsPerEpoch
+        reduceRatio
+        initialMintSize
+        initialTargetMintSizePerEpoch
+        feeRate
+        liquidityTokensRatio
+        startTimestamp
+        status
+        metadataTimestamp
+        valueManager
+        wsolVault
+        graduateEpoch
+      }
+      totalCount
+    }
+  }`
+  const bootstrapVars = {wallet: "DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD", first: Math.max(DEFAULT_FIRST, 10), offset: DEFAULT_OFFSET };
+  // const bootstrapVars = {targetEras: 1, first: Math.max(DEFAULT_FIRST, 10), offset: DEFAULT_OFFSET };
+  // const bootstrapVars = {
+  //   mints: ["FpuSjtzgiFKADiyPzW8EiayvmtYdqdQqoNYQS4Uz3PKR", "24goW3dRUodwy7zke7qyQWLueMiDAmpC4YBR5FohHMUn"],
+  //   referrerMain: "7Db1TTh4pHr1MuTmaJTpWoQqmkZ7712PEpQZ2DxWddep"
+  // };
   const bootstrap = await runQuery('bootstrap', bootstrapQuery, bootstrapVars);
   // console.log(bootstrap);
 })();

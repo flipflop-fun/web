@@ -1,9 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
-import { useQuery } from '@apollo/client';
 import { PageHeader } from '../components/common/PageHeader';
 import { AddressDisplay } from '../components/common/AddressDisplay';
-import { queryMyDelegatedTokens } from '../utils/graphql';
+import { queryMyDelegatedTokens } from '../utils/graphql2';
 import { useNavigate } from 'react-router-dom';
 import { useDeviceType } from '../hooks/device';
 import { ErrorBox } from '../components/common/ErrorBox';
@@ -11,9 +10,10 @@ import { InitiazlizedTokenData } from '../types/types';
 import { DelegatedTokenCard } from '../components/liquidity/DelegatedTokenCard';
 import { filterTokens } from '../utils/format';
 import { fetchTokenMetadataMap } from '../utils/web3';
-import { PAGE_SIZE_OPTIONS } from '../config/constants';
+import { NETWORK_CONFIGS, PAGE_SIZE_OPTIONS } from '../config/constants';
 import { TokenImage } from '../components/mintTokens/TokenImage';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../hooks/graphquery';
 
 type DelegatedTokensProps = {
   expanded: boolean;
@@ -32,31 +32,36 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
   const navigate = useNavigate();
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+  const ownerBase58 = wallet?.publicKey?.toBase58();
 
-  const { loading: initialLoading, error, data } = useQuery(queryMyDelegatedTokens, {
-    variables: {
-      wallet: wallet?.publicKey.toString(),
-      skip: 0,
-      first: 10,
-    },
-    skip: !wallet,
-    fetchPolicy: 'network-only',
-  });
+  const { loading: initialLoading, error, data } = useGraphQuery(
+    subgraphUrl,
+    queryMyDelegatedTokens, {
+      wallet: ownerBase58 as string,
+      offset: 0,
+      first: 100,
+    }, {
+      auto: !!ownerBase58,
+    }
+  );
 
   const handleClick = (mint: string) => {
     navigate(`/token/${mint}`);
   };
 
   useEffect(() => {
-    const _dataAfterFilter = filterTokens(data?.initializeTokenEventEntities);
-    setDataAfterFilter(_dataAfterFilter);
-    setTotalCount(Math.max(totalCount, (currentPage - 1) * pageSize + (_dataAfterFilter?.length ?? 0)));
-    if (_dataAfterFilter) {
-      setLoadingMetadata(true);
-      fetchTokenMetadataMap(_dataAfterFilter).then((updatedMap) => {
-        setLoadingMetadata(false);
-        setTokenMetadataMap(updatedMap);
-      });
+    if (data && data.allInitializeTokenEventEntities) {
+      const _dataAfterFilter = filterTokens(data?.allInitializeTokenEventEntities.nodes);
+      setDataAfterFilter(_dataAfterFilter);
+      setTotalCount(Math.max(totalCount, (currentPage - 1) * pageSize + (_dataAfterFilter?.length ?? 0)));
+      if (_dataAfterFilter) {
+        setLoadingMetadata(true);
+        fetchTokenMetadataMap(_dataAfterFilter).then((updatedMap) => {
+          setLoadingMetadata(false);
+          setTokenMetadataMap(updatedMap);
+        });
+      }
     }
   }, [currentPage, data, pageSize, totalCount]);
 

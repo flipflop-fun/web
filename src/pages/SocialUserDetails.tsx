@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { PageHeader } from "../components/common/PageHeader";
 import { useParams } from "react-router-dom";
 import { InitiazlizedTokenData, OrderedUser, Role } from "../types/types";
-import { DEFAULT_IMAGE } from "../config/constants";
+import { DEFAULT_IMAGE, NETWORK_CONFIGS } from "../config/constants";
 import { AddressDisplay } from "../components/common/AddressDisplay";
 import { socialIcons } from "../components/social/MyProfile";
 import { generateDefaultUsername } from "../utils/format";
@@ -10,8 +10,7 @@ import { getSearchByKey} from "../utils/user";
 import { useDeviceType } from "../hooks/device";
 import { mergeUserData } from "./SocialExplore";
 import { CommentBox } from "../components/social/CommentBox";
-import { useLazyQuery } from "@apollo/client";
-import { queryInitializeTokenEventByMints, queryMyDelegatedTokens, queryMyDeployments, querySetRefererCodeEntitiesByOwner } from "../utils/graphql";
+import { queryInitializeTokenEventByMints, queryMyDelegatedTokens, queryMyDeployments, querySetRefererCodeEntitiesByOwner } from "../utils/graphql2";
 import { TokenCardSimple } from "../components/mintTokens/TokenCardSimple";
 import { TokenCardWeb } from "../components/mintTokens/TokenCardWeb";
 import { SocialButtonsUser } from "../components/social/SocialButtonsUser";
@@ -19,6 +18,7 @@ import { FaAngleDoubleDown } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useAuth } from "../hooks/auth";
 import { useTranslation } from "react-i18next";
+import { runGraphQuery } from "../hooks/graphquery";
 
 type SocialUserDetailsProps = {
   expanded: boolean;
@@ -34,15 +34,8 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
   const [tokensByValueManager, setTokensByValueManager] = useState<InitiazlizedTokenData[]>([]);
   const [tokensByPromoter, setTokensByPromoter] = useState<InitiazlizedTokenData[]>([]);
   const { t } = useTranslation();
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
   
-  const [searchTokensByAdmin, { loading: searchLoadingByAdmin, error: searchErrorByAdmin, data: searchDataByAdmin }] = useLazyQuery(queryMyDeployments);
-
-  const [searchTokensByValueManager, { loading: searchLoadingByValueManager, error: searchErrorByValueManager, data: searchDataByValueManager }] = useLazyQuery(queryMyDelegatedTokens);
-
-  const [searchTokensByPromoter, { loading: searchLoadingByPromoter, error: searchErrorByPromoter, data: searchDataByPromoter }] = useLazyQuery(querySetRefererCodeEntitiesByOwner);
-
-  const [searchTokensByMints, { loading: searchLoadingByMints, error: searchErrorByMints, data: searchDataByMints }] = useLazyQuery(queryInitializeTokenEventByMints);
-
   const titles = {
     "issuer": t('social.launchedTokensList'),
     "promoter": t('social.promotedTokensList'),
@@ -63,69 +56,52 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
   }, [address, handleLogin, isLoggingIn, token]);
 
   const fetchTokens = useCallback(async () => {
-    // Fetch tokens
-    (user?.role as Role[]).forEach((role) => {
-      if (role === Role.ISSUER && !user?.hides.includes(role) && tokensByAdmin.length === 0) searchTokensByAdmin({
-          fetchPolicy: 'network-only',
-          variables: {
-            wallet: user?.admin,
-            skip: 0,
-            first: 100,
-          },
-        });
-      else if (role === Role.PROMOTER && !user?.hides.includes(role) && tokensByPromoter.length === 0) searchTokensByPromoter({
-          fetchPolicy: 'network-only',
-          variables: {
-            owner: user?.admin,
-            skip: 0,
-            first: 100,
-          },
-        });
-      else if (role === Role.MANAGER && !user?.hides.includes(role) && tokensByValueManager.length === 0) searchTokensByValueManager({
-          fetchPolicy: 'network-only',
-          variables: {
-            wallet: user?.admin,
-            skip: 0,
-            first: 100,
-          },
-        });
+    if (!user) return;
+    const roles = (user?.role as Role[]);
+    for (const role of roles) {
+      if (user?.hides.includes(role)) continue;
+
+      if (role === Role.ISSUER && tokensByAdmin.length === 0) {
+        const data = await runGraphQuery(
+          subgraphUrl,
+          queryMyDeployments,
+          { wallet: user?.admin, offset: 0, first: 100 }
+        );
+        if (data?.allInitializeTokenEventEntities?.nodes) {
+          setTokensByAdmin(data.allInitializeTokenEventEntities.nodes as InitiazlizedTokenData[]);
+        }
+      } else if (role === Role.PROMOTER && tokensByPromoter.length === 0) {
+        const refData = await runGraphQuery(
+          subgraphUrl,
+          querySetRefererCodeEntitiesByOwner,
+          { owner: user?.admin, offset: 0, first: 100 }
+        );
+        const refNodes = refData?.allSetRefererCodeEventEntities?.nodes || [];
+        const mints: string[] = refNodes.map((n: any) => n.mint).filter(Boolean);
+        if (mints.length > 0) {
+          const mintData = await runGraphQuery(
+            subgraphUrl,
+            queryInitializeTokenEventByMints,
+            { mints, offset: 0, first: mints.length }
+          );
+          if (mintData?.allInitializeTokenEventEntities?.nodes) {
+            setTokensByPromoter(mintData.allInitializeTokenEventEntities.nodes as InitiazlizedTokenData[]);
+          }
+        } else {
+          setTokensByPromoter([]);
+        }
+      } else if (role === Role.MANAGER && tokensByValueManager.length === 0) {
+        const data = await runGraphQuery(
+          subgraphUrl,
+          queryMyDelegatedTokens,
+          { wallet: user?.admin, offset: 0, first: 100 }
+        );
+        if (data?.allInitializeTokenEventEntities?.nodes) {
+          setTokensByValueManager(data.allInitializeTokenEventEntities.nodes as InitiazlizedTokenData[]);
+        }
       }
-    );
-  }, [searchTokensByAdmin, searchTokensByPromoter, searchTokensByValueManager, tokensByAdmin.length, tokensByPromoter.length, tokensByValueManager.length, user?.admin, user?.hides, user?.role]);
-
-  useEffect(() => {
-    if (!searchLoadingByAdmin && !searchErrorByAdmin && searchDataByAdmin) {
-      setTokensByAdmin(searchDataByAdmin.initializeTokenEventEntities as InitiazlizedTokenData[])
     }
-  }, [searchLoadingByAdmin, searchErrorByAdmin, searchDataByAdmin]);
-
-  useEffect(() => {
-    if (!searchLoadingByValueManager && !searchErrorByValueManager && searchDataByValueManager) {
-      setTokensByValueManager(searchDataByValueManager.initializeTokenEventEntities as InitiazlizedTokenData[])
-    }
-  }, [searchLoadingByValueManager, searchErrorByValueManager, searchDataByValueManager]);
-
-  useEffect(() => {
-    if (!searchLoadingByPromoter && !searchErrorByPromoter && searchDataByPromoter) {
-      const mints = [];
-      for (let i = 0; i < searchDataByPromoter.setRefererCodeEventEntities.length; i++) {
-        mints.push(searchDataByPromoter.setRefererCodeEventEntities[i].mint);
-      }
-      searchTokensByMints({
-        fetchPolicy: 'network-only',
-        variables: {
-          mints: mints,
-          orderBy: "timestamp",
-        },
-      });
-    }
-  }, [searchLoadingByPromoter, searchErrorByPromoter, searchDataByPromoter, searchTokensByMints]);
-
-  useEffect(() => {
-    if (!searchLoadingByMints && !searchErrorByMints && searchDataByMints) {
-      setTokensByPromoter(searchDataByMints.initializeTokenEventEntities as InitiazlizedTokenData[])
-    }
-  }, [searchLoadingByMints, searchErrorByMints, searchDataByMints]);
+  }, [user, tokensByAdmin.length, tokensByPromoter.length, tokensByValueManager.length, subgraphUrl]);
 
   useEffect(() => {
     if (address && token) fetchUserData();
@@ -133,7 +109,7 @@ export const SocialUserDetails: FC<SocialUserDetailsProps> = ({ expanded }) => {
 
   useEffect(() => {
     if (user) fetchTokens();
-  }, [user?.role.length])
+  }, [user]);
 
   if (!user) {
     return (

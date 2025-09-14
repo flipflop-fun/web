@@ -42,11 +42,7 @@ export function useGraphQuery<TData = any, TVariables extends Record<string, any
     try {
       setLoading(true);
       setError(null);
-      console.log("###### endpoint", endpoint);
-      console.log("###### query", query);
-      console.log("###### vars", vars);
       const result = await runGraphQuery(endpoint, query, vars);
-      console.log("###### result", result);
       if (!mountedRef.current) return null;
 
       // runGraphQuery 在出错时返回 null，这里统一处理为 error

@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { InitiazlizedTokenData, Liquidity, PoolData } from '../types/types';
-import { useLazyQuery } from '@apollo/client';
-import { queryBurnLp, queryLiquidities, queryTokensByMints, queryTrades } from '../utils/graphql';
+import { queryBurnLp, queryLiquidities, queryTokensByMints, queryTrades } from '../utils/graphql2';
 import { Trades } from '../components/liquidity/Trades';
 import { Liquidities } from '../components/liquidity/Liquidities';
 import { LpBurns } from '../components/liquidity/LpBurns';
@@ -10,6 +9,8 @@ import { PoolInformation } from '../components/liquidity/PoolInformation';
 import { useParams } from 'react-router-dom';
 import { sleep } from '@raydium-io/raydium-sdk-v2';
 import { useTranslation } from 'react-i18next';
+import { runGraphQuery } from '../hooks/graphquery';
+import { NETWORK_CONFIGS } from '../config/constants';
 
 type ManageLiquidityProps = {
   expanded: boolean;
@@ -36,101 +37,49 @@ export function ManageLiquidity({
   const [vaultLpTokenBalance, setVaultLpTokenBalance] = useState(0);
   const [totalLpToken, setTotalLpToken] = useState(0);
   const [isDexOpen, setIsDexOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialFetchDone = useRef(false);
   const nonce = useRef(0);
   const { mint } = useParams();
   const { t } = useTranslation();
-
-  const [getTokenData, { loading: queryTokenDataLoading }] = useLazyQuery(queryTokensByMints, {
-    onCompleted: (data) => {
-      const _tokenData = data.initializeTokenEventEntities[0];
-      setTokenData(_tokenData);
-    },
-    onError: (error) => {
-      toast.error('Failed to fetch token data');
-      console.error('Error fetching token data:', error);
-    }
-  });
-
-  const [getTradesData, { loading: queryTradesLoading }] = useLazyQuery(queryTrades, {
-    onCompleted: (data) => {
-      const _tradesData = data.proxySwapBaseEventEntities as [];
-      // console.log("trades", _tradesData);
-      setTradesData([..._tradesData]);
-    },
-    onError: (error) => {
-      toast.error('Failed to fetch trades data');
-      console.error('Error fetching trades data:', error);
-    }
-  });
-
-  const [getLiquiditiesData, { loading: queryLiquiditiesLoading }] = useLazyQuery(queryLiquidities, {
-    onCompleted: (data) => {
-      const _liquiditiesData = data.proxyLiquidityEventEntities as Liquidity[];
-      // console.log("liquidities", _liquiditiesData);
-      setLiquiditiesData([..._liquiditiesData]);
-    },
-    onError: (error) => {
-      toast.error('Failed to fetch liquidities data');
-      console.error('Error fetching liquidities data:', error);
-    }
-  });
-
-  const [getLpBurnData, { loading: queryLpBurnLoading }] = useLazyQuery(queryBurnLp, {
-    onCompleted: (data) => {
-      const _lpBurnData = data.proxyBurnLpTokensEventEntities as [];
-      // console.log("lp burn", _lpBurnData);
-      setLpBurnData([..._lpBurnData]);
-    },
-    onError: (error) => {
-      toast.error('Failed to fetch lp burn data');
-      console.error('Error fetching lp burn data:', error);
-    }
-  });
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || 'devnet'].subgraphUrl2;
 
   const fetchAllData = useCallback(async (address: string) => {
     if (!address) {
       toast.error('Please enter mint address');
       return;
     }
-    console.log("fetch all data...");
 
     try {
-      // Waiting 2 seconds for chain data sync
+      setIsLoading(true);
       await sleep(2000);
-      const queryParams = {
-        skip: 0,
-        first: 10,
-        mint: address
-      };
 
-      await Promise.all([
-        getTokenData({
-          variables: {
-            mints: [address],
-            skip: 0,
-            first: 10
-          }
-        }),
-        getLiquiditiesData({
-          variables: queryParams,
-          fetchPolicy: 'network-only'
-        }),
-        getLpBurnData({
-          variables: queryParams,
-          fetchPolicy: 'network-only'
-        }),
-        getTradesData({
-          variables: queryParams,
-          fetchPolicy: 'network-only'
-        })
+      const [tokenResp, liquiditiesResp, lpBurnResp, tradesResp] = await Promise.all([
+        runGraphQuery(subgraphUrl, queryTokensByMints, { mints: [address], offset: 0, first: 10 }),
+        runGraphQuery(subgraphUrl, queryLiquidities, { mint: address, offset: 0, first: 10 }),
+        runGraphQuery(subgraphUrl, queryBurnLp, { mint: address, offset: 0, first: 10 }),
+        runGraphQuery(subgraphUrl, queryTrades, { mint: address, offset: 0, first: 10 }),
       ]);
+
+      const tokenNode = tokenResp?.allInitializeTokenEventEntities?.nodes?.[0] as InitiazlizedTokenData | undefined;
+      if (tokenNode) setTokenData(tokenNode);
+
+      const liqNodes = (liquiditiesResp?.allProxyLiquidityEventEntities?.nodes || []) as Liquidity[];
+      setLiquiditiesData([...liqNodes]);
+
+      const burnNodes = (lpBurnResp?.allProxyBurnLpTokensEventEntities?.nodes || []) as [];
+      setLpBurnData([...burnNodes]);
+
+      const tradeNodes = (tradesResp?.allProxySwapBaseEventEntities?.nodes || []) as [];
+      setTradesData([...tradeNodes]);
     } catch (error) {
       console.error('Error:', error);
       toast.error('Failed to fetch data');
+    } finally {
+      setIsLoading(false);
     }
-  }, [getLiquiditiesData, getLpBurnData, getTokenData, getTradesData]);
+  }, [subgraphUrl]);
 
   useEffect(() => {
     if(mint && !initialFetchDone.current) {
@@ -148,8 +97,6 @@ export function ManageLiquidity({
 
   return (
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
-      {/* <PageHeader title="Manage Liquidity" bgImage='/bg/group1/8.jpg' /> */}
-
       <div className="container mx-auto md:px-4 px-1 py-8">
         <div className='max-w-4xl mx-auto'>
           <h1 className='text-2xl mb-6'>{t('vm.manageMarketValue')}</h1>
@@ -165,10 +112,10 @@ export function ManageLiquidity({
               />
               <button
                 onClick={() => fetchAllData(mintAddress)}
-                disabled={queryTokenDataLoading || queryLiquiditiesLoading || queryTradesLoading || queryLpBurnLoading || !mintAddress}
+                disabled={isLoading || !mintAddress}
                 className="btn btn-primary"
               >
-                {queryTokenDataLoading ? 'Loading...' : t('vm.getInfo')}
+                {isLoading ? 'Loading...' : t('vm.getInfo')}
               </button>
             </div>
           </div>)}

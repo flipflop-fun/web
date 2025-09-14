@@ -20,7 +20,6 @@ import {
   createDefaultAuthorizationResultCache,
   createDefaultWalletNotFoundHandler,
 } from '@solana-mobile/wallet-adapter-mobile';
-// import { clusterApiUrl } from '@solana/web3.js';
 import { Navbar } from './components/common/Navbar';
 import { Toaster } from 'react-hot-toast';
 import { Sidebar } from './components/common/Sidebar';
@@ -38,8 +37,7 @@ import { CreateLiquidityPool } from './pages/CreateLiquidityPool';
 import { ManageLiquidity } from './pages/ManageLiquidity';
 import { DelegatedTokens } from './pages/DelegatedTokens';
 import { TradingBot } from './pages/TradingBot';
-import { useLazyQuery } from '@apollo/client';
-import { queryMyDelegatedTokens } from './utils/graphql';
+import { queryMyDelegatedTokens } from './utils/graphql2';
 import { CopilotKit } from "@copilotkit/react-core";
 import "@copilotkit/react-ui/styles.css";
 import { MyCopilotKit } from './components/agent/MyCopilotKit';
@@ -51,7 +49,7 @@ import { useDeviceType } from './hooks/device';
 import { AuthProvider } from './hooks/auth';
 import './i18n/i18n';
 import { useTranslation } from 'react-i18next';
-// import MaintenanceBanner from './components/common/MaintenanceBanner';
+import { useGraphQuery } from './hooks/graphquery';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 const AppContent = () => {
@@ -65,23 +63,22 @@ const AppContent = () => {
   const { isMobile } = useDeviceType();
   const wallet = useAnchorWallet();
   const { t } = useTranslation();
-
-  const [getDelegatedTokens, { data: delegatedTokens }] = useLazyQuery(queryMyDelegatedTokens);
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+  const ownerBase58 = wallet?.publicKey?.toBase58?.() ?? wallet?.publicKey?.toString();
+  
+  const { data: delegatedTokens } = useGraphQuery(
+    subgraphUrl,
+    queryMyDelegatedTokens,
+    {
+      wallet: ownerBase58 as string,
+      offset: 0,
+      first: 10,
+    },
+    { auto: !!ownerBase58 }
+  );
 
   useEffect(() => {
-    if(wallet) {
-      getDelegatedTokens({
-        variables: {
-          wallet: wallet?.publicKey.toString(),
-          skip: 0,
-          first: 10,
-        },
-      });
-    }
-  }, [getDelegatedTokens, wallet]);
-
-  useEffect(() => {
-    if (delegatedTokens && delegatedTokens.initializeTokenEventEntities && delegatedTokens.initializeTokenEventEntities.length > 0) {
+    if (delegatedTokens && delegatedTokens.allInitializeTokenEventEntities && delegatedTokens.allInitializeTokenEventEntities.totalCount > 0) {
       setHasDelegatedTokens(true);
     } else {
       setHasDelegatedTokens(false);

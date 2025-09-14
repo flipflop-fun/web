@@ -1,7 +1,6 @@
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { FC, useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { queryMyTokenList, queryTokensByMints } from '../utils/graphql';
+import { queryMyTokenList, queryTokensByMints } from '../utils/graphql2';
 import { InitiazlizedTokenData, MyAccountProps, TokenListItem, TokenMetadataIPFS } from '../types/types';
 import { AddressDisplay } from '../components/common/AddressDisplay';
 import { TokenImage } from '../components/mintTokens/TokenImage';
@@ -11,11 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import { ReferralCodeModal } from '../components/myAccount/ReferralCodeModal';
 import { RefundModal } from '../components/myAccount/RefundModal';
 import { Pagination } from '../components/common/Pagination';
-import { PAGE_SIZE_OPTIONS } from '../config/constants';
+import { NETWORK_CONFIGS, PAGE_SIZE_OPTIONS } from '../config/constants';
 import { useDeviceType } from '../hooks/device';
 import { MyMintedTokenCard } from '../components/myAccount/MyMintedTokenCard';
 import { PageHeader } from '../components/common/PageHeader';
 import { useTranslation } from 'react-i18next';
+import { useGraphQuery } from '../hooks/graphquery';
 // import { PublicKey } from '@solana/web3.js';
 
 export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
@@ -33,43 +33,58 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   const [pageSize, setPageSize] = useState(20);
   const [totalCount, setTotalCount] = useState(0);
   // const [frozenStates, setFrozenStates] = useState<{ [key: string]: boolean | null }>({});
+  const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+  const ownerBase58 = wallet?.publicKey?.toBase58();
 
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
-  const { data: myTokensData, loading: loadingTokens } = useQuery(queryMyTokenList, {
-    variables: {
-      owner: wallet?.publicKey?.toBase58() || '',
-      skip: (currentPage - 1) * pageSize,
-      first: pageSize
-    },
-    skip: !wallet?.publicKey,
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first'
-  });
 
-  const { data: tokenDetailsData, loading: loadingDetails } = useQuery(queryTokensByMints, {
-    variables: {
-      mints: searchMints,
-      skip: 0,
-      first: 100
+  const { data: myTokensData, loading: loadingTokens, refetch: refetchMyTokens } = useGraphQuery(
+    subgraphUrl,
+    queryMyTokenList,
+    {
+      owner: ownerBase58 as string,
+      offset: (currentPage - 1) * pageSize,
+      first: pageSize,
     },
-    skip: searchMints.length === 0,
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first'
-  });
+    {
+      auto: false,
+    }
+  );
+
+  const { data: tokenDetailsData, loading: loadingDetails, refetch: refetchTokenDetails } = useGraphQuery(
+    subgraphUrl,
+    queryTokensByMints,
+    {
+      mints: searchMints,
+      offset: 0,
+      first: 100,
+    },
+    {
+      auto: false,
+    }
+  );
+
+  useEffect(() => {
+    if (!ownerBase58) return;
+    refetchMyTokens({
+      owner: ownerBase58,
+      offset: (currentPage - 1) * pageSize,
+      first: pageSize,
+    });
+  }, [ownerBase58, currentPage, pageSize]);
+
+  useEffect(() => {
+    if (!searchMints || searchMints.length === 0) return;
+    refetchTokenDetails({
+      mints: searchMints,
+      offset: 0,
+      first: Math.min(100, searchMints.length),
+    });
+  }, [searchMints]);
 
   useEffect(() => {
     if (!wallet?.publicKey) return;
-
-    // const getBalance = async () => {
-    //   try {
-    //     const balance = await connection.getBalance(wallet?.publicKey);
-    //     setBalance(balance / LAMPORTS_PER_SOL);
-    //   } catch (e) {
-    //     console.error('Error getting balance:', e);
-    //   }
-    // };
-
     // getBalance();
     const id = connection.onAccountChange(wallet.publicKey, (account) => {
       // setBalance(account.lamports / LAMPORTS_PER_SOL);
@@ -81,38 +96,18 @@ export const MyMintedTokens: FC<MyAccountProps> = ({ expanded }) => {
   }, [connection, wallet?.publicKey]);
 
   useEffect(() => {
-    if (myTokensData?.holdersEntities && wallet) {
-      const tokensAfterFilter = filterTokenListItem(myTokensData?.holdersEntities);
+    if (myTokensData && myTokensData.allHoldersEntities && wallet) {
+      const tokensAfterFilter = filterTokenListItem(myTokensData?.allHoldersEntities.nodes);
       const mints = tokensAfterFilter.map((token: TokenListItem) => token.mint);
       setSearchMints(mints);
       setTotalCount(Math.max(totalCount, (currentPage - 1) * pageSize + (mints.length ?? 0)));
       setTokenList(tokensAfterFilter);
-
-      // TODO: cancel fetching totalMintFee from RPC
-      // const processTokens = async () => {
-      //   const processedTokens = await Promise.all(
-      //     tokensAfterFilter.map(async (token: TokenListItem) => {
-      //       const refundData = await getRefundAccountData(wallet, connection, new PublicKey(token.mint));
-      //       if (refundData.success && refundData.data) {
-      //         return {
-      //           ...token,
-      //           totalMintFee: refundData.data.totalMintFee
-      //         };
-      //       }
-      //       return {
-      //         ...token,
-      //         totalMintFee: null
-      //       };
-      //     })
-      //   );
-      //   setTokenList(processedTokens as TokenListItem[]);
-      // };
-      // processTokens();
     }
   }, [currentPage, myTokensData, pageSize, totalCount]);
 
   useEffect(() => {
-    const tokenEventEntities = filterTokens(tokenDetailsData?.initializeTokenEventEntities);
+    if (!tokenDetailsData || !tokenDetailsData.allInitializeTokenEventEntities) return;
+    const tokenEventEntities = filterTokens(tokenDetailsData.allInitializeTokenEventEntities.nodes);
 
     if (tokenEventEntities) {
       const updatedTokenList = tokenList.map(token => ({

@@ -413,7 +413,7 @@ export const queryInitializeTokenEventBySearch = `
 
 // 8) InitializeTokenEvent by mints (IN)
 export const queryInitializeTokenEventByMints = `
-  query GetInitializedTokenEvents($mints: [String!], $first: Int = 50, $offset: Int = 0) {
+  query GetInitializedTokenEvents($mints: [String!]!, $first: Int = 50, $offset: Int = 0) {
     allInitializeTokenEventEntities(
       first: $first
       offset: $offset
@@ -592,7 +592,7 @@ export const queryMyTokenList = `
 
 // 14) Tokens by mints (IN)
 export const queryTokensByMints = `
-  query GetTokensByMints($offset: Int!, $first: Int!, $mints: [String!]) {
+  query GetTokensByMints($offset: Int!, $first: Int!, $mints: [String!]!) {
     allInitializeTokenEventEntities(
       offset: $offset
       first: $first
@@ -694,7 +694,7 @@ export const queryTotalReferrerBonus = `
 
 // 17) Total referrer bonus sum (per mints)
 export const queryTotalReferrerBonusSum = `
-  query GetTotalReferrerBonusSum($mints: [String]!, $referrerMain: String!) {
+  query GetTotalReferrerBonusSum($mints: [String!]!, $referrerMain: String!) {
     allMintTokenEntities(
       filter: { and: [ { mint: { in: $mints } }, { referrerMain: { equalTo: $referrerMain } } ] }
     ) {

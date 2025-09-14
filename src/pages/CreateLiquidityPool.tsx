@@ -2,9 +2,8 @@ import { FC, useCallback, useEffect, useState } from "react";
 import { PageHeader } from "../components/common/PageHeader";
 import { useConnection, useAnchorWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-import { useLazyQuery } from "@apollo/client";
 import { toast } from "react-hot-toast";
-import { queryTokensByMints } from "../utils/graphql";
+import { queryTokensByMints } from "../utils/graphql2";
 import { AddressDisplay } from "../components/common/AddressDisplay";
 import {
   getLiquidityPoolData,
@@ -14,6 +13,8 @@ import {
 import { InitiazlizedTokenData, PoolData, ResponseData } from "../types/types";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { runGraphQuery } from "../hooks/graphquery";
+import { NETWORK_CONFIGS } from "../config/constants";
 
 type CreateLiquidityPoolProps = {
   expanded: boolean;
@@ -26,51 +27,20 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
   const wallet = useAnchorWallet();
   const [mintAddress, setMintAddress] = useState<string | undefined>("");
   const [currentEpoch, setCurrentEpoch] = useState<number | null>(null);
-  // const [loading, setLoading] = useState(false);
   const [tokenData, setTokenData] = useState<InitiazlizedTokenData | null>(
     null
   );
   const [tokenVaultBalance, setTokenVaultBalance] = useState(0);
   const [wsolVaultBalance, setWsolVaultBalance] = useState(0);
   const [poolAddress, setPoolAddress] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
   const { mint } = useParams();
-
-  const [getTokenData, { loading: queryLoading }] = useLazyQuery(
-    queryTokensByMints,
-    {
-      onCompleted: (data) => {
-        const _tokenData = data.initializeTokenEventEntities[0];
-        console.log(_tokenData);
-        setTokenData(_tokenData);
-
-        getTokenBalance(new PublicKey(_tokenData.tokenVault), connection).then(
-          (balance) => {
-            setTokenVaultBalance(balance as number);
-          }
-        );
-
-        getTokenBalance(new PublicKey(_tokenData.wsolVault), connection).then(
-          (balance) => {
-            setWsolVaultBalance(balance as number);
-          }
-        );
-
-        getLiquidityPoolData(wallet, connection, _tokenData).then(
-          (res: ResponseData) => {
-            if (res.success) {
-              const poolData = res.data as PoolData;
-              setPoolAddress(poolData.poolAddress);
-            }
-          }
-        );
-      },
-      onError: (error) => {
-        toast.error(t('errors.fetchTokenData'));
-        console.error("Error fetching tokenData data:", error);
-      },
-    }
-  );
+  const subgraphUrl =
+    NETWORK_CONFIGS[
+      (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) ||
+        "devnet"
+    ].subgraphUrl2;
 
   // Get current Epoch
   const fetchCurrentEpoch = useCallback(async () => {
@@ -81,7 +51,7 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
       console.error("Error fetching epoch:", error);
       toast.error(t('errors.fetchCurrentEpoch'));
     }
-  }, [connection]);
+  }, [connection, t]);
 
   const handleFetch = useCallback(
     async (mint: string) => {
@@ -92,19 +62,55 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
       try {
         new PublicKey(mint); // Verify address
         await fetchCurrentEpoch();
-        await getTokenData({
-          variables: {
-            mints: [mint],
-            skip: 0,
-            first: 10,
-          },
+
+        setIsLoading(true);
+        const data = await runGraphQuery(subgraphUrl, queryTokensByMints, {
+          mints: [mint],
+          offset: 0,
+          first: 10,
         });
+
+        const _tokenData = data?.allInitializeTokenEventEntities?.nodes?.[0] as InitiazlizedTokenData | undefined;
+        if (!_tokenData) {
+          setTokenData(null);
+          toast.error(t('errors.fetchTokenData'));
+          return;
+        }
+
+        setTokenData(_tokenData);
+
+        try {
+          const [tokenBal, wsolBal] = await Promise.all([
+            getTokenBalance(new PublicKey(_tokenData.tokenVault), connection),
+            getTokenBalance(new PublicKey(_tokenData.wsolVault), connection),
+          ]);
+          setTokenVaultBalance((tokenBal as number) || 0);
+          setWsolVaultBalance((wsolBal as number) || 0);
+        } catch (balanceErr) {
+          console.error("Error fetching balances:", balanceErr);
+        }
+
+        try {
+          const res: ResponseData = await getLiquidityPoolData(
+            wallet,
+            connection,
+            _tokenData
+          );
+          if (res?.success) {
+            const poolData = res.data as PoolData;
+            setPoolAddress(poolData.poolAddress);
+          }
+        } catch (poolErr) {
+          console.error("Error fetching pool data:", poolErr);
+        }
       } catch (error) {
         toast.error(t('errors.invalidMintAddress'));
         return;
+      } finally {
+        setIsLoading(false);
       }
     },
-    [fetchCurrentEpoch, getTokenData]
+    [fetchCurrentEpoch, connection, wallet, subgraphUrl, t]
   );
 
   useEffect(() => {
@@ -113,28 +119,6 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
       handleFetch(mint);
     }
   }, [handleFetch, mint]);
-
-  // Create Pool, deprecated
-  // const handleCreatePool = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const result = await proxyCreatePool(
-  //       wallet,
-  //       connection,
-  //       tokenData as InitiazlizedTokenData
-  //     );
-  //     if (!result?.success) {
-  //       toast.error(result?.message as string);
-  //       return;
-  //     }
-  //     toast.success(t('errors.poolCreatedSuccess'));
-  //   } catch (error) {
-  //     toast.error(t('errors.failedCreatePool'));
-  //     console.error("Error creating pool:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <div
@@ -159,10 +143,10 @@ export const CreateLiquidityPool: FC<CreateLiquidityPoolProps> = ({
                 />
                 <button
                   onClick={() => handleFetch(mintAddress as string)}
-                  disabled={queryLoading}
+                  disabled={isLoading}
                   className="btn btn-primary"
                 >
-                  {queryLoading ? "Loading..." : t('vm.getInfo')}
+                  {isLoading ? "Loading..." : t('vm.getInfo')}
                 </button>
               </div>
             </div>

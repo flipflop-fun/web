@@ -1,5 +1,4 @@
 import React, { useState, KeyboardEvent, useEffect, useMemo } from 'react';
-import { useLazyQuery, gql } from '@apollo/client';
 import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent, queryInitializeTokenEventGraduated, queryHotInitializeTokenEventGraduated } from '../utils/graphql2';
 import { InitiazlizedTokenData, DiscoverProps } from '../types/types';
 import { FaSearch } from 'react-icons/fa';
@@ -12,7 +11,7 @@ import { useDeviceType } from '../hooks/device';
 import { ScrollCards } from '../components/common/ScrollCards';
 import { TokenCardSimple } from '../components/mintTokens/TokenCardSimple';
 import { useTranslation } from 'react-i18next';
-import { useGraphQuery } from '../hooks/graphquery';
+import { runGraphQuery, useGraphQuery } from '../hooks/graphquery';
 
 export const Discover: React.FC<DiscoverProps> = ({
   expanded,
@@ -20,8 +19,9 @@ export const Discover: React.FC<DiscoverProps> = ({
   graduatedToken,
 }) => {
   const [searchInput, setSearchInput] = useState('');
-  // const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchData, setSearchData] = useState<any | null>(null);
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
@@ -59,7 +59,6 @@ export const Discover: React.FC<DiscoverProps> = ({
   );
 
   const filteredHotTokens = useMemo(() => {
-    console.log("###### hotData", hotData)
     const nodes = hotData?.allInitializeTokenEventEntities?.nodes as InitiazlizedTokenData[] | undefined;
     if (!nodes) return [];
     const result = filterTokens(nodes)
@@ -73,25 +72,20 @@ export const Discover: React.FC<DiscoverProps> = ({
     return result;
   }, [hotData]);
 
-  // Search tokens by lazy query
-  const [searchTokens, { loading: searchLoading, error: searchError, data: searchData }] = useLazyQuery(
-    gql(queryInitializeTokenEventBySearch),
-    {
-      fetchPolicy: 'network-only' // Ensure each time it fetches the latest data
-    }
-  );
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchInput.trim()) {
-      // setIsSearchMode(true);
       saveToHistory(searchInput.trim());
-      searchTokens({
-        variables: {
+      setSearchLoading(true);
+      const searchResult = await runGraphQuery(
+        subgraphUrl,
+        queryInitializeTokenEventBySearch, {
           offset: 0,
           first: 50,
           searchQuery: searchInput.trim()
         }
-      });
+      )
+      setSearchData(searchResult);
+      setSearchLoading(false);
     }
   };
 
@@ -101,17 +95,20 @@ export const Discover: React.FC<DiscoverProps> = ({
     }
   };
 
-  const handleHistoryClick = (term: string) => {
+  const handleHistoryClick = async (term: string) => {
     setSearchInput(term);
-    // setIsSearchMode(true);
     saveToHistory(term);
-    searchTokens({
-      variables: {
+    setSearchLoading(true);
+    const searchResult = await runGraphQuery(
+      subgraphUrl,
+      queryInitializeTokenEventBySearch, {
         offset: 0,
         first: 50,
         searchQuery: term
       }
-    });
+    )
+    setSearchData(searchResult);
+    setSearchLoading(false);
   };
 
   // Get the display data based on search mode
@@ -125,7 +122,7 @@ export const Discover: React.FC<DiscoverProps> = ({
 
   // Merge errors and loading states
   const loading = searchLoading || initialLoading || hotLoading;
-  const error = searchError || initialError || hotError;
+  const error = initialError || hotError;
 
   if (loading) {
     return (

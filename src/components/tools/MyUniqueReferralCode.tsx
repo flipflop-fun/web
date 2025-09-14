@@ -17,15 +17,18 @@ import { MyUniqueReferralCodeCard } from './MyUniqueReferralCodeCard';
 import { filterRefererCode } from '../../utils/format';
 import { PageHeader } from '../common/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { useGraphQuery } from '../../hooks/graphquery';
+import { runGraphQuery, useGraphQuery } from '../../hooks/graphquery';
 
 export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }) => {
   const wallet = useAnchorWallet();
+  const ownerBase58 = wallet?.publicKey?.toBase58();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
+  const [tokenData, setTokenData] = useState<any | null>(null);
+  const [referralBonusData, setReferralBonusData] = useState<any | null>(null);
   const [selectedToken, setSelectedToken] = useState<{ mint: string, amount: string, tokenData: InitiazlizedTokenData } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bonusByMint, setBonusByMint] = useState<Record<string, string>>({});
@@ -37,11 +40,14 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
 
   const { loading: urcLoading, error: urcError, data: urcData, refetch } = useGraphQuery(
     subgraphUrl,
-    querySetRefererCodeEntitiesByOwner, {
-      owner: wallet?.publicKey.toBase58(),
+    querySetRefererCodeEntitiesByOwner,
+    {
+      owner: ownerBase58 as string,
       offset: (currentPage - 1) * pageSize,
       first: pageSize,
-    }, {
+    },
+    {
+      auto: false,
       onCompleted: (data) => {
         setTotalCount(data.allSetRefererCodeEventEntities.totalCount);
       }
@@ -49,44 +55,60 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
   );
 
   const goToPage = async (page: number) => {
+    if (!ownerBase58) return;
     const nextOffset = (page - 1) * pageSize;
-    await refetch({owner: wallet?.publicKey.toBase58(), offset: nextOffset, first: pageSize });
+    await refetch({ owner: ownerBase58, offset: nextOffset, first: pageSize });
   };
 
   useEffect(() => {
+    if (!ownerBase58) return;
     goToPage(currentPage);
-  }, [currentPage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerBase58, currentPage, pageSize]);
 
-  const mints = filterRefererCode(urcData?.allSetRefererCodeEventEntities.nodes).map((token: SetRefererCodeEntity) => token.mint);
-  const { loading: tokenLoading, error: tokenError, data: tokenData } = useGraphQuery(
-    subgraphUrl,
-    queryTokensByMints, {
-      mints: mints,
-      offset: 0,
-      first: mints?.length || 1,
-    }
-  );
+  useEffect(() => {
+    if (urcData && urcData.allSetRefererCodeEventEntities && urcData.allSetRefererCodeEventEntities.nodes.length > 0) {
+      const mints: string[] = filterRefererCode(urcData?.allSetRefererCodeEventEntities.nodes).map((token: SetRefererCodeEntity) => token.mint).filter(Boolean);
+      if (!mints || mints.length === 0) return;
 
-  const { error: referralBonusError, data: referralBonusData } = useGraphQuery(
-    subgraphUrl,
-    queryTotalReferrerBonusSum, {
-      mints: mints,
-      referrerMain: wallet?.publicKey.toBase58(),
+      runGraphQuery(
+        subgraphUrl,
+        queryTokensByMints, {
+          mints: mints,
+          offset: 0,
+          first: mints.length,
+        }
+      ).then((data) => {
+        setTokenData(data);
+      });
+
+      runGraphQuery(
+        subgraphUrl,
+        queryTotalReferrerBonusSum, {
+          mints: mints,
+          referrerMain: ownerBase58,
+        }
+      ).then((data) => {
+        setReferralBonusData(data);
+      });
+
     }
-  );
+  }, [urcData, subgraphUrl, ownerBase58]);
 
   const [tokenMetadataMap, setTokenMetadataMap] = useState<Record<string, InitiazlizedTokenData>>({});
 
   useEffect(() => {
-    setLoadingMetadata(true);
-    fetchTokenMetadataMap(tokenData?.allInitializeTokenEventEntities.nodes).then((updatedMap) => {
-      setLoadingMetadata(false);
-      setTokenMetadataMap(updatedMap);
-    });
+    if (tokenData && tokenData.allInitializeTokenEventEntities) {
+      setLoadingMetadata(true);
+      fetchTokenMetadataMap(tokenData?.allInitializeTokenEventEntities.nodes).then((updatedMap) => {
+        setLoadingMetadata(false);
+        setTokenMetadataMap(updatedMap);
+      });
+    }
   }, [tokenData]);
 
   useEffect(() => {
-    if (referralBonusData?.allMintTokenEntities) {
+    if (referralBonusData && referralBonusData?.allMintTokenEntities) {
       const bonusMap = referralBonusData.allMintTokenEntities.nodes.reduce((acc: Record<string, string>, entity: any) => {
         const existingBonus = acc[entity.mint] || '0';
         const newBonus = (parseFloat(existingBonus) + parseFloat(entity.referrerFee || '0')).toString();
@@ -95,12 +117,6 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
       setBonusByMint(bonusMap);
     }
   }, [referralBonusData]);
-
-  // useEffect(() => {
-  //   if (wallet) {
-  //     refetchUrc();
-  //   }
-  // }, [wallet, refetchUrc]);
 
   const handleTokenClick = (token: any) => {
     navigate(`/token/${token.mint}`);
@@ -135,14 +151,6 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
     }, 300);
   };
 
-  // const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const newPageSize = Number(event.target.value);
-  //   setPageSize(newPageSize);
-  //   setCurrentPage(1); 
-  // };
-
-  // const totalPages = Math.ceil(totalCount / pageSize);
-
   if (!wallet) {
     return (
       <div className={`hero min-h-[400px] bg-base-200 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
@@ -155,7 +163,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
     );
   }
 
-  if (tokenError || referralBonusError) {
+  if (urcError) {
     return (
       <div className={`hero min-h-[400px] bg-base-200 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
         <div className="hero-content text-center">
@@ -171,7 +179,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
     <div className={`space-y-0 md:p-4 md:mb-20 ${expanded ? 'md:ml-64' : 'md:ml-20'}`}>
       <PageHeader title={t('menu.myUrc')} bgImage='/bg/group1/5.jpg' />
       <div className="md:max-w-6xl mx-auto mb-3 md:mb-20">
-        {urcLoading || tokenLoading || loadingMetadata ? (
+        {urcLoading || loadingMetadata ? (
           <div className="flex justify-center">
             <span className="loading loading-spinner loading-lg"></span>
           </div>
@@ -309,7 +317,7 @@ export const MyUniqueReferralCode: FC<MyUniqueReferralCodeProps> = ({ expanded }
           isOpen={!!selectedBonusMint}
           onClose={handleCloseBonusDetail}
           mint={selectedBonusMint}
-          referrerMain={wallet.publicKey.toBase58()}
+          referrerMain={ownerBase58!}
           totalBonus={totalBonus}
         />
       )}
