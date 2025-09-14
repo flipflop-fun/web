@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HolderData, TokenHoldersProps } from '../../types/types';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { Pagination } from '../common/Pagination';
@@ -16,7 +16,7 @@ export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
   const { t } = useTranslation();
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
 
-  const { data, loading, error } = useGraphQuery(subgraphUrl, queryHolders, {
+  const { data, loading, error, refetch } = useGraphQuery(subgraphUrl, queryHolders, {
       mint: token.mint,
       offset: (currentPage - 1) * pageSize,
       first: pageSize
@@ -25,6 +25,15 @@ export const TokenHolders: React.FC<TokenHoldersProps> = ({ token }) => {
         setTotalCount(data.allHoldersEntities?.totalCount as number);
     }
   });
+
+  const goToPage = async (page: number) => {
+    const nextOffset = (page - 1) * pageSize;
+    await refetch({mint: token.mint, offset: nextOffset, first: pageSize });
+  };
+
+  useEffect(() => {
+    goToPage(currentPage);
+  }, [currentPage])
 
   const totalPages = Math.ceil(totalCount / pageSize);
 

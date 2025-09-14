@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { queryTokenMintTransactions } from '../../utils/graphql2';
 import { AddressDisplay } from '../common/AddressDisplay';
 import { MintTransactionData, TokenMintTransactionsProps } from '../../types/types';
@@ -18,7 +18,7 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
-  const { data, loading, error } = useGraphQuery(subgraphUrl, queryTokenMintTransactions, {
+  const { data, loading, error, refetch } = useGraphQuery(subgraphUrl, queryTokenMintTransactions, {
       mint: token.mint,
       offset: (currentPage - 1) * pageSize,
       first: pageSize
@@ -29,6 +29,15 @@ export const TokenMintTransactions: React.FC<TokenMintTransactionsProps> = ({ to
       }
     }
   );
+
+  const goToPage = async (page: number) => {
+    const nextOffset = (page - 1) * pageSize;
+    await refetch({mint: token.mint, offset: nextOffset, first: pageSize });
+  };
+
+  useEffect(() => {
+    goToPage(currentPage);
+  }, [currentPage])
 
   const totalPages = hasMore ? currentPage + 1 : currentPage;
 

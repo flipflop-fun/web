@@ -55,9 +55,10 @@ async function runQuery(name, query, variables) {
     );
 
     const httpBody = res.data;
-    console.log(httpBody.data);
+    console.log("httpBody", httpBody.data);
     return httpBody.data;
   } catch (err) {
+    console.log(err)
     return null;
   }
 }
@@ -97,9 +98,8 @@ function logResult(name, result, opts = {}) {
 
   // Bootstrap: fetch a few tokens WITHOUT using filter plugin features
   // const bootstrapQuery = `
-  //   query Bootstrap($targetEras: BigFloat!, $first: Int!, $offset: Int!) {
+  //   query Bootstrap($first: Int!, $offset: Int!) {
   //     allInitializeTokenEventEntities(
-  //       filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { lessThanOrEqualTo: $targetEras } }] }
   //       first: $first
   //       offset: $offset
   //       orderBy: TIMESTAMP_DESC
@@ -114,6 +114,25 @@ function logResult(name, result, opts = {}) {
   //     }
   //   }
   // `;
+
+  const bootstrapQuery = `
+    query Bootstrap($targetEras: BigFloat!, $first: Int!, $offset: Int!) {
+      allInitializeTokenEventEntities(
+        filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { lessThanOrEqualTo: $targetEras } }] }
+        first: $first
+        offset: $offset
+        orderBy: TIMESTAMP_DESC
+      ) {
+        nodes {
+          mint
+          admin
+          valueManager
+          tokenSymbol
+          tokenName
+        }
+      }
+    }
+  `;
 
   // const bootstrapQuery = `
   //   query GetHolders($mint: String!, $offset: Int!, $first: Int!) {
@@ -131,29 +150,49 @@ function logResult(name, result, opts = {}) {
   //   }
   // }
   // `;
-  const bootstrapQuery = `
-    query GetTokenTransactions($mint: String!, $offset: Int!, $first: Int!) {
-    allMintTokenEntities(
-      condition: { mint: $mint }
-      offset: $offset
-      first: $first
-      orderBy: TIMESTAMP_DESC
-    ) {
-      nodes {
-        id
-        txId
-        sender
-        timestamp
-        currentEra
-        currentEpoch
-        mintSizeEpoch
-      }
-      totalCount
-    }
-  }
-  `;
-
-  const bootstrapVars = {mint: "7gaXGbZ5ByCL7K8QQyb47vYpc6nsBcjwqt3FqXTnWULE", first: Math.max(DEFAULT_FIRST, 10), offset: DEFAULT_OFFSET };
+  // const bootstrapQuery = `
+  //   query GetTokenTransactions($mint: String!, $offset: Int!, $first: Int!) {
+  //   allMintTokenEntities(
+  //     condition: { mint: $mint }
+  //     offset: $offset
+  //     first: $first
+  //     orderBy: TIMESTAMP_DESC
+  //   ) {
+  //     nodes {
+  //       id
+  //       txId
+  //       sender
+  //       timestamp
+  //       currentEra
+  //       currentEpoch
+  //       mintSizeEpoch
+  //     }
+  //     totalCount
+  //   }
+  // }
+  // `;
+  // const bootstrapQuery = `
+  //   query GetSetRefererCodeEntity($owner: String!, $offset: Int!, $first: Int!) {
+  //   allSetRefererCodeEventEntities(
+  //     condition: { referrerMain: $owner }
+  //     offset: $offset
+  //     first: $first
+  //     orderBy: ID_DESC
+  //   ) {
+  //     nodes {
+  //       id
+  //       mint
+  //       referralAccount
+  //       referrerAta
+  //       referrerMain
+  //       activeTimestamp
+  //     }
+  //     totalCount
+  //   }
+  // }
+  // `;
+  // const bootstrapVars = {owner: "7Db1TTh4pHr1MuTmaJTpWoQqmkZ7712PEpQZ2DxWddep", first: Math.max(DEFAULT_FIRST, 10), offset: DEFAULT_OFFSET };
+  const bootstrapVars = {targetEras: 1, first: Math.max(DEFAULT_FIRST, 10), offset: DEFAULT_OFFSET };
   const bootstrap = await runQuery('bootstrap', bootstrapQuery, bootstrapVars);
-  console.log(bootstrap.allMintTokenEntities);
+  // console.log(bootstrap);
 })();
