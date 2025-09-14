@@ -1,5 +1,5 @@
 import React, { useState, KeyboardEvent, useEffect, useMemo } from 'react';
-import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent, queryInitializeTokenEventGraduated, queryHotInitializeTokenEventGraduated } from '../utils/graphql2';
+import { queryInitializeTokenEvent, queryInitializeTokenEventBySearch, queryHotInitializeTokenEvent, queryInitializeTokenEventGraduated, queryHotInitializeTokenEventGraduated, queryInitializeTokenEventBySearchGraduated } from '../utils/graphql2';
 import { InitiazlizedTokenData, DiscoverProps } from '../types/types';
 import { FaSearch } from 'react-icons/fa';
 import { ErrorBox } from '../components/common/ErrorBox';
@@ -25,6 +25,18 @@ export const Discover: React.FC<DiscoverProps> = ({
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
+  // Pagination page size
+  const PAGE_SIZE = 12;
+  // Pagination states for Latest and Hottest sections
+  const [latestPage, setLatestPage] = useState(1);
+  const [hotPage, setHotPage] = useState(1);
+
+  // Reset pages when graduatedToken toggles to keep pagination valid
+  useEffect(() => {
+    setLatestPage(1);
+    setHotPage(1);
+  }, [graduatedToken]);
+
   // Load search history on component mount
   useEffect(() => {
     const history = localStorage.getItem('search_history');
@@ -40,50 +52,60 @@ export const Discover: React.FC<DiscoverProps> = ({
     localStorage.setItem('search_history', JSON.stringify(newHistory));
   };
 
-  const { loading: initialLoading, error: initialError, data: latestData } = useGraphQuery(
+  const { loading: initialLoading, error: initialError, data: latestData, refetch: refetchLatest } = useGraphQuery(
     subgraphUrl,
     graduatedToken ? queryInitializeTokenEventGraduated : queryInitializeTokenEvent, {
-      first: 100,
-      offset: 0,
+      first: PAGE_SIZE,
+      offset: (latestPage - 1) * PAGE_SIZE,
       targetEras: 1,
     },
+    { auto: false }
   );
 
-  const { loading: hotLoading, error: hotError, data: hotData } = useGraphQuery(
+  const { loading: hotLoading, error: hotError, data: hotData, refetch: refetchHot } = useGraphQuery(
     subgraphUrl,
     graduatedToken ? queryHotInitializeTokenEventGraduated : queryHotInitializeTokenEvent, {
-      first: 100,
-      offset: 0,
+      first: PAGE_SIZE,
+      offset: (hotPage - 1) * PAGE_SIZE,
       targetEras: 1,
-    }
+    },
+    { auto: false }
   );
 
-  const filteredHotTokens = useMemo(() => {
+  // Trigger refetch when pages change (avoid including refetch in deps to prevent loops)
+  useEffect(() => {
+    refetchLatest({ first: PAGE_SIZE, offset: (latestPage - 1) * PAGE_SIZE, targetEras: 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestPage, PAGE_SIZE, graduatedToken]);
+
+  useEffect(() => {
+    refetchHot({ first: PAGE_SIZE, offset: (hotPage - 1) * PAGE_SIZE, targetEras: 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hotPage, PAGE_SIZE, graduatedToken]);
+
+  // Derived hot tokens (server already filters by era; keep light filtering)
+  const hotTokens = useMemo(() => {
     const nodes = hotData?.allInitializeTokenEventEntities?.nodes as InitiazlizedTokenData[] | undefined;
     if (!nodes) return [];
-    const result = filterTokens(nodes)
-      .filter((token: InitiazlizedTokenData) =>
-        token.currentEra <= token.targetEras
-      )
-      .sort((a: InitiazlizedTokenData, b: InitiazlizedTokenData) =>
-        Number(b.difficultyCoefficientEpoch) - Number(a.difficultyCoefficientEpoch)
-      )
-      .slice(0, 10);
-    return result;
+    return filterTokens(nodes);
   }, [hotData]);
 
-  const handleSearch = async () => {
+  const handleSearch = async (e?: React.SyntheticEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (searchInput.trim()) {
       saveToHistory(searchInput.trim());
       setSearchLoading(true);
       const searchResult = await runGraphQuery(
         subgraphUrl,
-        queryInitializeTokenEventBySearch, {
+        graduatedToken ? queryInitializeTokenEventBySearchGraduated : queryInitializeTokenEventBySearch, {
           offset: 0,
           first: 50,
           searchQuery: searchInput.trim()
         }
-      )
+      );
       setSearchData(searchResult);
       setSearchLoading(false);
     }
@@ -91,22 +113,28 @@ export const Discover: React.FC<DiscoverProps> = ({
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
       handleSearch();
     }
   };
 
-  const handleHistoryClick = async (term: string) => {
+  const handleHistoryClick = async (term: string, e?: React.SyntheticEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setSearchInput(term);
     saveToHistory(term);
     setSearchLoading(true);
     const searchResult = await runGraphQuery(
       subgraphUrl,
-      queryInitializeTokenEventBySearch, {
+      graduatedToken ? queryInitializeTokenEventBySearchGraduated : queryInitializeTokenEventBySearch, {
         offset: 0,
         first: 50,
         searchQuery: term
       }
-    )
+    );
     setSearchData(searchResult);
     setSearchLoading(false);
   };
@@ -119,6 +147,12 @@ export const Discover: React.FC<DiscoverProps> = ({
   const latestDisplayData = {
     initializeTokenEventEntities: filterTokens((latestData?.allInitializeTokenEventEntities?.nodes as InitiazlizedTokenData[]) || []),
   };
+
+  // Totals for pagination
+  const latestTotalCount = latestData?.allInitializeTokenEventEntities?.totalCount || 0;
+  const latestTotalPages = Math.ceil(latestTotalCount / PAGE_SIZE) || 1;
+  const hotTotalCount = hotData?.allInitializeTokenEventEntities?.totalCount || 0;
+  const hotTotalPages = Math.ceil(hotTotalCount / PAGE_SIZE) || 1;
 
   // Merge errors and loading states
   const loading = searchLoading || initialLoading || hotLoading;
@@ -147,18 +181,21 @@ export const Discover: React.FC<DiscoverProps> = ({
       <div className="md:max-w-6xl mx-auto mb-3 md:mb-12">
         <div className="flex flex-wrap gap-2 mb-4">
           <button 
+            type="button"
             className="btn btn-primary"
             onClick={() => window.location.href = '/launch-token'}
           >
             {t('discover.launchAToken')}
           </button>
           <button 
+            type="button"
             className="btn btn-secondary"
             onClick={() => window.location.href = '/my-minted-tokens'}
           >
             {t('discover.myMintedTokens')}
           </button>
           <button 
+            type="button"
             className="btn btn-accent"
             onClick={() => window.location.href = '/my-urc'}
           >
@@ -166,6 +203,7 @@ export const Discover: React.FC<DiscoverProps> = ({
           </button>
           {hasDelegatedTokens &&
             <button 
+              type="button"
               className="btn btn-extra1"
               onClick={() => window.location.href = '/my-delegated-tokens'}
             >
@@ -187,8 +225,9 @@ export const Discover: React.FC<DiscoverProps> = ({
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
           <button
+            type="button"
             className="search-btn join-item btn-primary w-24"
-            onClick={handleSearch}
+            onClick={(e) => handleSearch(e)}
             disabled={loading}
           >
             {loading ? <span className="loading loading-spinner loading-sm"></span> : t('discover.search')}
@@ -201,8 +240,9 @@ export const Discover: React.FC<DiscoverProps> = ({
             {searchHistory.map((term, index) => {
               const colorIndex = index % BADGE_BG_COLORS.length;
               return <button
+                type="button"
                 key={index}
-                onClick={() => handleHistoryClick(term)}
+                onClick={(e) => handleHistoryClick(term, e)}
                 className={`badge`}
                 style={{
                   backgroundColor: BADGE_BG_COLORS[colorIndex],
@@ -221,15 +261,7 @@ export const Discover: React.FC<DiscoverProps> = ({
           )}
         </div>
 
-        {/* No Results Message */}
-        {/* {displayData.initializeTokenEventEntities.length === 0 && (
-                    <div className="text-center py-8 text-gray-500">
-                        No search results found
-                    </div>
-                )} */}
-
         {/* Latest Tokens */}
-
         {latestDisplayData.initializeTokenEventEntities.length > 0 && (
           <div className={`${isMobile && "bg-base-200 -ml-4 -mr-4 pb-4"}`}>
             <h2 className="text-xl mt-6 ml-4 pt-1">{t('discover.latestTokens')}</h2>
@@ -242,25 +274,71 @@ export const Discover: React.FC<DiscoverProps> = ({
                 )}
               </div>
             )}
+            {latestTotalPages > 1 && (
+              <div className="mt-3 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  disabled={latestPage === 1 || initialLoading}
+                  onClick={() => setLatestPage(Math.max(1, latestPage - 1))}
+                >
+                  Prev
+                </button>
+                <span className="text-sm">
+                  Page {latestPage} of {latestTotalPages} ({latestTotalCount} results)
+                </span>
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  disabled={latestPage === latestTotalPages || initialLoading}
+                  onClick={() => setLatestPage(Math.min(latestTotalPages, latestPage + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         )}
 
         {/* Hottest Tokens */}
-        {filteredHotTokens.length > 0 && (
+        {hotTokens.length > 0 && (
           <>
             <h2 className="text-xl mt-6">{t('discover.hottestTokens')}</h2>
             {isMobile ? (
               <div className="grid grid-cols-2 gap-4 p-1">
-                {filteredHotTokens.map((token: InitiazlizedTokenData, index: number) =>
+                {hotTokens.map((token: InitiazlizedTokenData, index: number) =>
                   <TokenCardSimple key={token.mint} token={token} number={index + 1} type="static" />
                 )}
               </div>
 
             ) : (
               <div className="grid grid-cols-3 gap-4 p-1">
-                {filteredHotTokens.map((token: InitiazlizedTokenData, index: number) =>
+                {hotTokens.map((token: InitiazlizedTokenData, index: number) =>
                   <TokenCardWeb key={token.mint} token={token} number={index + 1} type="static" />
                 )}
+              </div>
+            )}
+            {hotTotalPages > 1 && (
+              <div className="mt-3 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  disabled={hotPage === 1 || hotLoading}
+                  onClick={() => setHotPage(Math.max(1, hotPage - 1))}
+                >
+                  Prev
+                </button>
+                <span className="text-sm">
+                  Page {hotPage} of {hotTotalPages} ({hotTotalCount} results)
+                </span>
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  disabled={hotPage === hotTotalPages || hotLoading}
+                  onClick={() => setHotPage(Math.min(hotTotalPages, hotPage + 1))}
+                >
+                  Next
+                </button>
               </div>
             )}
           </>

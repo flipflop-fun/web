@@ -411,6 +411,72 @@ export const queryInitializeTokenEventBySearch = `
   }
 `;
 
+export const queryInitializeTokenEventBySearchGraduated = `
+  query GetInitializedTokenEvents($offset: Int!, $first: Int!, $searchQuery: String!) {
+    allInitializeTokenEventEntities(
+      filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { greaterThan: $targetEras } }] }
+      first: $first
+      offset: $offset
+      filter: {
+        and: [
+          { status: { equalTo: 1 } },
+          { or: [
+              { tokenName: { includesInsensitive: $searchQuery } },
+              { tokenSymbol: { includesInsensitive: $searchQuery } },
+              { admin: { includesInsensitive: $searchQuery } },
+              { mint: { includesInsensitive: $searchQuery } }
+            ]
+          }
+        ]
+      }
+      orderBy: DIFFICULTY_COEFFICIENT_EPOCH_DESC
+    ) {
+      nodes {
+        id
+        txId
+        admin
+        tokenId
+        mint
+        configAccount
+        metadataAccount
+        tokenVault
+        timestamp
+        tokenName
+        tokenSymbol
+        tokenUri
+        supply
+        currentEra
+        currentEpoch
+        elapsedSecondsEpoch
+        startTimestampEpoch
+        lastDifficultyCoefficientEpoch
+        difficultyCoefficientEpoch
+        mintSizeEpoch
+        quantityMintedEpoch
+        targetMintSizeEpoch
+        totalMintFee
+        totalReferrerFee
+        totalTokens
+        targetEras
+        epochesPerEra
+        targetSecondsPerEpoch
+        reduceRatio
+        initialMintSize
+        initialTargetMintSizePerEpoch
+        feeRate
+        liquidityTokensRatio
+        startTimestamp
+        status
+        metadataTimestamp
+        valueManager
+        wsolVault
+        graduateEpoch
+      }
+      totalCount
+    }
+  }
+`;
+
 // 8) InitializeTokenEvent by mints (IN)
 export const queryInitializeTokenEventByMints = `
   query GetInitializedTokenEvents($mints: [String!]!, $first: Int = 50, $offset: Int = 0) {
