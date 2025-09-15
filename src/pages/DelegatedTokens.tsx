@@ -35,16 +35,26 @@ export const DelegatedTokens: FC<DelegatedTokensProps> = ({
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
   const ownerBase58 = wallet?.publicKey?.toBase58();
 
-  const { loading: initialLoading, error, data } = useGraphQuery(
+  const { loading: initialLoading, error, data, refetch } = useGraphQuery(
     subgraphUrl,
     queryMyDelegatedTokens, {
       wallet: ownerBase58 as string,
       offset: 0,
       first: 100,
     }, {
-      auto: !!ownerBase58,
+      auto: false,
     }
   );
+
+  useEffect(() => {
+    if (!ownerBase58) return;
+    refetch({
+      wallet: ownerBase58 as string,
+      offset: 0,
+      first: 100,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerBase58]);
 
   const handleClick = (mint: string) => {
     navigate(`/token/${mint}`);

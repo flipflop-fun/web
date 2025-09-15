@@ -201,9 +201,9 @@ async function runQuery(name, query, variables) {
   // }`
 
   const bootstrapQuery = `
-    query GetMyDeployments($wallet: String!, $offset: Int!, $first: Int!) {
+  query GetMyDelegatedTokens($wallet: String!, $offset: Int!, $first: Int!) {
     allInitializeTokenEventEntities(
-      condition: { admin: $wallet, status: 1 }
+      condition: { valueManager: $wallet, status: 1 }
       offset: $offset
       first: $first
       orderBy: TIMESTAMP_DESC
@@ -259,5 +259,5 @@ async function runQuery(name, query, variables) {
   //   referrerMain: "7Db1TTh4pHr1MuTmaJTpWoQqmkZ7712PEpQZ2DxWddep"
   // };
   const bootstrap = await runQuery('bootstrap', bootstrapQuery, bootstrapVars);
-  // console.log(bootstrap);
+  // console.log(bootstrap.allInitializeTokenEventEntities.totalCount);
 })();

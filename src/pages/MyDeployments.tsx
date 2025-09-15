@@ -42,19 +42,29 @@ export const MyDeployments: React.FC<MyDeploymentsProps> = ({ expanded }) => {
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
   const ownerBase58 = wallet?.publicKey?.toBase58();
 
-  const { loading: initialLoading, error: initialError, data: initialData } = useGraphQuery(
+  const { loading: initialLoading, error: initialError, data: initialData, refetch } = useGraphQuery(
     subgraphUrl,
     queryMyDeployments, {
       wallet: ownerBase58 as string,
       offset: (currentPage - 1) * pageSize,
       first: pageSize,
     }, {
-      auto: !!ownerBase58,
+      auto: false,
     }
   );
 
   useEffect(() => {
-    console.log("data", initialData)
+    if (!ownerBase58) return;
+    refetch({
+      wallet: ownerBase58 as string,
+      offset: (currentPage - 1) * pageSize,
+      first: pageSize,
+    });
+    // intentionally exclude `refetch` from deps to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerBase58, currentPage, pageSize]);
+
+  useEffect(() => {
     if (initialData && initialData.allInitializeTokenEventEntities) {
       const _dataAfterFilter = filterTokens(initialData?.allInitializeTokenEventEntities.nodes);
       setDataAfterFilter(_dataAfterFilter);

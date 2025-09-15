@@ -72,7 +72,7 @@ export const queryHotInitializeTokenEvent = `
       filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { lessThanOrEqualTo: $targetEras } }] }
       first: $first
       offset: $offset
-      orderBy: TIMESTAMP_DESC
+      orderBy: CURRENT_EPOCH_DESC
     ) {
       nodes {
         id
@@ -187,7 +187,7 @@ export const queryHotInitializeTokenEventGraduated = `
       filter: { and: [{ status: { equalTo: 1 } }, { currentEra: { greaterThan: $targetEras } }] }
       first: $first
       offset: $offset
-      orderBy: TIMESTAMP_DESC
+      orderBy: CURRENT_EPOCH_DESC
     ) {
       nodes {
         id

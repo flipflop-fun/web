@@ -23,7 +23,7 @@ export const TokenHero: React.FC<TokenHeroProps> = ({
   const [imageData, setImageData] = useState("");
   const { token: userToken } = useAuth();
   const { t } = useTranslation();
-
+  
   useEffect(() => {
     const controller = new AbortController();
 

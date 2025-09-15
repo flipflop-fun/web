@@ -66,7 +66,7 @@ const AppContent = () => {
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
   const ownerBase58 = wallet?.publicKey?.toBase58?.() ?? wallet?.publicKey?.toString();
   
-  const { data: delegatedTokens } = useGraphQuery(
+  const { data: delegatedTokens, refetch } = useGraphQuery(
     subgraphUrl,
     queryMyDelegatedTokens,
     {
@@ -74,8 +74,18 @@ const AppContent = () => {
       offset: 0,
       first: 10,
     },
-    { auto: !!ownerBase58 }
+    { auto: false }
   );
+
+  useEffect(() => {
+    if (ownerBase58) {
+      refetch({
+        wallet: ownerBase58 as string,
+        offset: 0,
+        first: 10,
+      })
+    }
+  }, [ownerBase58])
 
   useEffect(() => {
     if (delegatedTokens && delegatedTokens.allInitializeTokenEventEntities && delegatedTokens.allInitializeTokenEventEntities.totalCount > 0) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { queryTotalReferrerBonus } from '../../utils/graphql2';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { AddressDisplay } from '../common/AddressDisplay';
@@ -29,17 +29,26 @@ export const ReferralBonusDetailModal: React.FC<ReferralBonusDetailModalProps> =
   const [pageSize, setPageSize] = useState(5);
   const { t } = useTranslation();
   const subgraphUrl = NETWORK_CONFIGS[(process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet"].subgraphUrl2;
-  const { loading, error, data } = useGraphQuery(
+  const { loading, error, data, refetch } = useGraphQuery(
     subgraphUrl,
-    queryTotalReferrerBonus, {
+    queryTotalReferrerBonus,
+    {
       mint,
-      referrerMain
-    }, {
-      auto: !isOpen,
+      referrerMain,
+    },
+    {
+      auto: false,
     }
   );
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    if (!mint || !referrerMain) return;
+    refetch({ mint, referrerMain });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, mint, referrerMain]);
+
+   if (!isOpen) return null;
 
   if (loading) return (
     <div className="modal modal-open">
