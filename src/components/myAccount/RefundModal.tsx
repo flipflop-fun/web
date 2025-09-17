@@ -183,7 +183,12 @@ export const RefundModal: FC<RefundModalProps> = ({
                 </span>
               </div>
             </div>
-            {refundAccountData && tokenBalance.toFixed(0) === safeLamportBNToUiNumber(refundAccountData?.totalTokens).toFixed(0) ? (
+            {refundAccountData && (() => {
+              const refundBalance = safeLamportBNToUiNumber(refundAccountData.totalTokens);
+              const difference = Math.abs(tokenBalance - refundBalance);
+              const tolerance = Math.max(tokenBalance, refundBalance) * 0.01; // 1% tolerance
+              return difference <= tolerance;
+            })() ? (
               <div className="flex flex-col gap-2">
                 {/* <AlertBox
                   title={t('common.attention')}
