@@ -672,7 +672,7 @@ export interface NetworkConfig {
   createPoolFeeReceive: PublicKey;
   memoProgram: PublicKey;
   addressLookupTableAddress: PublicKey;
-  subgraphUrl: string;
+  // subgraphUrl: string;
   subgraphUrl2: string;
   thegraphApiKey?: string;
   launchRuleAccount: PublicKey;

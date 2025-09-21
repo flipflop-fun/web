@@ -37,7 +37,7 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
     apiBaseUrl: 'https://api-dev.flipflop.plus',
-    subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/flipflop-pom',
+    // subgraphUrl: 'https://data.flipflop.plus/subgraphs/name/flipflop-pom',
     subgraphUrl2: 'https://graph-devnet.flipflop.plus/graphql',
     systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'),
     allowOwnerOffCurveForProtocolFeeAccount: false,
@@ -51,12 +51,12 @@ export const NETWORK_CONFIGS: NetworkConfigs = {
     chartApiUrl: 'https://chart-api-testnet.flipflop.plus/api/v1/ohlc',
   } as NetworkConfig,
   mainnet_beta: {
-    isPaused: true, // launching is paused, should be same as on-chain
+    isPaused: false, // launching is paused, should be same as on-chain
     frontendUrl: "https://app.flipflop.fun",
     irysGatewayUrl: "https://gateway.irys.xyz",
     scanUrl: 'https://explorer.solana.com',
     apiBaseUrl: 'https://api.flipflop.plus',
-    subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/proof_of_mint',
+    // subgraphUrl: 'https://data-mainnet.flipflop.plus/subgraphs/name/proof_of_mint',
     subgraphUrl2: 'https://graph-mainnet.flipflop.plus/graphql',
     systemDeployer: new PublicKey('DJ3jvpv6k7uhq8h9oVHZck6oY4dQqY1GHaLvCLjSqxaD'), // Must be the original deployer to fix the system config pda account
     allowOwnerOffCurveForProtocolFeeAccount: true,
