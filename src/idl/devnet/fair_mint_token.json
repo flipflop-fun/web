@@ -371,8 +371,41 @@
                 ]
               },
               {
-                "kind": "account",
-                "path": "admin"
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
               }
             ]
           }
@@ -455,8 +488,41 @@
                 ]
               },
               {
-                "kind": "account",
-                "path": "admin"
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
               }
             ]
           }
@@ -581,32 +647,7 @@
           }
         },
         {
-          "name": "launch_rule_account",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  108,
-                  97,
-                  117,
-                  110,
-                  99,
-                  104,
-                  95,
-                  114,
-                  117,
-                  108,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "system_config_account"
-              }
-            ]
-          }
+          "name": "launch_rule_account"
         },
         {
           "name": "mint_token_vault",
@@ -617,7 +658,8 @@
           "writable": true
         },
         {
-          "name": "wsol_mint"
+          "name": "wsol_mint",
+          "address": "So11111111111111111111111111111111111111112"
         },
         {
           "name": "wsol_vault",
@@ -625,7 +667,71 @@
         },
         {
           "name": "system_config_account",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103,
+                  95,
+                  118,
+                  49,
+                  46,
+                  49
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "protocol_fee_account",
@@ -786,7 +892,71 @@
           }
         },
         {
-          "name": "system_config_account"
+          "name": "system_config_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103,
+                  95,
+                  118,
+                  49,
+                  46,
+                  49
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "mint_token_vault",
@@ -801,7 +971,8 @@
           "writable": true
         },
         {
-          "name": "wsol_mint"
+          "name": "wsol_mint",
+          "address": "So11111111111111111111111111111111111111112"
         },
         {
           "name": "referrer_ata"
@@ -2201,7 +2372,71 @@
           "writable": true
         },
         {
-          "name": "system_config_account"
+          "name": "system_config_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103,
+                  95,
+                  118,
+                  49,
+                  46,
+                  49
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "payer",
@@ -2455,10 +2690,98 @@
           }
         },
         {
-          "name": "config_account"
+          "name": "config_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103,
+                  95,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
         },
         {
-          "name": "system_config_account"
+          "name": "system_config_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103,
+                  95,
+                  118,
+                  49,
+                  46,
+                  49
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "code_account",
@@ -2540,7 +2863,71 @@
         },
         {
           "name": "system_config_account",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103,
+                  95,
+                  118,
+                  49,
+                  46,
+                  49
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "system_program",
@@ -2718,7 +3105,71 @@
         },
         {
           "name": "system_config_account",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  121,
+                  115,
+                  116,
+                  101,
+                  109,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103,
+                  95,
+                  118,
+                  49,
+                  46,
+                  49
+                ]
+              },
+              {
+                "kind": "const",
+                "value": [
+                  182,
+                  170,
+                  55,
+                  20,
+                  102,
+                  217,
+                  47,
+                  143,
+                  149,
+                  33,
+                  37,
+                  172,
+                  229,
+                  131,
+                  149,
+                  124,
+                  52,
+                  126,
+                  53,
+                  73,
+                  199,
+                  69,
+                  248,
+                  211,
+                  168,
+                  196,
+                  34,
+                  161,
+                  132,
+                  131,
+                  85,
+                  210
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "protocol_fee_account",
@@ -3421,6 +3872,31 @@
       "code": 6093,
       "name": "LaunchRuleAdminNotMatch",
       "msg": "Launch rule admin not match"
+    },
+    {
+      "code": 6094,
+      "name": "InvalidSystemConfigAccount",
+      "msg": "Invalid system config account"
+    },
+    {
+      "code": 6095,
+      "name": "InvalidWsolAta",
+      "msg": "Invalid WSOL ATA"
+    },
+    {
+      "code": 6096,
+      "name": "InvalidProtocolWsolVault",
+      "msg": "Invalid protocol WSOL vault"
+    },
+    {
+      "code": 6097,
+      "name": "InvalidWsolVaultOwner",
+      "msg": "Invalid WSOL vault owner"
+    },
+    {
+      "code": 6098,
+      "name": "InvalidMetadataProgram",
+      "msg": "Invalid metadata program"
     }
   ],
   "types": [
