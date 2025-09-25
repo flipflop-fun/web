@@ -89,7 +89,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
       const result = await login(publicKey, signatureBase58, WALLET_SIGN_MESSAGE);
       if (result.success) {
         const token = result.data.token;
-        console.log("token: ", token)
+        // console.log("token: ", token)
         setToken(token);
         setWalletAddress(publicKey);
         localStorage.setItem('flipflop_token', token);

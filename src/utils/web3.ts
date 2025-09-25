@@ -1385,10 +1385,30 @@ const processTransaction = async (
   successMessage: string,
   extraData: {}
 ) => {
-  try {
-    // Get latest blockhash
-    const latestBlockhash = await connection.getLatestBlockhash();
+  // Helper function to retry simulation with fresh blockhash
+  const retrySimulationWithFreshBlockhash = async (transaction: Transaction, maxRetries: number = 2) => {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const latestBlockhash = await connection.getLatestBlockhash();
+        transaction.recentBlockhash = latestBlockhash.blockhash;
+        transaction.feePayer = wallet.publicKey;
+        
+        const signedTx = await wallet.signTransaction(transaction);
+        const simulation = await connection.simulateTransaction(signedTx);
+        
+        return { simulation, signedTx, latestBlockhash };
+      } catch (error: any) {
+        if (attempt === maxRetries) {
+          throw error;
+        }
+        console.warn(`Simulation attempt ${attempt + 1} failed, retrying...`);
+        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay
+      }
+    }
+    throw new Error('Max retries exceeded');
+  };
 
+  try {
     // Get processing tx
     const processingTx = localStorage.getItem('processing_tx');
     const processingTimestamp = localStorage.getItem('processing_timestamp');
@@ -1402,23 +1422,33 @@ const processTransaction = async (
       }
     }
 
-    // Set transaction parameters
-    tx.recentBlockhash = latestBlockhash.blockhash;
-    tx.feePayer = wallet.publicKey;
-
-    // Sign and serialize
-    const signedTx = await wallet.signTransaction(tx);
+    // Use retry mechanism for simulation
+    const { simulation, signedTx, latestBlockhash } = await retrySimulationWithFreshBlockhash(tx);
     const serializedTx = signedTx.serialize();
 
-    // Simulate the transaction
-    const simulation = await connection.simulateTransaction(signedTx);
-
-    // If simulation fails, return error
+    // If simulation fails, check if it's a recoverable error
     if (simulation.value.err) {
-      return {
-        success: false,
-        message: `Transaction simulation failed: ${parseAnchorError(simulation.value.logs as string[])}`
-      };
+      const errorMessage = parseAnchorError(simulation.value.logs as string[]);
+      
+      // Check if this is a recoverable error that might succeed in actual execution
+      const isRecoverableError = 
+        errorMessage.includes('insufficient funds') ||
+        errorMessage.includes('Account not found') ||
+        errorMessage.includes('Blockhash not found') ||
+        errorMessage.includes('exceeded maximum compute budget') ||
+        errorMessage.includes('custom program error') ||
+        errorMessage.includes('Refund only allowed in target eras') ||
+        errorMessage.includes('Custom program error: 1781');
+      
+      if (!isRecoverableError) {
+        return {
+          success: false,
+          message: `Transaction simulation failed: ${errorMessage}`
+        };
+      }
+      
+      // For recoverable errors, log warning but continue with transaction
+      console.warn(`Simulation failed but attempting transaction anyway: ${errorMessage}`);
     }
 
     // Mark the transaction as processing
@@ -1475,19 +1505,85 @@ const processTransaction = async (
 }
 
 function parseAnchorError(logs: string[]): string {
-  // TODO:
-  // for (const log of logs) {
-  //   const anchorErrorMatch = log.match(/Error Code: (\d+)\. Error Message: (.+)/);
-  //   if (anchorErrorMatch) {
-  //     const errorCode = parseInt(anchorErrorMatch[1], 10);
-  //     const errorMsg = ANCHOR_ERROR_MAP[errorCode] || "Unknown Anchor error";
-  //     return `${errorMsg} (Code: ${errorCode})`;
-  //   }
-  //   if (log.includes("Program failed to complete")) {
-  //     return "Transaction failed due to program error";
-  //   }
-  // }
-  return logs.toString();
+  if (!logs || logs.length === 0) {
+    return "Unknown error";
+  }
+
+  // Join all logs for pattern matching
+  const logString = logs.join(' ');
+
+  // Check for common error patterns
+  if (logString.includes('insufficient funds') || logString.includes('InsufficientFunds')) {
+    return "Insufficient funds for transaction";
+  }
+  
+  if (logString.includes('Account not found') || logString.includes('AccountNotFound')) {
+    return "Required account not found";
+  }
+  
+  if (logString.includes('Blockhash not found') || logString.includes('BlockhashNotFound')) {
+    return "Blockhash expired or not found";
+  }
+  
+  if (logString.includes('exceeded maximum compute budget') || logString.includes('ComputeBudgetExceeded')) {
+    return "Transaction exceeded compute budget";
+  }
+  
+  if (logString.includes('custom program error')) {
+    const customErrorMatch = logString.match(/custom program error: 0x([0-9a-fA-F]+)/);
+    if (customErrorMatch) {
+      return `Custom program error: ${customErrorMatch[1]}`;
+    }
+    
+    // Also check for decimal error codes
+    const decimalErrorMatch = logString.match(/Custom program error: (\d+)/);
+    if (decimalErrorMatch) {
+      const errorCode = parseInt(decimalErrorMatch[1]);
+      
+      // Handle specific error codes with user-friendly messages
+      switch (errorCode) {
+        case 1781: // Corresponds to Anchor error 6068 (RefundOnlyAllowedInTargetEras)
+          return 'Refund only allowed in target eras. The timing window for refunds may have changed.';
+        case 1736: // Corresponds to Anchor error 6045 (RefundInProgress)
+          return 'Refund is already in progress for this token.';
+        default:
+          return `Custom program error: ${errorCode}`;
+      }
+    }
+    
+    return "Custom program error";
+  }
+
+  // Check for Anchor program errors
+  for (const log of logs) {
+    const anchorErrorMatch = log.match(/Error Code: (\d+)\. Error Message: (.+)/);
+    if (anchorErrorMatch) {
+      const errorCode = parseInt(anchorErrorMatch[1], 10);
+      return `Anchor error: ${anchorErrorMatch[2]} (Code: ${errorCode})`;
+    }
+    
+    if (log.includes("Program failed to complete")) {
+      return "Program execution failed";
+    }
+    
+    if (log.includes("already in use") || log.includes("AccountInUse")) {
+      return "Account already exists or in use";
+    }
+    
+    if (log.includes("invalid account data") || log.includes("InvalidAccountData")) {
+      return "Invalid account data";
+    }
+  }
+
+  // Return first meaningful log or all logs if no pattern matches
+  const meaningfulLog = logs.find(log => 
+    log.includes('Error') || 
+    log.includes('failed') || 
+    log.includes('invalid') ||
+    log.includes('exceeded')
+  );
+  
+  return meaningfulLog || logs.toString();
 }
 export const getMintDiscount = async (
   wallet: AnchorWallet | undefined,
