@@ -741,6 +741,9 @@ export type FairMintToken = {
         },
         {
           "name": "protocolFeeAccount",
+          "docs": [
+            "protocol fee account"
+          ],
           "writable": true
         },
         {
@@ -1051,13 +1054,47 @@ export type FairMintToken = {
               }
             ],
             "program": {
-              "kind": "account",
-              "path": "cpSwapProgram"
+              "kind": "const",
+              "value": [
+                169,
+                42,
+                49,
+                26,
+                136,
+                152,
+                134,
+                77,
+                32,
+                99,
+                200,
+                252,
+                203,
+                83,
+                110,
+                30,
+                138,
+                48,
+                77,
+                141,
+                83,
+                152,
+                76,
+                10,
+                78,
+                179,
+                193,
+                68,
+                7,
+                214,
+                116,
+                231
+              ]
             }
           }
         },
         {
-          "name": "ammConfig"
+          "name": "ammConfig",
+          "address": "9zSzfkYy6awexsHvmggeH36pfVUdDGyCcwmjT3AQPBj6"
         },
         {
           "name": "cpSwapProgram",
@@ -1191,6 +1228,9 @@ export type FairMintToken = {
         },
         {
           "name": "lpMint",
+          "docs": [
+            "pool lp mint, init by cp-swap"
+          ],
           "writable": true
         },
         {
@@ -1279,6 +1319,7 @@ export type FairMintToken = {
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -1541,6 +1582,7 @@ export type FairMintToken = {
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -1799,6 +1841,7 @@ export type FairMintToken = {
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -2057,6 +2100,7 @@ export type FairMintToken = {
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -3903,6 +3947,141 @@ export type FairMintToken = {
       "code": 6098,
       "name": "invalidMetadataProgram",
       "msg": "Invalid metadata program"
+    },
+    {
+      "code": 6099,
+      "name": "swapInProgress",
+      "msg": "Swap operation in progress, please try again later"
+    },
+    {
+      "code": 6100,
+      "name": "depositInProgress",
+      "msg": "Deposit operation in progress, please try again later"
+    },
+    {
+      "code": 6101,
+      "name": "withdrawInProgress",
+      "msg": "Withdraw operation in progress, please try again later"
+    },
+    {
+      "code": 6102,
+      "name": "burnLpInProgress",
+      "msg": "Burn LP tokens operation in progress, please try again later"
+    },
+    {
+      "code": 6103,
+      "name": "createPoolInProgress",
+      "msg": "Create pool operation in progress, please try again later"
+    },
+    {
+      "code": 6104,
+      "name": "invalidProgramId",
+      "msg": "Invalid program id"
+    },
+    {
+      "code": 6105,
+      "name": "invalidRemainingCpSwapProgram",
+      "msg": "Invalid remaining cp swap program"
+    },
+    {
+      "code": 6106,
+      "name": "invalidRemainingTokenProgram",
+      "msg": "Invalid remaining token program"
+    },
+    {
+      "code": 6107,
+      "name": "invalidRemainingAssociatedTokenProgram",
+      "msg": "Invalid remaining associated token program"
+    },
+    {
+      "code": 6108,
+      "name": "invalidRemainingSystemProgram",
+      "msg": "Invalid remaining system program"
+    },
+    {
+      "code": 6109,
+      "name": "invalidRemainingRentProgram",
+      "msg": "Invalid remaining rent program"
+    },
+    {
+      "code": 6110,
+      "name": "invalidRemainingAuthority",
+      "msg": "Invalid remaining authority program"
+    },
+    {
+      "code": 6111,
+      "name": "invalidRemainingWrongTokenMintOrder",
+      "msg": "Invalid remaining wrong token mint order"
+    },
+    {
+      "code": 6112,
+      "name": "invalidRemainingWrongTokenMint",
+      "msg": "Invalid remaining wrong token mint program"
+    },
+    {
+      "code": 6113,
+      "name": "invalidRemainingCreatorMustBeSigner",
+      "msg": "Invalid remaining creator must be signer"
+    },
+    {
+      "code": 6114,
+      "name": "invalidRemainingPoolState",
+      "msg": "Invalid remaining pool state program"
+    },
+    {
+      "code": 6115,
+      "name": "invalidRemainingToken0Vault",
+      "msg": "Invalid remaining token 0 vault program"
+    },
+    {
+      "code": 6116,
+      "name": "invalidRemainingToken1Vault",
+      "msg": "Invalid remaining token 1 vault program"
+    },
+    {
+      "code": 6117,
+      "name": "invalidRemainingCreatePoolFee",
+      "msg": "Invalid remaining create pool fee program"
+    },
+    {
+      "code": 6118,
+      "name": "invalidRemainingObservationState",
+      "msg": "Invalid remaining observation state program"
+    },
+    {
+      "code": 6119,
+      "name": "invalidRemainingCreatorToken0",
+      "msg": "Invalid remaining creator token 0 program"
+    },
+    {
+      "code": 6120,
+      "name": "invalidRemainingCreatorToken1",
+      "msg": "Invalid remaining creator token 1 program"
+    },
+    {
+      "code": 6121,
+      "name": "invalidRemainingLpMint",
+      "msg": "Invalid remaining lp mint program"
+    },
+    {
+      "code": 6122,
+      "name": "invalidRemainingCreatorLpToken",
+      "msg": "Invalid remaining creator lp token program"
+    },
+    {
+      "code": 6123,
+      "name": "invalidRemainingAmmConfig",
+      "msg": "Invalid remaining amm config"
+    },
+    {
+      "code": 6124,
+      "name": "invalidRemainingToken0ProgramId",
+      "msg": "Invalid remaining token 0 program id"
+    },
+    {
+      "code": 6125,
+      "name": "invalidRemainingToken1ProgramId",
+      "msg": "Invalid remaining token 1 program id"
     }
   ],
   "types": [

@@ -735,6 +735,9 @@
         },
         {
           "name": "protocol_fee_account",
+          "docs": [
+            "protocol fee account"
+          ],
           "writable": true
         },
         {
@@ -1045,13 +1048,47 @@
               }
             ],
             "program": {
-              "kind": "account",
-              "path": "cp_swap_program"
+              "kind": "const",
+              "value": [
+                169,
+                42,
+                49,
+                26,
+                136,
+                152,
+                134,
+                77,
+                32,
+                99,
+                200,
+                252,
+                203,
+                83,
+                110,
+                30,
+                138,
+                48,
+                77,
+                141,
+                83,
+                152,
+                76,
+                10,
+                78,
+                179,
+                193,
+                68,
+                7,
+                214,
+                116,
+                231
+              ]
             }
           }
         },
         {
-          "name": "amm_config"
+          "name": "amm_config",
+          "address": "9zSzfkYy6awexsHvmggeH36pfVUdDGyCcwmjT3AQPBj6"
         },
         {
           "name": "cp_swap_program",
@@ -1185,6 +1222,9 @@
         },
         {
           "name": "lp_mint",
+          "docs": [
+            "pool lp mint, init by cp-swap"
+          ],
           "writable": true
         },
         {
@@ -1273,6 +1313,7 @@
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -1535,6 +1576,7 @@
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -1793,6 +1835,7 @@
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -2051,6 +2094,7 @@
           "docs": [
             "Config account"
           ],
+          "writable": true,
           "pda": {
             "seeds": [
               {
@@ -3897,6 +3941,141 @@
       "code": 6098,
       "name": "InvalidMetadataProgram",
       "msg": "Invalid metadata program"
+    },
+    {
+      "code": 6099,
+      "name": "SwapInProgress",
+      "msg": "Swap operation in progress, please try again later"
+    },
+    {
+      "code": 6100,
+      "name": "DepositInProgress",
+      "msg": "Deposit operation in progress, please try again later"
+    },
+    {
+      "code": 6101,
+      "name": "WithdrawInProgress",
+      "msg": "Withdraw operation in progress, please try again later"
+    },
+    {
+      "code": 6102,
+      "name": "BurnLpInProgress",
+      "msg": "Burn LP tokens operation in progress, please try again later"
+    },
+    {
+      "code": 6103,
+      "name": "CreatePoolInProgress",
+      "msg": "Create pool operation in progress, please try again later"
+    },
+    {
+      "code": 6104,
+      "name": "InvalidProgramId",
+      "msg": "Invalid program id"
+    },
+    {
+      "code": 6105,
+      "name": "InvalidRemainingCpSwapProgram",
+      "msg": "Invalid remaining cp swap program"
+    },
+    {
+      "code": 6106,
+      "name": "InvalidRemainingTokenProgram",
+      "msg": "Invalid remaining token program"
+    },
+    {
+      "code": 6107,
+      "name": "InvalidRemainingAssociatedTokenProgram",
+      "msg": "Invalid remaining associated token program"
+    },
+    {
+      "code": 6108,
+      "name": "InvalidRemainingSystemProgram",
+      "msg": "Invalid remaining system program"
+    },
+    {
+      "code": 6109,
+      "name": "InvalidRemainingRentProgram",
+      "msg": "Invalid remaining rent program"
+    },
+    {
+      "code": 6110,
+      "name": "InvalidRemainingAuthority",
+      "msg": "Invalid remaining authority program"
+    },
+    {
+      "code": 6111,
+      "name": "InvalidRemainingWrongTokenMintOrder",
+      "msg": "Invalid remaining wrong token mint order"
+    },
+    {
+      "code": 6112,
+      "name": "InvalidRemainingWrongTokenMint",
+      "msg": "Invalid remaining wrong token mint program"
+    },
+    {
+      "code": 6113,
+      "name": "InvalidRemainingCreatorMustBeSigner",
+      "msg": "Invalid remaining creator must be signer"
+    },
+    {
+      "code": 6114,
+      "name": "InvalidRemainingPoolState",
+      "msg": "Invalid remaining pool state program"
+    },
+    {
+      "code": 6115,
+      "name": "InvalidRemainingToken0Vault",
+      "msg": "Invalid remaining token 0 vault program"
+    },
+    {
+      "code": 6116,
+      "name": "InvalidRemainingToken1Vault",
+      "msg": "Invalid remaining token 1 vault program"
+    },
+    {
+      "code": 6117,
+      "name": "InvalidRemainingCreatePoolFee",
+      "msg": "Invalid remaining create pool fee program"
+    },
+    {
+      "code": 6118,
+      "name": "InvalidRemainingObservationState",
+      "msg": "Invalid remaining observation state program"
+    },
+    {
+      "code": 6119,
+      "name": "InvalidRemainingCreatorToken0",
+      "msg": "Invalid remaining creator token 0 program"
+    },
+    {
+      "code": 6120,
+      "name": "InvalidRemainingCreatorToken1",
+      "msg": "Invalid remaining creator token 1 program"
+    },
+    {
+      "code": 6121,
+      "name": "InvalidRemainingLpMint",
+      "msg": "Invalid remaining lp mint program"
+    },
+    {
+      "code": 6122,
+      "name": "InvalidRemainingCreatorLpToken",
+      "msg": "Invalid remaining creator lp token program"
+    },
+    {
+      "code": 6123,
+      "name": "InvalidRemainingAmmConfig",
+      "msg": "Invalid remaining amm config"
+    },
+    {
+      "code": 6124,
+      "name": "InvalidRemainingToken0ProgramId",
+      "msg": "Invalid remaining token 0 program id"
+    },
+    {
+      "code": 6125,
+      "name": "InvalidRemainingToken1ProgramId",
+      "msg": "Invalid remaining token 1 program id"
     }
   ],
   "types": [
