@@ -155,19 +155,18 @@ export const Liquidities: FC<LiquiditiesProps> = ({
       setRemoveLiquidityAmount('0');
       setMessageRemoveLiquidity('');
     } else {
-      const amount = poolTokenBalance * vaultLpTokenBalance / totalLpToken * percent / 100;
-      const wsolNeeded = poolSOLBalance * vaultLpTokenBalance / totalLpToken * percent / 100;
-      console.log(amount, wsolNeeded)
-      if(amount > poolTokenBalance) {
+      const amount = new Decimal(poolTokenBalance).mul(new Decimal(vaultLpTokenBalance)).div(new Decimal(totalLpToken)).mul(new Decimal(percent)).div(new Decimal(100));
+      const wsolNeeded = new Decimal(poolSOLBalance).mul(new Decimal(vaultLpTokenBalance)).div(new Decimal(totalLpToken)).mul(new Decimal(percent)).div(new Decimal(100));
+      if(amount.gt(new Decimal(poolTokenBalance))) {
         setMessageRemoveLiquidity(t('common.exceedTokenInPool') + ": " + poolTokenBalance.toFixed(4) + " " + tokenData.tokenSymbol);
       }
-      else if(wsolNeeded > poolSOLBalance) {
+      else if(wsolNeeded.gt(new Decimal(poolSOLBalance))) {
         setMessageRemoveLiquidity(t('common.exceedSolInPool') + ": " + poolSOLBalance.toFixed(4) + " SOL");
       }
       else {
         setMessageRemoveLiquidity('');
-        setRemoveLiquidityAmount(amount.toFixed(4));
-        setRemoveLiquidityAmount1(wsolNeeded.toFixed(4));
+        setRemoveLiquidityAmount(amount.toFixed(9));
+        setRemoveLiquidityAmount1(wsolNeeded.toFixed(9));
       }
     }
 

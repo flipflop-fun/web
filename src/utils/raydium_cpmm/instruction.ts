@@ -101,6 +101,74 @@ export async function calculateDepositAmounts(
   };
 }
 
+export async function calculateWithdrawAmountsByLpBalance(
+  program: Program<FairMintToken>,
+  token0: PublicKey,
+  token1: PublicKey,
+  tokenName: string,
+  tokenSymbol: string,
+  slippageTolerance: number = 0.05
+) {
+  const poolInfo = await getPoolData(program, token0, token1);
+  if (!poolInfo.poolAddress || !poolInfo.cpSwapPoolState) throw new Error("Pool not found");
+
+  const lpSupply = poolInfo.cpSwapPoolState.lpAmount;
+  const token0Reserve = poolInfo.cpSwapPoolState.token0Amount;
+  const token1Reserve = poolInfo.cpSwapPoolState.token1Amount;
+
+  // derive configAccount and LP ATA that actually holds LP
+  const [poolAddress] = getPoolAddress(
+    NETWORK_CONFIGS[network].cpSwapConfigAddress,
+    token0,
+    token1,
+    NETWORK_CONFIGS[network].cpSwapProgram
+  );
+  const [lpMintAddress] = getPoolLpMintAddress(
+    poolAddress,
+    NETWORK_CONFIGS[network].cpSwapProgram
+  );
+  const [mintAccount] = PublicKey.findProgramAddressSync(
+    [Buffer.from(MINT_SEED), Buffer.from(tokenName), Buffer.from(tokenSymbol.toLowerCase())],
+    program.programId,
+  );
+  const [configAccount] = PublicKey.findProgramAddressSync(
+    [Buffer.from(CONFIG_DATA_SEED), mintAccount.toBuffer()],
+    program.programId,
+  );
+  const ownerLpToken = getAssociatedTokenAddressSync(
+    lpMintAddress,
+    configAccount,
+    true,
+    TOKEN_PROGRAM_ID
+  );
+  const balanceInfo = await program.provider.connection.getTokenAccountBalance(ownerLpToken);
+  const userLpLamports = new BN(balanceInfo.value.amount);
+  if (userLpLamports.isZero()) {
+    return {
+      lpTokenAmount: new BN(0),
+      minToken0Amount: new BN(0),
+      minToken1Amount: new BN(0),
+      actualToken0Amount: new BN(0),
+      actualToken1Amount: new BN(0),
+    };
+  }
+
+  // Compute the actual withdraw amounts based on user LP balance
+  const actualToken0Amount = userLpLamports.mul(token0Reserve).div(lpSupply);
+  const actualToken1Amount = userLpLamports.mul(token1Reserve).div(lpSupply);
+
+  const minToken0Amount = actualToken0Amount.mul(new BN(100 - slippageTolerance * 100)).div(new BN(100));
+  const minToken1Amount = actualToken1Amount.mul(new BN(100 - slippageTolerance * 100)).div(new BN(100));
+
+  return {
+    lpTokenAmount: userLpLamports,
+    minToken0Amount,
+    minToken1Amount,
+    actualToken0Amount,
+    actualToken1Amount,
+  };
+}
+
 export async function calculateWithdrawAmounts(
   program: Program<FairMintToken>,
   token0: PublicKey,
@@ -333,8 +401,8 @@ export async function poolDepositInstructions(
     token1Program
   );
 
-  console.log("token0 account", onwerToken0.toBase58());
-  console.log("token1 account", onwerToken1.toBase58());
+  // console.log("token0 account", onwerToken0.toBase58());
+  // console.log("token1 account", onwerToken1.toBase58());
 
   const contextProxyDeposit = {
     cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
