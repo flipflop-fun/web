@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { getMyReferrerData, getReferrerDataByReferralAccount, getSystemConfig, reactiveReferrerCode, setReferrerCode } from '../../utils/web3';
+import { getMyReferrerData, getReferralDataByCodeHash, getReferrerCodeHash, getReferrerDataByReferralAccount, getSystemConfig, reactiveReferrerCode, setReferrerCode } from '../../utils/web3';
 import toast from 'react-hot-toast';
 import { InitiazlizedTokenData, ReferralCodeModalProps, ReferrerData } from '../../types/types';
 import { LOCAL_STORAGE_MY_REFERRAL_CODE, NETWORK_CONFIGS } from '../../config/constants';
@@ -132,7 +132,18 @@ export const ReferralCodeModal: FC<ReferralCodeModalProps> = ({
       });
       localStorage.setItem(LOCAL_STORAGE_MY_REFERRAL_CODE + "_" + token.mint + "_" + wallet?.publicKey.toBase58(), myReferrerCode);
     } catch (error: any) {
-      toast.error(t('urc.failedToGenerateReferralCode') + ": " + (error.message || ''));
+      if (error.message.includes('Provided owner is not allowed')) {
+        const codeHash = getReferrerCodeHash(wallet, connection, myReferrerCode);
+        if (!codeHash.success) {
+          throw new Error(codeHash.message);
+        }
+        getReferralDataByCodeHash(wallet, connection, new PublicKey(codeHash.data)).then((data) => {
+          if (data?.success) setReferralData(data.data);
+          else toast.error("ReferralCodeModal.handleGetCode: " + data.message as string);
+        });
+      } else {
+        toast.error(t('urc.failedToGenerateReferralCode') + ": " + (error.message || ''));
+      }
     } finally {
       setLoading(false);
     }

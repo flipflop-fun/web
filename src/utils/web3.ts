@@ -1511,7 +1511,7 @@ function parseAnchorError(logs: string[]): string {
 
   // Join all logs for pattern matching
   const logString = logs.join(' ');
-  console.log("Logs", logString);
+
   // Check for common error patterns
   if (logString.includes('insufficient funds') || logString.includes('InsufficientFunds')) {
     return "Insufficient funds for transaction";
