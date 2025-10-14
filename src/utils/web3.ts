@@ -10,7 +10,7 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js';
 import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
-import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK_CONFIGS } from '../config/constants';
+import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK_CONFIGS, URC_THROTTLE_SEEDS } from '../config/constants';
 import { InitializeTokenConfig, InitiazlizedTokenData, MetadataAccouontData, RemainingAccount, ResponseData, TokenMetadata, TokenMetadataIPFS } from '../types/types';
 import { AnchorWallet } from '@solana/wallet-adapter-react';
 import { FairMintToken } from '../types/fair_mint_token';
@@ -289,6 +289,11 @@ export const reactiveReferrerCode = async (
     program.programId,
   );
 
+  const [referrerThrottle] = PublicKey.findProgramAddressSync(
+    [Buffer.from(URC_THROTTLE_SEEDS), new PublicKey(NETWORK_CONFIGS[network].systemDeployer).toBuffer()],
+    program.programId
+  );
+
   const setReferrerCodeAccounts = {
     mint,
     referralAccount: referralAccountPda,
@@ -296,6 +301,7 @@ export const reactiveReferrerCode = async (
     codeAccount: codeAccountPda,
     configAccount: configAccountPda,
     systemConfigAccount: systemConfigAccountPda,
+    referrerThrottle,
     payer: wallet.publicKey,
     systemProgram: SystemProgram.programId,
     tokenProgram: TOKEN_PROGRAM_ID,
