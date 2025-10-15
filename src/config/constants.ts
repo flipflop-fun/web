@@ -83,7 +83,7 @@ export const REFERRAL_CODE_SEED = "referral_code";
 export const CODE_ACCOUNT_SEEDS = "code_account";
 export const MINT_VAULT_OWNER_SEEDS = "mint-vault-owner";
 export const EXTRA_ACCOUNT_META_LIST_SEEDS = "extra-account-metas";
-export const URC_THROTTLE_SEEDS = "urc_throttle";
+
 
 // LOCAL_STORAGE PREFIX
 export const LOCAL_STORAGE_KEY_EXPANDED = 'flipflop_sidebar_expanded_menus';

@@ -1,6 +1,6 @@
 {
   "name": "flipflop-client",
-  "version": "0.8.5",
+  "version": "0.8.4",
   "private": true,
   "dependencies": {
     "@copilotkit/react-core": "^1.5.20",

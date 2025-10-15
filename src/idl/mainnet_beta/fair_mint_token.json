@@ -2857,68 +2857,6 @@
           }
         },
         {
-          "name": "referrer_throttle",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  117,
-                  114,
-                  99,
-                  95,
-                  116,
-                  104,
-                  114,
-                  111,
-                  116,
-                  116,
-                  108,
-                  101
-                ]
-              },
-              {
-                "kind": "const",
-                "value": [
-                  182,
-                  170,
-                  55,
-                  20,
-                  102,
-                  217,
-                  47,
-                  143,
-                  149,
-                  33,
-                  37,
-                  172,
-                  229,
-                  131,
-                  149,
-                  124,
-                  52,
-                  126,
-                  53,
-                  73,
-                  199,
-                  69,
-                  248,
-                  211,
-                  168,
-                  196,
-                  34,
-                  161,
-                  132,
-                  131,
-                  85,
-                  210
-                ]
-              }
-            ]
-          }
-        },
-        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         },
@@ -3373,19 +3311,6 @@
         195,
         222,
         70
-      ]
-    },
-    {
-      "name": "ReferrerThrottleData",
-      "discriminator": [
-        156,
-        48,
-        238,
-        20,
-        112,
-        82,
-        26,
-        5
       ]
     },
     {
@@ -4151,11 +4076,6 @@
       "code": 6125,
       "name": "InvalidRemainingToken1ProgramId",
       "msg": "Invalid remaining token 1 program id"
-    },
-    {
-      "code": 6126,
-      "name": "URCActivationLimitExceeded",
-      "msg": "URC activation exceeds limit in current window"
     }
   ],
   "types": [
@@ -4743,22 +4663,6 @@
                 32
               ]
             }
-          }
-        ]
-      }
-    },
-    {
-      "name": "ReferrerThrottleData",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "window_start",
-            "type": "u64"
-          },
-          {
-            "name": "activation_count",
-            "type": "u32"
           }
         ]
       }
