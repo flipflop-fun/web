@@ -290,7 +290,7 @@ export const reactiveReferrerCode = async (
   );
 
   const [referrerThrottle] = PublicKey.findProgramAddressSync(
-    [Buffer.from(URC_THROTTLE_SEEDS), new PublicKey(NETWORK_CONFIGS[network].systemDeployer).toBuffer()],
+    [Buffer.from(URC_THROTTLE_SEEDS), mint.toBuffer()],
     program.programId
   );
 
