@@ -647,6 +647,35 @@
           }
         },
         {
+          "name": "referrer_throttle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  114,
+                  99,
+                  95,
+                  116,
+                  104,
+                  114,
+                  111,
+                  116,
+                  116,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
           "name": "launch_rule_account"
         },
         {

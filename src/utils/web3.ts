@@ -113,6 +113,10 @@ export const initializeToken = async (
       [Buffer.from(SYSTEM_CONFIG_SEEDS), NETWORK_CONFIGS[network].systemDeployer.toBuffer()],
       program.programId,
     );
+    const [referrerThrottlePda] = PublicKey.findProgramAddressSync(
+      [Buffer.from(URC_THROTTLE_SEEDS), mintPda.toBuffer()],
+      program.programId
+    );
     const wsolVaultAta = await getAssociatedTokenAddress(NATIVE_MINT, configPda, true, TOKEN_PROGRAM_ID);
     const tokenVaultAta = await getAssociatedTokenAddress(mintPda, configPda, true, TOKEN_PROGRAM_ID);
     const mintTokenVaultAta = await getAssociatedTokenAddress(mintPda, mintPda, true, TOKEN_PROGRAM_ID);
@@ -130,6 +134,7 @@ export const initializeToken = async (
       wsolVault: wsolVaultAta,
       systemConfigAccount: systemConfigAccountPda,
       protocolFeeAccount: protocolFeeAccount,
+      referrerThrottle: referrerThrottlePda,
       launchRuleAccount: NETWORK_CONFIGS[network].launchRuleAccount,
       tokenMetadataProgram: NETWORK_CONFIGS[network].tokenMetadataProgramId,
     }
@@ -416,6 +421,11 @@ export const setReferrerCode = async (
     program.programId,
   );
 
+  const [referrerThrottle] = PublicKey.findProgramAddressSync(
+    [Buffer.from(URC_THROTTLE_SEEDS), mint.toBuffer()],
+    program.programId
+  );
+
   const setReferrerCodeAccounts = {
     mint,
     referralAccount: referralAccountPda,
@@ -423,6 +433,7 @@ export const setReferrerCode = async (
     codeAccount: codeAccountPda,
     configAccount: configAccountPda,
     systemConfigAccount: systemConfigAccountPda,
+    referrerThrottle,
     payer: wallet.publicKey,
     systemProgram: SystemProgram.programId,
     tokenProgram: TOKEN_PROGRAM_ID,

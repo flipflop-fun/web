@@ -653,6 +653,35 @@ export type FairMintToken = {
           }
         },
         {
+          "name": "referrerThrottle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  114,
+                  99,
+                  95,
+                  116,
+                  104,
+                  114,
+                  111,
+                  116,
+                  116,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
           "name": "launchRuleAccount"
         },
         {
@@ -2863,6 +2892,35 @@ export type FairMintToken = {
           }
         },
         {
+          "name": "referrerThrottle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  114,
+                  99,
+                  95,
+                  116,
+                  104,
+                  114,
+                  111,
+                  116,
+                  116,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
@@ -3317,6 +3375,19 @@ export type FairMintToken = {
         195,
         222,
         70
+      ]
+    },
+    {
+      "name": "referrerThrottleData",
+      "discriminator": [
+        156,
+        48,
+        238,
+        20,
+        112,
+        82,
+        26,
+        5
       ]
     },
     {
@@ -4082,6 +4153,11 @@ export type FairMintToken = {
       "code": 6125,
       "name": "invalidRemainingToken1ProgramId",
       "msg": "Invalid remaining token 1 program id"
+    },
+    {
+      "code": 6126,
+      "name": "urcActivationLimitExceeded",
+      "msg": "URC activation exceeds limit in current window"
     }
   ],
   "types": [
@@ -4669,6 +4745,22 @@ export type FairMintToken = {
                 32
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "referrerThrottleData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "windowStart",
+            "type": "u64"
+          },
+          {
+            "name": "activationCount",
+            "type": "u32"
           }
         ]
       }
