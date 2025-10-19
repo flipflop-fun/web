@@ -88,7 +88,9 @@
     "errorLoadingUrcs": "Error al cargar los URCs",
     "rehearsalAlert": "Este es el ensayo antes del Mainnet formal, participando en el fondo mínimo y la prueba de reembolso!",
     "launchPausedAlert": "En la versión de Ensayo, no se pueden crear tokens!",
-    "avgPrice": "Precio promedio"
+    "avgPrice": "Precio promedio",
+    "expand": "Expandir",
+    "collapse": "Contraer"
   },
   "menu": {
     "discover": "Descubrir",
