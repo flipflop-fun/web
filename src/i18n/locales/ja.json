@@ -88,7 +88,9 @@
     "errorLoadingUrcs": "URCの読み込みエラー",
     "rehearsalAlert": "これは正式なメインネットの前のリハーサルであり、最低資金とテスト返金の参加を行います！",
     "launchPausedAlert": "リハーサルバージョンでは、トークンを作成できません！",
-    "avgPrice": "平均価格"
+    "avgPrice": "平均価格",
+    "expand": "展開",
+    "collapse": "折りたたむ"
   },
   "menu": {
     "discover": "発見",

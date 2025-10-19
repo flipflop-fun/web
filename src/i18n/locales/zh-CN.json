@@ -88,7 +88,9 @@
     "errorLoadingUrcs": "加载URCs出错",
     "rehearsalAlert": "这是正式主网之前的彩排，参与最低资金和测试退款!",
     "launchPausedAlert": "在彩排版本中，无法创建代币!",
-    "avgPrice": "平均价格"
+    "avgPrice": "平均价格",
+    "expand": "展开",
+    "collapse": "收起"
   },
   "menu": {
     "discover": "发现",
