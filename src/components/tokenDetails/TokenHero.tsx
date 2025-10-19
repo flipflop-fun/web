@@ -24,6 +24,10 @@ export const TokenHero: React.FC<TokenHeroProps> = ({
   const { token: userToken } = useAuth();
   const { t } = useTranslation();
   
+  // Description UI: collapsed/expanded state and long-text detection
+  const [descExpanded, setDescExpanded] = useState(false);
+  const isLongDesc = !!metadata?.description && ((metadata.description.length > 160) || ((metadata.description.match(/\n/g) || []).length > 3));
+  
   useEffect(() => {
     const controller = new AbortController();
 
@@ -99,11 +103,28 @@ export const TokenHero: React.FC<TokenHeroProps> = ({
             <ShareButton token={token} metadata={metadata as TokenMetadataIPFS} inputCode={referrerCode} />
           </div>
           {metadata?.description && (
-            <div className='bg-black/60 rounded-lg px-3 py-2 mt-2'>
-              <p className="pixel-text mt-1 text-white text-lg [text-shadow:2px_2px_0_#000000]">
-                {metadata?.description}
+            <div className='bg-black/60 rounded-lg px-3 py-2 mt-2 relative'>
+              <p
+                className="pixel-text mt-1 text-white text-lg [text-shadow:2px_2px_0_#000000] break-words whitespace-pre-line"
+                style={!descExpanded && isLongDesc ? { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
+              >
+                {metadata.description}
               </p>
-            </div>)}
+              {!descExpanded && isLongDesc && (
+                <div className="pointer-events-none absolute bottom-2 left-0 right-0 h-6 bg-gradient-to-t from-black/60 to-transparent" />
+              )}
+              {isLongDesc && (
+                <button
+                  type="button"
+                  className="mt-2 text-white/80 underline text-sm"
+                  onClick={() => setDescExpanded((prev) => !prev)}
+                  aria-label={descExpanded ? t('common.collapse') : t('common.expand')}
+                >
+                  {descExpanded ? t('common.collapse') : t('common.expand')}
+                </button>
+              )}
+            </div>
+          )}
             <div className="bg-black/60 px-3 py-2 w-full mt-3">
               {tokenData && token && userToken && <SocialButtonsToken 
                 tokenData={tokenData} 
