@@ -648,7 +648,15 @@ export const refund = async (
       TOKEN_PROGRAM_ID
     ));
     // Add refund instruction
+    tx.add(
+      ComputeBudgetProgram.setComputeUnitLimit({
+        units: 400_000, // Set compute unit limit
+      })
+    );
     tx.add(instructionRefund);
+    
+    // Add compute budget instructions
+    
     // send transactions
     return await processTransaction(tx, connection, wallet, "Refund successfully", { mint: token.mint });
   } catch (error: any) {
