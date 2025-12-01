@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { InitiazlizedTokenData, TokenMetadataIPFS } from "../../types/types";
 import { DataBlock } from "./TokenInfo";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
@@ -17,6 +17,7 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
   hasStarted,
 }) => {
   const { t } = useTranslation();
+  const [expanded, setExpanded] = useState(false);
   const mintedSupply = useMemo(() => {
     // Including vault amount
     return Number(token.supply) / LAMPORTS_PER_SOL;
@@ -63,6 +64,11 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           tooltip={t('tooltip.mintFee')}
         />
         <DataBlock
+          label={t('tokenInfo.tokenAddress')}
+          value={<AddressDisplay address={token.mint} />}
+          tooltip={t('tooltip.tokenAddress')}
+        />
+        <DataBlock
           label={t('tokenInfo.initialMintSize')}
           value={(Number(token.initialMintSize) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2}) + " " + (metadata?.symbol || "SOL") + "/" + t('common.mint')}
           tooltip={t('tooltip.mintFee')}
@@ -82,6 +88,7 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           value={totalSupplyToTargetEras.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
           tooltip={t('tooltip.targetSupply')}
         />
+        {expanded && (<>
         <DataBlock
           label={t('tokenInfo.targetSpeed')}
           value={formatSeconds(mintSpeed) + "/" + t('common.mint')}
@@ -101,11 +108,6 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           label={t('tokenInfo.developer')}
           value={<AddressDisplay address={token.admin} />}
           tooltip={t('tooltip.deployer')}
-        />
-        <DataBlock
-          label={t('tokenInfo.tokenAddress')}
-          value={<AddressDisplay address={token.mint} />}
-          tooltip={t('tooltip.tokenAddress')}
         />
         <DataBlock
           label={t('tokenInfo.liquidityVault') + ' (SOL)'}
@@ -183,6 +185,18 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           value={parseFloat(token.lastDifficultyCoefficientEpoch).toFixed(4)}
           tooltip={t('tooltip.difficultyOfLastEpoch')}
         />
+        </>)}
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <button
+          type="button"
+          className="btn btn-sm btn-outline"
+          onClick={() => setExpanded((v) => !v)}
+          aria-label={expanded ? t('common.collapse') : t('common.expand')}
+        >
+          {expanded ? t('common.collapse') : t('common.expand')}
+        </button>
       </div>
 
       {hasStarted &&

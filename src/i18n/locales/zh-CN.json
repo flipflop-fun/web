@@ -89,8 +89,8 @@
     "rehearsalAlert": "这是正式主网之前的彩排，参与最低资金和测试退款!",
     "launchPausedAlert": "在彩排版本中，无法创建代币!",
     "avgPrice": "平均价格",
-    "expand": "展开",
-    "collapse": "收起"
+    "expand": "显示更多",
+    "collapse": "显示更少"
   },
   "menu": {
     "discover": "发现",

@@ -89,8 +89,8 @@
     "rehearsalAlert": "Este es el ensayo antes del Mainnet formal, participando en el fondo mínimo y la prueba de reembolso!",
     "launchPausedAlert": "En la versión de Ensayo, no se pueden crear tokens!",
     "avgPrice": "Precio promedio",
-    "expand": "Expandir",
-    "collapse": "Contraer"
+    "expand": "Mostrar más",
+    "collapse": "Mostrar menos"
   },
   "menu": {
     "discover": "Descubrir",
