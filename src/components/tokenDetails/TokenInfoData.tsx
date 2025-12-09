@@ -40,10 +40,10 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
   }, [token.supply]);
 
   useEffect(() => {
-    if (!maxSupply || !mintedSupply) {
+    if (!maxSupply) {
       return;
     }
-    setMintableTokenSupply(Math.round(maxSupply - mintedSupply));
+    setMintableTokenSupply(Math.round(Math.abs(maxSupply - mintedSupply)));
   }, [maxSupply, mintedSupply, setMintableTokenSupply]);
 
   const mintSpeed = useMemo(() => {
