@@ -9,7 +9,7 @@ import {
   TransactionMessage,
   VersionedTransaction,
 } from '@solana/web3.js';
-import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
+import { Program, AnchorProvider, BN, BorshAccountsCoder, Idl } from '@coral-xyz/anchor';
 import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK_CONFIGS, URC_THROTTLE_SEEDS } from '../config/constants';
 import { InitializeTokenConfig, InitiazlizedTokenData, MetadataAccouontData, RemainingAccount, ResponseData, TokenMetadata, TokenMetadataIPFS } from '../types/types';
 import { AnchorWallet } from '@solana/wallet-adapter-react';
@@ -2269,4 +2269,14 @@ export const getWalletAddressFromToken = (token: string): string | null => {
     console.error('Failed to decode JWT:', error);
     return null;
   }
+}
+
+export const getMaxSupplyByConfigAccount = async (configPda: PublicKey, connection: Connection): Promise<BN> => {
+  const info = await connection.getAccountInfo(configPda);
+  if (!info) {
+    throw new Error('Config account not found');
+  }
+  const coder = new BorshAccountsCoder(fairMintTokenIdl as Idl);
+  const decoded = coder.decode('TokenConfigData', info.data) as any
+  return new BN(decoded.max_supply);
 }

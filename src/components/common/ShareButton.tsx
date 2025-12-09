@@ -67,6 +67,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ token, metadata, input
         metadata as TokenMetadataIPFS,
         discount.data as string,
         currentUrl,
+        connection,
       );
       // Download image
       const link = document.createElement('a');

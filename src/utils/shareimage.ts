@@ -3,9 +3,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { APP_NAME } from "../config/constants";
-import { BN_LAMPORTS_PER_SOL, calculateMaxSupply, calculateTotalSupplyToTargetEras, formatLargeNumber, formatSeconds, getMintSpeed } from "./format";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { BN_LAMPORTS_PER_SOL, calculateTotalSupplyToTargetEras, formatLargeNumber, formatSeconds, getMintSpeed } from "./format";
+import { Connection, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { BN } from "@coral-xyz/anchor";
+import { getMaxSupplyByConfigAccount } from "./web3";
 
 const BOX_WIDTH = 6;
 
@@ -187,7 +188,7 @@ const originalCost = (token: InitiazlizedTokenData) => {
   return initialMintSize > 0 ? feeRateInSol / initialMintSize : 0;
 };
 
-export const drawShareImage = async (token: InitiazlizedTokenData, metadata: TokenMetadataIPFS, discount: string, currentUrl: string) => {
+export const drawShareImage = async (token: InitiazlizedTokenData, metadata: TokenMetadataIPFS, discount: string, currentUrl: string, connection: Connection) => {
   // Load pixel fonts
   await loadPixelFonts();
 
@@ -315,7 +316,8 @@ export const drawShareImage = async (token: InitiazlizedTokenData, metadata: Tok
   // Information area
   const infoY = 790;
   // Max supply
-  const maxSupply = calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio);
+  // const maxSupply = calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio);
+  const maxSupply = await getMaxSupplyByConfigAccount(new PublicKey(token.configAccount), connection);
   drawPixelRect(ctx, 40, infoY, 170, 60, '#ffffff');
   ctx.font = '16px RetroPixel';
   ctx.fillText('Max supply', 50, infoY + 20);
@@ -323,7 +325,13 @@ export const drawShareImage = async (token: InitiazlizedTokenData, metadata: Tok
   ctx.fillText(formatLargeNumber(maxSupply), 50, infoY + 45);
 
   // Target milestone supply
-  const targetMilestoneSupply = calculateTotalSupplyToTargetEras(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.targetEras, token.liquidityTokensRatio);
+  const targetMilestoneSupply = calculateTotalSupplyToTargetEras(
+    token.epochesPerEra,
+    token.initialTargetMintSizePerEpoch,
+    token.reduceRatio,
+    token.targetEras,
+    token.liquidityTokensRatio,
+  );
   drawPixelRect(ctx, 215, infoY, 170, 60, '#ffffff');
   ctx.font = '16px RetroPixel';
   ctx.fillText('Target MS supply', 225, infoY + 20);

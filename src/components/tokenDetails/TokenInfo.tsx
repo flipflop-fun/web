@@ -23,6 +23,7 @@ export const TokenInfo: React.FC<TokenInfoProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
+  const [mintableTokenSupply, setMintableTokenSupply] = useState<number | undefined>(undefined);
   const { isMobile } = useDeviceType();
   const { t } = useTranslation();
 
@@ -49,16 +50,17 @@ export const TokenInfo: React.FC<TokenInfoProps> = ({
       {parseInt(token.currentEra) > parseInt(token.targetEras) && <div className="mb-4"><DexLink mint={token.mint} /></div>}
       <div className="pixel-box">
         {isMobile && !isLoading ?
-          <TokenInfoDataMobile token={token} metadata={metadata as TokenMetadataIPFS} hasStarted={hasStarted} />
-          : <TokenInfoData token={token} metadata={metadata as TokenMetadataIPFS} hasStarted={hasStarted} />}
+          <TokenInfoDataMobile token={token} metadata={metadata as TokenMetadataIPFS} hasStarted={hasStarted} setMintableTokenSupply={setMintableTokenSupply} />
+          : <TokenInfoData token={token} metadata={metadata as TokenMetadataIPFS} hasStarted={hasStarted} setMintableTokenSupply={setMintableTokenSupply} />}
 
         {hasStarted ?
           (
             <div>
               <div className="flex justify-between mt-3 md:mt-8">
                 <div className='w-1/2 px-3'>
-                  <button className="btn w-full btn-primary" onClick={() => setIsModalOpen(true)}>
+                  <button className="btn w-full btn-primary" disabled={!mintableTokenSupply} onClick={() => setIsModalOpen(true)}>
                     {t('common.mint')}
+                    {!mintableTokenSupply && ` (${token.tokenSymbol} not available)`}
                   </button>
                 </div>
                 <div className='w-1/2 px-3'>

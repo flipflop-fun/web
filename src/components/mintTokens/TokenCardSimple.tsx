@@ -1,17 +1,16 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { TokenCardWebProps, TokenMetadataIPFS } from '../../types/types';
 import { TokenImage } from './TokenImage';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import { useNavigate } from 'react-router-dom';
-import { fetchMetadata } from '../../utils/web3';
-import {
-  calculateMaxSupply,
-} from '../../utils/format';
+import { fetchMetadata, getMaxSupplyByConfigAccount } from '../../utils/web3';
+import { useConnection } from '@solana/wallet-adapter-react';
 // import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
 
 export const TokenCardSimple: React.FC<TokenCardWebProps> = ({ token, number, type }) => {
   const navigate = useNavigate();
   const [metadata, setMetadata] = useState<TokenMetadataIPFS | null>(null);
+  const { connection } = useConnection();
 
   const handleCardClick = () => {
     navigate(`/token/${token.mint}`);
@@ -27,14 +26,15 @@ export const TokenCardSimple: React.FC<TokenCardWebProps> = ({ token, number, ty
 
   const totalSupplyToTargetEras = useMemo(() => {
     const percentToTargetEras = 1 - Math.pow(Number(token.reduceRatio) / 100, Number(token.targetEras));
-    const maxSupply = calculateMaxSupply(
-      token.epochesPerEra,
-      token.initialTargetMintSizePerEpoch,
-      token.reduceRatio,
-      token.liquidityTokensRatio,
-    );
+    // const maxSupply = calculateMaxSupply(
+    //   token.epochesPerEra,
+    //   token.initialTargetMintSizePerEpoch,
+    //   token.reduceRatio,
+    //   token.liquidityTokensRatio,
+    // );
+    const maxSupply = getMaxSupplyByConfigAccount(new PublicKey(token.configAccount), connection);
     return percentToTargetEras * Number(maxSupply);
-  }, [token.targetEras, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.epochesPerEra]);
+  }, [token.targetEras, token.reduceRatio, token.configAccount, connection]);
 
   const mintedSupply = useMemo(() => {
     // Including vault amount
