@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { TokenCardWebProps, TokenMetadataIPFS } from '../../types/types';
 import { TokenImage } from './TokenImage';
-import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useNavigate } from 'react-router-dom';
-import { fetchMetadata, getMaxSupplyByConfigAccount } from '../../utils/web3';
+import { fetchMetadata } from '../../utils/web3';
 import { useTranslation } from 'react-i18next';
 import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
-import { useConnection } from '@solana/wallet-adapter-react';
+import { calculateMaxSupply } from '../../utils/format';
 
 export const TokenCardWeb: React.FC<TokenCardWebProps> = ({ token }) => {
   const navigate = useNavigate();
-  const { connection } = useConnection();
   const { t } = useTranslation();
   const [metadata, setMetadata] = useState<TokenMetadataIPFS | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,15 +31,16 @@ export const TokenCardWeb: React.FC<TokenCardWebProps> = ({ token }) => {
 
   const totalSupplyToTargetEras = useMemo(() => {
     const percentToTargetEras = 1 - Math.pow(Number(token.reduceRatio) / 100, Number(token.targetEras));
-    // const maxSupply = calculateMaxSupply(
-    //   token.epochesPerEra,
-    //   token.initialTargetMintSizePerEpoch,
-    //   token.reduceRatio,
-    //   token.liquidityTokensRatio,
-    // );
-    const maxSupply = getMaxSupplyByConfigAccount(new PublicKey(token.configAccount), connection);
+    const maxSupply = calculateMaxSupply(
+      token.epochesPerEra,
+      token.initialTargetMintSizePerEpoch,
+      token.reduceRatio,
+      token.liquidityTokensRatio,
+    );
+    // NOTE: To avoding too many query from rpc, use the calculateMaxSupply instead of getMaxSupplyByConfigAccount
+    // const maxSupply = getMaxSupplyByConfigAccount(new PublicKey(token.configAccount), connection);
     return percentToTargetEras * Number(maxSupply);
-  }, [token.targetEras, token.reduceRatio, token.configAccount, connection]);
+  }, [token.reduceRatio, token.targetEras, token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.liquidityTokensRatio]);
 
   const mintedSupply = useMemo(() => {
     // Including vault amount

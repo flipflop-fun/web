@@ -10,7 +10,7 @@ import {
   VersionedTransaction,
 } from '@solana/web3.js';
 import { Program, AnchorProvider, BN, BorshAccountsCoder, Idl } from '@coral-xyz/anchor';
-import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK_CONFIGS, URC_THROTTLE_SEEDS } from '../config/constants';
+import { CONFIG_DATA_SEED, MINT_SEED, SYSTEM_CONFIG_SEEDS, REFERRAL_SEED, REFUND_SEEDS, REFERRAL_CODE_SEED, CODE_ACCOUNT_SEEDS, ARSEEDING_GATEWAY_URL, UPLOAD_API_URL, ARWEAVE_GATEWAY_URL, ARWEAVE_DEFAULT_SYNC_TIME, STORAGE, METADATA_SEED, NETWORK_CONFIGS, URC_THROTTLE_SEEDS, GRADUATION_CONTROL_SEEDS } from '../config/constants';
 import { InitializeTokenConfig, InitiazlizedTokenData, MetadataAccouontData, RemainingAccount, ResponseData, TokenMetadata, TokenMetadataIPFS } from '../types/types';
 import { AnchorWallet } from '@solana/wallet-adapter-react';
 import { FairMintToken } from '../types/fair_mint_token';
@@ -760,8 +760,12 @@ export const mintToken = async (
     [token0Mint, token1Mint] = [token1Mint, token0Mint];
   }
   const [poolAddress] = getPoolAddress(NETWORK_CONFIGS[network].cpSwapConfigAddress, token0Mint, token1Mint, NETWORK_CONFIGS[network].cpSwapProgram);
-  console.log("poolAddress", poolAddress.toBase58());
-  
+  // console.log("poolAddress", poolAddress.toBase58());
+  const [graduationControlAccountPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from(GRADUATION_CONTROL_SEEDS), new PublicKey(token.mint).toBuffer()],
+    program.programId,
+  );
+
   const mintAccounts = {
     mint: new PublicKey(token.mint),
     destination: destinationAta,
@@ -780,6 +784,7 @@ export const mintToken = async (
     protocolFeeAccount: protocolFeeAccount,
     protocolWsolVault: protocolWsolAta,
     poolState: poolAddress,
+    graduationControlAccount: graduationControlAccountPda,
     ammConfig: NETWORK_CONFIGS[network].cpSwapConfigAddress,
     cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     token0Mint: token0Mint,
@@ -2272,11 +2277,17 @@ export const getWalletAddressFromToken = (token: string): string | null => {
 }
 
 export const getMaxSupplyByConfigAccount = async (configPda: PublicKey, connection: Connection): Promise<BN> => {
-  const info = await connection.getAccountInfo(configPda);
-  if (!info) {
-    throw new Error('Config account not found');
+  try {
+    const info = await connection.getAccountInfo(configPda);
+    if (!info) {
+      throw new Error('Config account not found');
+    }
+    const coder = new BorshAccountsCoder(fairMintTokenIdl as Idl);
+    const decoded = coder.decode('TokenConfigData', info.data) as any
+    return new BN(decoded.max_supply);
+  } catch (error) {
+    console.error('Failed to get max supply:', error);
+    // throw error;
+    return new BN(0);
   }
-  const coder = new BorshAccountsCoder(fairMintTokenIdl as Idl);
-  const decoded = coder.decode('TokenConfigData', info.data) as any
-  return new BN(decoded.max_supply);
 }
