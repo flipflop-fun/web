@@ -294,11 +294,6 @@ export const reactiveReferrerCode = async (
     program.programId,
   );
 
-  const [referrerThrottle] = PublicKey.findProgramAddressSync(
-    [Buffer.from(URC_THROTTLE_SEEDS), mint.toBuffer()],
-    program.programId
-  );
-
   const setReferrerCodeAccounts = {
     mint,
     referralAccount: referralAccountPda,
