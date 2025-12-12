@@ -1,10 +1,12 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { InitiazlizedTokenData, TokenMetadataIPFS } from "../../types/types";
 import { DataBlock } from "./TokenInfo";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { calculateMaxSupply, calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintSpeed, safeLamportBNToUiNumber } from "../../utils/format";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintSpeed, safeLamportBNToUiNumber } from "../../utils/format";
 import { AddressDisplay } from "../common/AddressDisplay";
 import { useTranslation } from "react-i18next";
+import { getMaxSupplyByConfigAccount } from "../../utils/web3";
+import { useConnection } from "@solana/wallet-adapter-react";
 
 export type TokenInfoDataMobileProps = {
   token: InitiazlizedTokenData,
@@ -12,18 +14,28 @@ export type TokenInfoDataMobileProps = {
   hasStarted: boolean
 }
 
-export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
+export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps & { setMintableTokenSupply: (value: number | undefined) => void }> = ({
   token,
   metadata,
-  hasStarted
+  hasStarted,
+  setMintableTokenSupply,
 }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [maxSupply, setMaxSupply] = useState<number | undefined>(undefined);
+  const { connection } = useConnection();
   const { t } = useTranslation();
 
   const mintedSupply = useMemo(() => {
     // Including vault amount
     return Number(token.supply) / LAMPORTS_PER_SOL;
   }, [token.supply]);
+
+  useEffect(() => {
+    if (!maxSupply) {
+      return;
+    }
+    setMintableTokenSupply(Math.round(Math.abs(maxSupply - mintedSupply)));
+  }, [maxSupply, mintedSupply, setMintableTokenSupply]);
 
   const mintSpeed = useMemo(() => {
     return getMintSpeed(token.targetSecondsPerEpoch, token.initialTargetMintSizePerEpoch, token.initialMintSize);
@@ -37,7 +49,7 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
       token.targetEras,
       token.liquidityTokensRatio,
     );
-  }, [token.targetEras, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.epochesPerEra]);
+  }, [token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.targetEras, token.liquidityTokensRatio]);
 
   const progressPercentage = useMemo(() => {
     return (mintedSupply * 100) / totalSupplyToTargetEras;
@@ -46,6 +58,12 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
   const progressPercentageOfEpoch = useMemo(() => {
     return (Number(token.quantityMintedEpoch) * 100) / Number(token.targetMintSizeEpoch);
   }, [token.quantityMintedEpoch, token.targetMintSizeEpoch]);
+
+  useEffect(() => {
+    getMaxSupplyByConfigAccount(new PublicKey(token.configAccount), connection).then((maxSupply) => {
+      setMaxSupply(safeLamportBNToUiNumber(maxSupply));
+    });
+  }, [token.configAccount, connection]);
 
   return (
     <div className="space-y-3">
@@ -148,7 +166,8 @@ export const TokenInfoDataMobile: FC<TokenInfoDataMobileProps> = ({
           />
           <DataBlock
             label={t('tokenInfo.maxSupply')}
-            value={calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
+            // value={calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
+          value={maxSupply !== undefined && maxSupply > 0 && maxSupply.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
             tooltip={t('tooltip.maxSupply')}
           />
           <DataBlock

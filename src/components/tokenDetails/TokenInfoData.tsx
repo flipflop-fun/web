@@ -1,26 +1,50 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { InitiazlizedTokenData, TokenMetadataIPFS } from "../../types/types";
 import { DataBlock } from "./TokenInfo";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { calculateMaxSupply, calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintSpeed, safeLamportBNToUiNumber } from "../../utils/format";
+import { PublicKey } from "@solana/web3.js";
+import { calculateMinTotalFee, calculateTotalSupplyToTargetEras, formatSeconds, getMintSpeed, safeLamportBNToUiNumber } from "../../utils/format";
 import { AddressDisplay } from "../common/AddressDisplay";
 import { useTranslation } from "react-i18next";
+import { getMaxSupplyByConfigAccount } from "../../utils/web3";
+import { useConnection } from "@solana/wallet-adapter-react";
+import { BN } from "@coral-xyz/anchor";
 
 export type TokenInfoDataProps = {
   token: InitiazlizedTokenData,
   metadata: TokenMetadataIPFS,
   hasStarted: boolean,
+  setMintableTokenSupply: (value: number | undefined) => void,
 }
 export const TokenInfoData: FC<TokenInfoDataProps> = ({
   token,
   metadata,
   hasStarted,
+  setMintableTokenSupply,
 }) => {
   const { t } = useTranslation();
+  const [expanded, setExpanded] = useState(false);
+  const [maxSupply, setMaxSupply] = useState<number | undefined>(undefined);
+  const { connection } = useConnection();
+  
+  useEffect(() => {
+    if (!token.configAccount) {
+      return;
+    }
+    getMaxSupplyByConfigAccount(new PublicKey(token.configAccount), connection)
+      .then((maxSupply) => setMaxSupply(safeLamportBNToUiNumber(maxSupply)));
+  }, [token.configAccount, connection]);
+
   const mintedSupply = useMemo(() => {
     // Including vault amount
-    return Number(token.supply) / LAMPORTS_PER_SOL;
+    return safeLamportBNToUiNumber(new BN(token.supply));
   }, [token.supply]);
+
+  useEffect(() => {
+    if (!maxSupply) {
+      return;
+    }
+    setMintableTokenSupply(Math.round(Math.abs(maxSupply - mintedSupply)));
+  }, [maxSupply, mintedSupply, setMintableTokenSupply]);
 
   const mintSpeed = useMemo(() => {
     return getMintSpeed(token.targetSecondsPerEpoch, token.initialTargetMintSizePerEpoch, token.initialMintSize);
@@ -32,9 +56,9 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
       token.initialTargetMintSizePerEpoch,
       token.reduceRatio,
       token.targetEras,
-      token.liquidityTokensRatio
+      token.liquidityTokensRatio,
     );
-  }, [token.targetEras, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.epochesPerEra]);
+  }, [token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.targetEras, token.liquidityTokensRatio]);
 
   const progressPercentage = useMemo(() => {
     return (mintedSupply * 100) / totalSupplyToTargetEras;
@@ -59,13 +83,13 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
         />
         <DataBlock
           label={t('tokenInfo.mintFee')}
-          value={(Number(token.feeRate) / LAMPORTS_PER_SOL) + " SOL/" + t('common.mint')}
+          value={(safeLamportBNToUiNumber(token.feeRate, 2)) + " SOL/" + t('common.mint')}
           tooltip={t('tooltip.mintFee')}
         />
         <DataBlock
-          label={t('tokenInfo.initialMintSize')}
-          value={(Number(token.initialMintSize) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2}) + " " + (metadata?.symbol || "SOL") + "/" + t('common.mint')}
-          tooltip={t('tooltip.mintFee')}
+          label={t('tokenInfo.tokenAddress')}
+          value={<AddressDisplay address={token.mint} />}
+          tooltip={t('tooltip.tokenAddress')}
         />
         <DataBlock
           label={t('tokenInfo.currentMintSize')}
@@ -73,14 +97,26 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           tooltip={t('tooltip.currentMintSize')}
         />
         <DataBlock
+          label={`${t('tokenInfo.targetSupply')} (${t('tokenInfo.targetMilestone')}:${token.targetEras})`}
+          value={totalSupplyToTargetEras.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
+          tooltip={t('tooltip.targetSupply')}
+        />
+        <DataBlock
           label={t('tokenInfo.currentMinted')}
           value={(mintedSupply).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
           tooltip={t('tooltip.currentMinted')}
         />
         <DataBlock
-          label={`${t('tokenInfo.targetSupply')} (${t('tokenInfo.targetMilestone')}:${token.targetEras})`}
-          value={totalSupplyToTargetEras.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
-          tooltip={t('tooltip.targetSupply')}
+          label={t('tokenInfo.maxSupply')}
+          // value={calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
+          value={maxSupply !== undefined && maxSupply > 0 && maxSupply.toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
+          tooltip={t('tooltip.maxSupply')}
+        />
+        {expanded && (<>
+        <DataBlock
+          label={t('tokenInfo.initialMintSize')}
+          value={(safeLamportBNToUiNumber(token.initialMintSize, 2)).toLocaleString(undefined, { maximumFractionDigits: 2}) + " " + (metadata?.symbol || "SOL") + "/" + t('common.mint')}
+          tooltip={t('tooltip.mintFee')}
         />
         <DataBlock
           label={t('tokenInfo.targetSpeed')}
@@ -101,11 +137,6 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           label={t('tokenInfo.developer')}
           value={<AddressDisplay address={token.admin} />}
           tooltip={t('tooltip.deployer')}
-        />
-        <DataBlock
-          label={t('tokenInfo.tokenAddress')}
-          value={<AddressDisplay address={token.mint} />}
-          tooltip={t('tooltip.tokenAddress')}
         />
         <DataBlock
           label={t('tokenInfo.liquidityVault') + ' (SOL)'}
@@ -131,11 +162,6 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           label={t('tokenInfo.LiquidityTokensRatio')}
           value={token.liquidityTokensRatio + "%"}
           tooltip={t('tooltip.liquidityTokensRatio')}
-        />
-        <DataBlock
-          label={t('tokenInfo.maxSupply')}
-          value={calculateMaxSupply(token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.liquidityTokensRatio).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " " + metadata?.symbol}
-          tooltip={t('tooltip.maxSupply')}
         />
         <DataBlock
           label={t('tokenInfo.targetMintTime')}
@@ -165,12 +191,12 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
         />
         <DataBlock
           label={t('tokenInfo.totalMintFee')}
-          value={(Number(token.totalMintFee) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " SOL"}
+          value={(safeLamportBNToUiNumber(token.totalMintFee, 2)).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " SOL"}
           tooltip={t('tooltip.currentMintFee')}
         />
         <DataBlock
           label={t('tokenInfo.totalReferralFee')}
-          value={(Number(token.totalReferrerFee) / LAMPORTS_PER_SOL).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " SOL"}
+          value={(safeLamportBNToUiNumber(token.totalReferrerFee, 2)).toLocaleString(undefined, { maximumFractionDigits: 2 }) + " SOL"}
           tooltip={t('tooltip.currentReferralFee')}
         />
         <DataBlock
@@ -183,6 +209,18 @@ export const TokenInfoData: FC<TokenInfoDataProps> = ({
           value={parseFloat(token.lastDifficultyCoefficientEpoch).toFixed(4)}
           tooltip={t('tooltip.difficultyOfLastEpoch')}
         />
+        </>)}
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <button
+          type="button"
+          className="btn btn-sm btn-outline"
+          onClick={() => setExpanded((v) => !v)}
+          aria-label={expanded ? t('common.collapse') : t('common.expand')}
+        >
+          {expanded ? t('common.collapse') : t('common.expand')}
+        </button>
       </div>
 
       {hasStarted &&

@@ -205,7 +205,7 @@ function App() {
         onWalletNotFound: createDefaultWalletNotFoundHandler(),
       }),
     ],
-    [],
+    [network],
   );
 
   // if (NETWORK_CONFIGS[network].isPaused) {

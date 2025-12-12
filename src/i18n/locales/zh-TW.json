@@ -89,8 +89,8 @@
     "rehearsalAlert": "這是正式主網之前的彩排，參與最低資金和測試退款！",
     "launchPausedAlert": "在彩排版本中，無法創建代幣!",
     "avgPrice": "平均價格",
-    "expand": "展開",
-    "collapse": "收起"
+    "expand": "顯示更多",
+    "collapse": "顯示更少"
   },
   "menu": {
     "discover": "發現",

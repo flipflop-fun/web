@@ -91,7 +91,7 @@ export const calculateTotalSupplyToTargetEras = (
   initialTargetMintSizePerEpoch: string,
   reduceRatio: string,
   targetEras: string,
-  liquidityTokensRatio: string
+  liquidityTokensRatio: string,
 ): number => {
   const reduceRatioNum = parseFloat(reduceRatio) / 100 || 0;
   const targetErasNum = parseFloat(targetEras) || 0;
@@ -99,6 +99,7 @@ export const calculateTotalSupplyToTargetEras = (
   if (reduceRatioNum <= 0 || targetErasNum <= 0) {
     return 0;
   }
+  // for the current version, the total supply to the target ear is fixed by ORIGINAL max_supply * liquidity token ratio
   const maxSupply = calculateMaxSupply(epochesPerEra, initialTargetMintSizePerEpoch, reduceRatio, liquidityTokensRatio);
   const percentToTargetEras = 1 - Math.pow(reduceRatioNum, targetErasNum);
   const totalsupplyToTargetEras = percentToTargetEras * maxSupply;

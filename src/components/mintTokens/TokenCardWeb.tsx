@@ -4,11 +4,9 @@ import { TokenImage } from './TokenImage';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useNavigate } from 'react-router-dom';
 import { fetchMetadata } from '../../utils/web3';
-import {
-  calculateMaxSupply,
-} from '../../utils/format';
 import { useTranslation } from 'react-i18next';
 import { TokenBackgroundImage } from '../common/TokenBackgroundImage';
+import { calculateMaxSupply } from '../../utils/format';
 
 export const TokenCardWeb: React.FC<TokenCardWebProps> = ({ token }) => {
   const navigate = useNavigate();
@@ -39,8 +37,10 @@ export const TokenCardWeb: React.FC<TokenCardWebProps> = ({ token }) => {
       token.reduceRatio,
       token.liquidityTokensRatio,
     );
+    // NOTE: To avoding too many query from rpc, use the calculateMaxSupply instead of getMaxSupplyByConfigAccount
+    // const maxSupply = getMaxSupplyByConfigAccount(new PublicKey(token.configAccount), connection);
     return percentToTargetEras * Number(maxSupply);
-  }, [token.targetEras, token.initialTargetMintSizePerEpoch, token.reduceRatio, token.epochesPerEra]);
+  }, [token.reduceRatio, token.targetEras, token.epochesPerEra, token.initialTargetMintSizePerEpoch, token.liquidityTokensRatio]);
 
   const mintedSupply = useMemo(() => {
     // Including vault amount

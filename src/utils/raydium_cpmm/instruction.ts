@@ -23,7 +23,7 @@ import {
 import { ASSOCIATED_PROGRAM_ID } from "@coral-xyz/anchor/dist/cjs/utils/token";
 import { CpmmPoolInfoLayout } from "@raydium-io/raydium-sdk-v2";
 import { getTokenBalance } from "../web3";
-import { CONFIG_DATA_SEED, MINT_SEED, NETWORK_CONFIGS } from "../../config/constants";
+import { CONFIG_DATA_SEED, GRADUATION_CONTROL_SEEDS, MINT_SEED, NETWORK_CONFIGS } from "../../config/constants";
 import { CpSwapPoolStateData } from "../../types/types";
 import { safeLamportBNToUiNumber } from "../format";
 const network = (process.env.REACT_APP_NETWORK as keyof typeof NETWORK_CONFIGS) || "devnet";
@@ -403,6 +403,10 @@ export async function poolDepositInstructions(
 
   // console.log("token0 account", onwerToken0.toBase58());
   // console.log("token1 account", onwerToken1.toBase58());
+  const [graduationControlAccountPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from(GRADUATION_CONTROL_SEEDS), mintAccount.toBuffer()],
+    program.programId,
+  );
 
   const contextProxyDeposit = {
     cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
@@ -421,6 +425,7 @@ export async function poolDepositInstructions(
     vault0Mint: token0,
     vault1Mint: token1,
     lpMint: lpMintAddress,
+    graduationControlAccount: graduationControlAccountPda,
   };
 
   try {
@@ -512,6 +517,10 @@ export async function poolWithdrawInstructions(
     true,
     token1Program
   );
+  const [graduationControlAccountPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from(GRADUATION_CONTROL_SEEDS), mintAccount.toBuffer()],
+    program.programId,
+  );
 
   const contextProxyWithdraw = {
     cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
@@ -530,6 +539,7 @@ export async function poolWithdrawInstructions(
     vault0Mint: token0,
     vault1Mint: token1,
     lpMint: lpMintAddress,
+    graduationControlAccount: graduationControlAccountPda,
     memoProgram: NETWORK_CONFIGS[network].memoProgram,
   };
 
@@ -612,6 +622,11 @@ export async function poolSwapBaseInInstructions(
     NETWORK_CONFIGS[network].cpSwapProgram
   );
 
+  const [graduationControlAccountPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from(GRADUATION_CONTROL_SEEDS), mintAccount.toBuffer()],
+    program.programId,
+  );
+  
   const contextProxySwapBaseInput = {
     cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
     payer: owner,
@@ -629,6 +644,7 @@ export async function poolSwapBaseInInstructions(
     inputTokenMint: inputToken,
     outputTokenMint: outputToken,
     observationState: observationAddress,
+    graduationControlAccount: graduationControlAccountPda,
   };
 
   console.log("Context", Object.fromEntries(
@@ -710,6 +726,10 @@ export async function poolSwapBaseOutInstructions(
     poolAddress,
     NETWORK_CONFIGS[network].cpSwapProgram
   );
+  const [graduationControlAccountPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from(GRADUATION_CONTROL_SEEDS), mintAccount.toBuffer()],
+    program.programId,
+  );
 
   const contextProxySwapBaseOutput = {
     cpSwapProgram: NETWORK_CONFIGS[network].cpSwapProgram,
@@ -728,6 +748,7 @@ export async function poolSwapBaseOutInstructions(
     inputTokenMint: inputToken,
     outputTokenMint: outputToken,
     observationState: observationAddress,
+    graduationControlAccount: graduationControlAccountPda,
   };
 
   // console.log("contextProxySwapBaseOutput", Object.fromEntries(

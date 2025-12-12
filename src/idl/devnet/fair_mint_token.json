@@ -2,7 +2,7 @@
   "address": "FLipzZfErPUtDQPj9YrC6wp4nRRiVxRkFm3jdFmiPHJV",
   "metadata": {
     "name": "fair_mint_token",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
   },
@@ -647,6 +647,35 @@
           }
         },
         {
+          "name": "referrer_throttle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  114,
+                  99,
+                  95,
+                  116,
+                  104,
+                  114,
+                  111,
+                  116,
+                  116,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
           "name": "launch_rule_account"
         },
         {
@@ -1021,6 +1050,41 @@
           "writable": true
         },
         {
+          "name": "graduation_control_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  100,
+                  117,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
           "name": "pool_state",
           "writable": true,
           "pda": {
@@ -1216,7 +1280,7 @@
         {
           "name": "owner_lp_token",
           "docs": [
-            "Owner lp tokan account - config account"
+            "Owner lp token account - config account"
           ],
           "writable": true
         },
@@ -1425,7 +1489,7 @@
         {
           "name": "owner_lp_token",
           "docs": [
-            "Owner lp tokan account"
+            "Owner lp token account"
           ],
           "writable": true
         },
@@ -1486,6 +1550,41 @@
         {
           "name": "lp_mint",
           "writable": true
+        },
+        {
+          "name": "graduation_control_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  100,
+                  117,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
         }
       ],
       "args": [
@@ -1749,6 +1848,41 @@
             "The program account for the most recent oracle observation"
           ],
           "writable": true
+        },
+        {
+          "name": "graduation_control_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  100,
+                  117,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
         }
       ],
       "args": [
@@ -2008,6 +2142,41 @@
             "The program account for the most recent oracle observation"
           ],
           "writable": true
+        },
+        {
+          "name": "graduation_control_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  100,
+                  117,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
         }
       ],
       "args": [
@@ -2267,6 +2436,41 @@
         {
           "name": "lp_mint",
           "writable": true
+        },
+        {
+          "name": "graduation_control_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  114,
+                  97,
+                  100,
+                  117,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
         },
         {
           "name": "memo_program",
@@ -2857,6 +3061,35 @@
           }
         },
         {
+          "name": "referrer_throttle",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  114,
+                  99,
+                  95,
+                  116,
+                  104,
+                  114,
+                  111,
+                  116,
+                  116,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         },
@@ -3272,6 +3505,19 @@
         133,
         135,
         33
+      ]
+    },
+    {
+      "name": "GraduationControlData",
+      "discriminator": [
+        171,
+        21,
+        240,
+        108,
+        120,
+        137,
+        159,
+        145
       ]
     },
     {
@@ -3694,58 +3940,58 @@
     },
     {
       "code": 6049,
-      "name": "PayerMustSign",
-      "msg": "Payer must sign"
-    },
-    {
-      "code": 6050,
       "name": "InvalidPayerAccount",
       "msg": "Invalid payer account"
     },
     {
-      "code": 6051,
+      "code": 6050,
       "name": "InvalidCodeHash",
       "msg": "Invalid code hash"
     },
     {
-      "code": 6052,
+      "code": 6051,
       "name": "InvalidResetInterval",
       "msg": "Invalid reset interval"
     },
     {
-      "code": 6053,
+      "code": 6052,
       "name": "TokenAlreadyInitialized",
       "msg": "Token already initialized"
     },
     {
-      "code": 6054,
+      "code": 6053,
       "name": "InvalidTokenName",
       "msg": "Invalid token name"
     },
     {
-      "code": 6055,
+      "code": 6054,
       "name": "InvalidTokenSymbol",
       "msg": "Invalid token symbol"
     },
     {
-      "code": 6056,
+      "code": 6055,
       "name": "InvalidTokenUri",
       "msg": "Invalid token uri"
     },
     {
-      "code": 6057,
+      "code": 6056,
       "name": "MetadataAlreadyInitialized",
       "msg": "Metadata already initialized"
     },
     {
-      "code": 6058,
+      "code": 6057,
       "name": "InvalidProtocolFeeRate",
       "msg": "Invalid protocol fee rate, max 50000 which is 50%"
     },
     {
-      "code": 6059,
+      "code": 6058,
       "name": "InvalidRefundFeeRate",
       "msg": "Invalid refund fee rate, max 50000 which is 50%"
+    },
+    {
+      "code": 6059,
+      "name": "InvalidGraduateFeeRate",
+      "msg": "Invalid graduate fee rate, max 50 which is 50%"
     },
     {
       "code": 6060,
@@ -3864,13 +4110,13 @@
     },
     {
       "code": 6083,
-      "name": "UserBalanceNotEqualToRefund",
-      "msg": "User balance not equal to refund"
+      "name": "UserBalanceNotEnoughToRefund",
+      "msg": "User balance not enough to refund"
     },
     {
       "code": 6084,
-      "name": "VaultBalanceNotEqualToRefund",
-      "msg": "Vault balance not equal to refund"
+      "name": "VaultBalanceNotEnoughToRefund",
+      "msg": "Vault balance not enough to refund"
     },
     {
       "code": 6085,
@@ -4076,6 +4322,31 @@
       "code": 6125,
       "name": "InvalidRemainingToken1ProgramId",
       "msg": "Invalid remaining token 1 program id"
+    },
+    {
+      "code": 6126,
+      "name": "URCActivationLimitExceeded",
+      "msg": "URC activation exceeds limit in current window"
+    },
+    {
+      "code": 6127,
+      "name": "InvalidAdminAccount",
+      "msg": "Invalid admin account"
+    },
+    {
+      "code": 6128,
+      "name": "GraduationControlNotInitialized",
+      "msg": "Graduation control account not initialized"
+    },
+    {
+      "code": 6129,
+      "name": "WsolBudgetExceeded",
+      "msg": "WSOL market management budget exceeded in current window"
+    },
+    {
+      "code": 6130,
+      "name": "WsolBudgetInvariantFailed",
+      "msg": "WSOL budget invariant failed"
     }
   ],
   "types": [
@@ -4193,6 +4464,30 @@
           {
             "name": "referral_account",
             "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GraduationControlData",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "graduate_timestamp",
+            "type": "u64"
+          },
+          {
+            "name": "graduate_wsol_base",
+            "type": "u64"
+          },
+          {
+            "name": "used_wsol_budget",
+            "type": "u64"
+          },
+          {
+            "name": "post_graduation_wsol_accumulated",
+            "type": "u64"
           }
         ]
       }
