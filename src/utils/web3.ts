@@ -294,6 +294,11 @@ export const reactiveReferrerCode = async (
     program.programId,
   );
 
+  const [referrerThrottle] = PublicKey.findProgramAddressSync(
+    [Buffer.from(URC_THROTTLE_SEEDS), mint.toBuffer()],
+    program.programId
+  );
+
   const setReferrerCodeAccounts = {
     mint,
     referralAccount: referralAccountPda,
@@ -301,6 +306,7 @@ export const reactiveReferrerCode = async (
     codeAccount: codeAccountPda,
     configAccount: configAccountPda,
     systemConfigAccount: systemConfigAccountPda,
+    referrerThrottle,
     payer: wallet.publicKey,
     systemProgram: SystemProgram.programId,
     tokenProgram: TOKEN_PROGRAM_ID,
@@ -659,15 +665,7 @@ export const refund = async (
       TOKEN_PROGRAM_ID
     ));
     // Add refund instruction
-    tx.add(
-      ComputeBudgetProgram.setComputeUnitLimit({
-        units: 400_000, // Set compute unit limit
-      })
-    );
     tx.add(instructionRefund);
-    
-    // Add compute budget instructions
-    
     // send transactions
     return await processTransaction(tx, connection, wallet, "Refund successfully", { mint: token.mint });
   } catch (error: any) {
