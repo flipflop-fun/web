@@ -1,10 +1,6 @@
 {
   "name": "flipflop-client",
-<<<<<<< HEAD
-  "version": "0.8.6",
-=======
   "version": "0.9.2",
->>>>>>> devnet
   "private": true,
   "dependencies": {
     "@copilotkit/react-core": "^1.5.20",
