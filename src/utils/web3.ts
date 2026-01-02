@@ -18,7 +18,7 @@ import axios from 'axios';
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, NATIVE_MINT, TOKEN_PROGRAM_ID, createAssociatedTokenAccountInstruction, getAssociatedTokenAddressSync } from '@solana/spl-token';
 import { fetchMetadataFromUrlOrCache } from './db';
 import { BN_LAMPORTS_PER_SOL, getFeeValue, numberStringToBN } from './format';
-import { calculateDepositAmounts, calculateWithdrawAmountsByLpBalance, getPoolData, poolBurnLpTokensInstructions, poolDepositInstructions, poolSwapBaseInInstructions, poolSwapBaseOutInstructions, poolWithdrawInstructions, } from './raydium_cpmm/instruction';
+import { calculateDepositAmounts, calculateWithdrawAmounts, getPoolData, poolBurnLpTokensInstructions, poolDepositInstructions, poolSwapBaseInInstructions, poolSwapBaseOutInstructions, poolWithdrawInstructions, } from './raydium_cpmm/instruction';
 import { getAuthAddress, getOrcleAccountAddress, getPoolAddress, getPoolLpMintAddress, getPoolVaultAddress } from './raydium_cpmm/pda';
 import { RENT_PROGRAM_ID, SYSTEM_PROGRAM_ID } from '@raydium-io/raydium-sdk-v2';
 import { ASSOCIATED_PROGRAM_ID } from '@coral-xyz/anchor/dist/cjs/utils/token';
@@ -2019,12 +2019,12 @@ export async function proxyRemoveLiquidity(
     }
   }
 
-  const withdrawAmount = await calculateWithdrawAmountsByLpBalance(
+  const withdrawAmount = await calculateWithdrawAmounts(
     program,
     token0,
     token1,
-    tokenData.tokenName,
-    tokenData.tokenSymbol,
+    desiredToken0Amount,
+    desiredToken1Amount,
   );
 
   // Add liquidity
