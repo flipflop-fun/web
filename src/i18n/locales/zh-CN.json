@@ -572,5 +572,19 @@
   },
   "theme": {
     "themeProviderError": "useTheme必须在ThemeProvider内使用"
+  },
+  "aiChat": {
+    "title": "FlipFlop AI 客服助手",
+    "placeholder": "请输入关于 FlipFlop 的问题...",
+    "quickGuide": "操作指南",
+    "fromFAQ": "来自常见问题",
+    "error": "抱歉，遇到了错误。请重试。",
+    "close": "关闭",
+    "open": "打开 AI 客服",
+    "openFAQ": "打开常见问题",
+    "closeFAQ": "关闭常见问题",
+    "sendToChat": "发送到聊天",
+    "clickToViewAnswer": "点击问题查看答案",
+    "back": "返回"
   }
 }

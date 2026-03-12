@@ -572,5 +572,19 @@
   },
   "theme": {
     "themeProviderError": "useTheme phải được sử dụng trong ThemeProvider"
+  },
+  "aiChat": {
+    "title": "Trợ lý AI FlipFlop",
+    "placeholder": "Đặt câu hỏi về FlipFlop...",
+    "quickGuide": "Hướng Dẫn Nhanh",
+    "fromFAQ": "Từ FAQ",
+    "error": "Xin lỗi, tôi đã gặp lỗi. Vui lòng thử lại.",
+    "close": "Đóng",
+    "open": "Mở Chat AI",
+    "openFAQ": "Mở FAQ",
+    "closeFAQ": "Đóng FAQ",
+    "sendToChat": "Gửi đến Chat",
+    "clickToViewAnswer": "Nhấp vào câu hỏi để xem câu trả lời",
+    "back": "Quay lại"
   }
 }

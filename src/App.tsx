@@ -25,7 +25,7 @@ import { Toaster } from 'react-hot-toast';
 import { Sidebar } from './components/common/Sidebar';
 import { menuItems } from './config/menu';
 import { TokenDetail } from './pages/TokenDetail';
-import { APP_NAME, COPILOTKIT_RUNTIME_URL, NETWORK_CONFIGS } from './config/constants';
+import { APP_NAME, NETWORK_CONFIGS } from './config/constants';
 import { Discover } from './pages/Discover';
 import { MyMintedTokens } from './pages/MyMintedTokens';
 import { MyDeployments } from './pages/MyDeployments';
@@ -38,9 +38,7 @@ import { ManageLiquidity } from './pages/ManageLiquidity';
 import { DelegatedTokens } from './pages/DelegatedTokens';
 import { TradingBot } from './pages/TradingBot';
 import { queryMyDelegatedTokens } from './utils/graphql2';
-import { CopilotKit } from "@copilotkit/react-core";
-import "@copilotkit/react-ui/styles.css";
-import { MyCopilotKit } from './components/agent/MyCopilotKit';
+import { FlipFlopAIChat } from './components/agent/FlipFlopAIChat';
 import { SocialFeed } from './pages/SocialFeed';
 import { SocialProfile } from './pages/SocialProfile';
 import { SocialExplore } from './pages/SocialExplore';
@@ -179,7 +177,7 @@ const AppContent = () => {
         }}
       />
       {/* <Footer /> */}
-      <MyCopilotKit />
+      <FlipFlopAIChat />
     </div>
   );
 };
@@ -218,23 +216,21 @@ function App() {
   // } else {
     return (
       <Router>
-        <CopilotKit runtimeUrl={COPILOTKIT_RUNTIME_URL}>
-          <ConnectionProvider endpoint={endpoint || "https://api.devnet.solana.com"}>
-            <WalletProvider
-              wallets={wallets}
-              autoConnect
-              onError={(error: Error) => {
-                console.error('Wallet error:', error);
-              }}
-            >
-              <WalletModalProvider>
-                <AuthProvider>
-                  <AppContent />
-                </AuthProvider>
-              </WalletModalProvider>
-            </WalletProvider>
-          </ConnectionProvider>
-        </CopilotKit>
+        <ConnectionProvider endpoint={endpoint || "https://api.devnet.solana.com"}>
+          <WalletProvider
+            wallets={wallets}
+            autoConnect
+            onError={(error: Error) => {
+              console.error('Wallet error:', error);
+            }}
+          >
+            <WalletModalProvider>
+              <AuthProvider>
+                <AppContent />
+              </AuthProvider>
+            </WalletModalProvider>
+          </WalletProvider>
+        </ConnectionProvider>
       </Router>
     )
   // }

@@ -572,5 +572,19 @@
   },
   "theme": {
     "themeProviderError": "useTheme must be used within a ThemeProvider"
+  },
+  "aiChat": {
+    "title": "FlipFlop AI Assistant",
+    "placeholder": "Ask a question about FlipFlop...",
+    "quickGuide": "Quick Guide",
+    "fromFAQ": "From FAQ",
+    "error": "Sorry, I encountered an error. Please try again.",
+    "close": "Close",
+    "open": "Open AI Chat",
+    "openFAQ": "Open FAQ",
+    "closeFAQ": "Close FAQ",
+    "sendToChat": "Send to Chat",
+    "clickToViewAnswer": "Click a question to view answer",
+    "back": "Back"
   }
 }

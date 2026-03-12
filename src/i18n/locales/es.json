@@ -572,5 +572,19 @@
   },
   "theme": {
     "themeProviderError": "useTheme debe usarse dentro de un ThemeProvider"
+  },
+  "aiChat": {
+    "title": "Asistente IA de FlipFlop",
+    "placeholder": "Haz una pregunta sobre FlipFlop...",
+    "quickGuide": "Guía Rápida",
+    "fromFAQ": "De FAQ",
+    "error": "Lo siento, encontré un error. Por favor, inténtalo de nuevo.",
+    "close": "Cerrar",
+    "open": "Abrir Chat IA",
+    "openFAQ": "Abrir FAQ",
+    "closeFAQ": "Cerrar FAQ",
+    "sendToChat": "Enviar al Chat",
+    "clickToViewAnswer": "Haz clic en una pregunta para ver la respuesta",
+    "back": "Volver"
   }
 }

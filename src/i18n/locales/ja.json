@@ -572,5 +572,19 @@
   },
   "theme": {
     "themeProviderError": "useThemeはThemeProvider内で使用する必要があります"
+  },
+  "aiChat": {
+    "title": "FlipFlop AI アシスタント",
+    "placeholder": "FlipFlopについて質問してください...",
+    "quickGuide": "クイックガイド",
+    "fromFAQ": "FAQから",
+    "error": "申し訳ありません。エラーが発生しました。もう一度お試しください。",
+    "close": "閉じる",
+    "open": "AIチャットを開く",
+    "openFAQ": "FAQを開く",
+    "closeFAQ": "FAQを閉じる",
+    "sendToChat": "チャットに送信",
+    "clickToViewAnswer": "質問をクリックして回答を表示",
+    "back": "戻る"
   }
 }
