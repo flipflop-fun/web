@@ -84,7 +84,7 @@ export const MyCopilotKit = () => {
   const CustomUserMessage = (props: UserMessageProps) => {
     return (
       <div className="flex items-center gap-2 justify-end mb-4">
-        <div className="bg-green-500 text-white py-2 px-4 rounded-xl break-words flex-shrink-0 max-w-[80%]">{props.message}</div>
+        <div className="bg-green-500 text-white py-2 px-4 rounded-xl break-words flex-shrink-0 max-w-[80%]">{typeof props.message === 'string' ? props.message : props.message?.content || ''}</div>
       </div>
     );
   };
@@ -98,7 +98,7 @@ export const MyCopilotKit = () => {
         <div className="flex items-start">
           {/* <div className="mr-2">{!subComponent && avatar}</div> */}
           <div className="bg-gray-100 px-4 rounded-xl py-2 text-sm md:text-md">
-            {message && <MarkdownWithMath content={message || ""} />}
+            {message && <MarkdownWithMath content={(typeof message === 'string' ? message : message?.content) || ""} />}
             {isLoading && icons.spinnerIcon}
           </div>
         </div>
