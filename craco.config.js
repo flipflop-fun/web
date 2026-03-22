@@ -14,6 +14,7 @@ module.exports = {
                 zlib: require.resolve('browserify-zlib'),
                 buffer: require.resolve('buffer'),
                 process: require.resolve('process/browser.js'),
+                vm: require.resolve('vm-browserify'),
             };
 
             webpackConfig.devtool = false;
