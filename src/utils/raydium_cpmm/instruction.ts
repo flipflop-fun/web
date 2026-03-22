@@ -5,6 +5,7 @@ import {
   SystemProgram,
   ComputeBudgetProgram,
   TransactionInstruction,
+  Connection,
 } from "@solana/web3.js";
 import {
   TOKEN_PROGRAM_ID,
@@ -811,7 +812,7 @@ export async function poolBurnLpTokensInstructions(
     TOKEN_PROGRAM_ID
   );
 
-  const lpTokenBalance = await getTokenBalance(ownerLpToken, program.provider.connection) as number;
+  const lpTokenBalance = await getTokenBalance(ownerLpToken, program.provider.connection as unknown as Connection) as number;
   if (safeLamportBNToUiNumber(lpAmount) > lpTokenBalance) {
     throw new Error(`Insufficient LP token balance. Required: ${safeLamportBNToUiNumber(lpAmount)}, Available: ${lpTokenBalance}`);
   }

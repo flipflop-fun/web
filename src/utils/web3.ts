@@ -29,11 +29,11 @@ const fairMintTokenIdl = require(`../idl/${network}/fair_mint_token.json`);
 
 export const getProvider = (wallet: AnchorWallet, connection: Connection) => {
   return new AnchorProvider(
-    connection,
+    connection as any,
     {
       ...wallet,
-      signTransaction: wallet.signTransaction.bind(wallet),
-      signAllTransactions: wallet.signAllTransactions.bind(wallet),
+      signTransaction: wallet.signTransaction.bind(wallet) as any,
+      signAllTransactions: wallet.signAllTransactions.bind(wallet) as any,
       publicKey: wallet.publicKey,
     },
     { commitment: 'confirmed' }
@@ -322,7 +322,7 @@ export const reactiveReferrerCode = async (
     const transaction = new Transaction();
     // If the referrer ata does not exist, create it
     if (!referrerAtaInfo) transaction.add(instructionCreateReferrerAta);
-    transaction.add(instructionSetReferrerCode);
+    transaction.add(instructionSetReferrerCode as any);
     return await processTransaction(transaction, connection, wallet, "Reactiviate referrer code successfully", { referralAccount: referralAccountPda.toBase58(), mint: mint.toBase58() });
   } catch (error: any) {
     if (error.message.includes('Transaction simulation failed: This transaction has already been processed')) {
@@ -449,7 +449,7 @@ export const setReferrerCode = async (
     const transaction = new Transaction();
     // If the referrer ata does not exist, create it
     if (!referrerAtaInfo) transaction.add(instructionCreateReferrerAta);
-    transaction.add(instructionSetReferrerCode);
+    transaction.add(instructionSetReferrerCode as any);
     return await processTransaction(transaction, connection, wallet, "Set referrer code successfully", { referralAccount: referralAccountPda.toBase58() });
   } catch (error: any) {
     if (error.message.includes('Transaction simulation failed: This transaction has already been processed')) {
@@ -1401,14 +1401,14 @@ export const uploadToStorage = async (file: File, action: string = 'avatar', con
 };
 
 const processTransaction = async (
-  tx: Transaction,
+  tx: any,
   connection: Connection,
   wallet: AnchorWallet,
   successMessage: string,
   extraData: {}
 ) => {
   // Helper function to retry simulation with fresh blockhash
-  const retrySimulationWithFreshBlockhash = async (transaction: Transaction, maxRetries: number = 2) => {
+  const retrySimulationWithFreshBlockhash = async (transaction: any, maxRetries: number = 2) => {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const latestBlockhash = await connection.getLatestBlockhash();
