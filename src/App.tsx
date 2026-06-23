@@ -176,6 +176,9 @@ const AppContent = () => {
           duration: 5000,
         }}
       />
+      <div className="w-full text-center text-xs text-base-content/50 py-4 mt-auto">
+        This is a Web3 dApp — we do not collect any personal information.
+      </div>
       {/* <Footer /> */}
       <FlipFlopAIChat />
     </div>
